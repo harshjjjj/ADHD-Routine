@@ -581,87 +581,8 @@ function renderStatus() {
   }
 }
 
-// Intercept form submissions on the main landing page!
-function hookLandingPageForms() {
-  const waitlistForm = document.getElementById('waitlist-form-el') as HTMLFormElement | null;
-  const heroWaitlistForm = document.querySelector('.hero-waitlist-form') as HTMLFormElement | null;
-  
-  if (waitlistForm) {
-    waitlistForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const emailInput = document.getElementById('waitlist-email') as HTMLInputElement | null;
-      const successBox = document.getElementById('waitlist-success') as HTMLElement | null;
-      if (emailInput && emailInput.value.trim()) {
-        const email = emailInput.value.trim();
-        
-        // Visual indicator
-        const submitBtn = waitlistForm.querySelector('button');
-        if (submitBtn) {
-          submitBtn.textContent = 'Joining...';
-          submitBtn.disabled = true;
-          submitBtn.style.transform = 'scale(0.95)';
-        }
-        
-        // Save to Firestore and sync
-        await registerSubscriber(email);
-        
-        setTimeout(() => {
-          waitlistForm.style.display = 'none';
-          if (successBox) successBox.style.display = 'block';
-        }, 600);
-      }
-    });
-  }
-
-  if (heroWaitlistForm) {
-    heroWaitlistForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const emailInput = document.getElementById('hero-waitlist-email') as HTMLInputElement | null;
-      const heroBtn = document.getElementById('hero-waitlist-btn-id') as HTMLButtonElement | null;
-      if (emailInput && heroBtn && emailInput.value.trim()) {
-        const email = emailInput.value.trim();
-        
-        // Visual indicator
-        heroBtn.textContent = 'Joining...';
-        heroBtn.disabled = true;
-        
-        // Save to Firestore and sync
-        await registerSubscriber(email);
-        
-        setTimeout(() => {
-          heroBtn.textContent = 'Awesome! 🎉';
-          heroBtn.style.backgroundColor = 'var(--secondary-accent)';
-          emailInput.value = '';
-          
-          // Also trigger the primary bottom waitlist form success block gracefully
-          const bottomInput = document.getElementById('waitlist-email') as HTMLInputElement | null;
-          if (bottomInput) bottomInput.value = email;
-          const bottomForm = document.getElementById('waitlist-form-el') as HTMLElement | null;
-          const successBox = document.getElementById('waitlist-success') as HTMLElement | null;
-          if (bottomForm && successBox) {
-            bottomForm.style.display = 'none';
-            successBox.style.display = 'block';
-            
-            const waitlistSection = document.getElementById('waitlist');
-            if (waitlistSection) {
-              waitlistSection.scrollIntoView({ behavior: 'smooth' });
-            }
-          }
-          
-          setTimeout(() => {
-            heroBtn.textContent = 'Join Waitlist';
-            heroBtn.disabled = false;
-            heroBtn.style.backgroundColor = 'var(--primary-accent)';
-          }, 4000);
-        }, 750);
-      }
-    });
-  }
-}
-
 // Hook waitlist forms on page load
 window.addEventListener('DOMContentLoaded', () => {
-  hookLandingPageForms();
   renderStatus();
   
   // Double-verify admin button visibility in the workspace package

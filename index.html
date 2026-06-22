@@ -3769,30 +3769,7 @@
     }
 
     // 6. WAITLIST FORM HANDLING
-    function handleWaitlistSubmit(event) {
-      event.preventDefault();
-      
-      const emailInput = document.getElementById('waitlist-email');
-      const waitlistForm = document.getElementById('waitlist-form-el');
-      const successBox = document.getElementById('waitlist-success');
-
-      // Simple mock loading effect
-      const submitBtn = waitlistForm.querySelector('button');
-      submitBtn.textContent = 'Joining...';
-      submitBtn.disabled = true;
-
-      // Add a fun dopamine animation glow
-      submitBtn.style.transform = 'scale(0.95)';
-
-      setTimeout(() => {
-        // Hide form and open dopamine animation success box
-        waitlistForm.style.display = 'none';
-        successBox.style.display = 'block';
-        
-        // Console reporting standard waitlist subscription
-        console.log(`Subscriber registered: ${emailInput.value}`);
-      }, 800);
-    }
+    // (Handled below in CDN-loaded module to ensure secure real-time Firestore persistence)
 
     // 7. SETUP DYNAMIC LIVE CALENDAR IN MOCKUP
     const daysArr = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -3809,49 +3786,7 @@
     }
 
     // 8. HERO WAITLIST SUBMISSION
-    function handleHeroWaitlist(event) {
-      event.preventDefault();
-      const emailInput = document.getElementById('hero-waitlist-email');
-      const heroBtn = document.getElementById('hero-waitlist-btn-id');
-
-      if (!emailInput || !heroBtn) return;
-
-      const userEmail = emailInput.value;
-      heroBtn.textContent = 'Joining...';
-      heroBtn.disabled = true;
-
-      setTimeout(() => {
-        // Register simulation
-        console.log(`Hero waitlist subscriber: ${userEmail}`);
-        
-        // Visual completion feedback
-        heroBtn.textContent = 'Awesome! 🎉';
-        heroBtn.style.backgroundColor = 'var(--secondary-accent)';
-        emailInput.value = '';
-
-        // Also trigger the primary waitlist form success block gracefully
-        const bottomInput = document.getElementById('waitlist-email');
-        if (bottomInput) bottomInput.value = userEmail;
-        const bottomForm = document.getElementById('waitlist-form-el');
-        const successBox = document.getElementById('waitlist-success');
-        if (bottomForm && successBox) {
-          bottomForm.style.display = 'none';
-          successBox.style.display = 'block';
-
-          // Smooth scroll to waitlist section to confirm success details
-          const waitlistSection = document.getElementById('waitlist');
-          if (waitlistSection) {
-            waitlistSection.scrollIntoView({ behavior: 'smooth' });
-          }
-        }
-
-        setTimeout(() => {
-          heroBtn.textContent = 'Join Waitlist';
-          heroBtn.disabled = false;
-          heroBtn.style.backgroundColor = 'var(--primary-accent)';
-        }, 4000);
-      }, 750);
-    }
+    // (Handled below in CDN-loaded module to ensure secure real-time Firestore persistence)
 
     // 9. INTERACTIVE WALKTHROUGH CONTROLLER
     let activeWalkthroughIdx = 0;
@@ -4014,6 +3949,126 @@
       </div>
     </div>
   </div>
+
+  <!-- Robust Live Firebase Waitlist Integration Module (CDN-based for 100% static hosting / GitHub Pages reliability) -->
+  <script type="module">
+    import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      projectId: "gen-lang-client-0672384495",
+      appId: "1:167798810852:web:53c906e297dab40223e4f1",
+      apiKey: "AIzaSyAAAP6YLgMBbUt6eGrvQSm0jQ6XhyKm1NM",
+      authDomain: "gen-lang-client-0672384495.firebaseapp.com",
+      storageBucket: "gen-lang-client-0672384495.firebasestorage.app",
+      messagingSenderId: "167798810852"
+    };
+
+    let db;
+    try {
+      const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+      db = getFirestore(app);
+      console.log("Firebase CDN module initialized successfully for truceapp.site waitlist submissions.");
+    } catch(err) {
+      console.error("Failed to initialize Firebase CDN module:", err);
+    }
+
+    async function registerEmailInFirebase(email) {
+      if (!db) {
+        console.warn("Firestore not available! Saving waitlist email safely inside browser backup.");
+        saveToBackup(email);
+        return false;
+      }
+      try {
+        await addDoc(collection(db, 'waitlist'), {
+          email: email,
+          createdAt: serverTimestamp() || new Date(),
+          status: 'pending'
+        });
+        console.log("Successfully registered email in Google Firebase:", email);
+        return true;
+      } catch (err) {
+        console.error("Firestore submission failed:", err);
+        saveToBackup(email);
+        return false;
+      }
+    }
+
+    function saveToBackup(email) {
+      try {
+        let list = JSON.parse(localStorage.getItem('truce_offline_waitlist') || '[]');
+        list.push({ email: email, timestamp: new Date().toISOString() });
+        localStorage.setItem('truce_offline_waitlist', JSON.stringify(list));
+      } catch(e) {}
+    }
+
+    // Bind to window to allow instant access from standard HTML actions
+    window.handleWaitlistSubmit = async function(event) {
+      if (event) event.preventDefault();
+      
+      const emailInput = document.getElementById('waitlist-email');
+      const waitlistForm = document.getElementById('waitlist-form-el');
+      const successBox = document.getElementById('waitlist-success');
+
+      if (!emailInput || !emailInput.value.trim()) return;
+      const email = emailInput.value.trim();
+
+      const submitBtn = waitlistForm.querySelector('button');
+      if (submitBtn) {
+        submitBtn.textContent = 'Joining...';
+        submitBtn.disabled = true;
+        submitBtn.style.transform = 'scale(0.95)';
+      }
+
+      await registerEmailInFirebase(email);
+
+      setTimeout(() => {
+        if (waitlistForm) waitlistForm.style.display = 'none';
+        if (successBox) successBox.style.display = 'block';
+      }, 500);
+    };
+
+    window.handleHeroWaitlist = async function(event) {
+      if (event) event.preventDefault();
+      
+      const emailInput = document.getElementById('hero-waitlist-email');
+      const heroBtn = document.getElementById('hero-waitlist-btn-id');
+
+      if (!emailInput || !heroBtn || !emailInput.value.trim()) return;
+      const email = emailInput.value.trim();
+
+      heroBtn.textContent = 'Joining...';
+      heroBtn.disabled = true;
+
+      await registerEmailInFirebase(email);
+
+      setTimeout(() => {
+        heroBtn.textContent = 'Awesome! 🎉';
+        heroBtn.style.backgroundColor = 'var(--secondary-accent)';
+        emailInput.value = '';
+
+        const bottomInput = document.getElementById('waitlist-email');
+        if (bottomInput) bottomInput.value = email;
+        const bottomForm = document.getElementById('waitlist-form-el');
+        const successBox = document.getElementById('waitlist-success');
+        if (bottomForm && successBox) {
+          bottomForm.style.display = 'none';
+          successBox.style.display = 'block';
+
+          const waitlistSection = document.getElementById('waitlist');
+          if (waitlistSection) {
+            waitlistSection.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+
+        setTimeout(() => {
+          heroBtn.textContent = 'Join Waitlist';
+          heroBtn.disabled = false;
+          heroBtn.style.backgroundColor = 'var(--primary-accent)';
+        }, 4000);
+      }, 600);
+    };
+  </script>
 
   <script type="module" src="/src/waitlist.ts"></script>
 </body>
