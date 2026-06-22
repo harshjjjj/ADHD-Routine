@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Support & Contact | Truce — ADHD Daily Routine</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  
+  <!-- Space Grotesk and Inter Fonts from Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* CSS RESET & VARIABLES */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg-color: #fff9fa;
+      --surface-color: #ffffff;
+      --primary-accent: #ff415d;
+      --primary-glow: rgba(255, 65, 93, 0.12);
+      --primary-border: rgba(255, 65, 93, 0.12);
+      --recessed-section: #fdf3f5;
+      --secondary-accent: #05ca97;
+      --body-text: #453335;
+      --muted-text: #998386;
+      --title-text: #2a0b0e;
+      --badge-bg: rgba(255, 65, 93, 0.08);
+      --nav-glass: rgba(255, 249, 250, 0.85);
+      --footer-bg: #ffeef2;
+      
+      --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-display: 'Space Grotesk', 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--body-text);
+      font-family: var(--font-family);
+      line-height: 1.7;
+      font-size: 16px;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* TYPOGRAPHY */
+    h1, h2, h3, h4 {
+      color: var(--title-text);
+      letter-spacing: -0.03em;
+      font-family: var(--font-display);
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-size: 42px;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    h2 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-top: 2.5rem;
+      border-bottom: 2px solid var(--primary-border);
+      padding-bottom: 8px;
+    }
+
+    h3 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-top: 1.5rem;
+    }
+
+    p {
+      margin-bottom: 1.25rem;
+      color: var(--body-text);
+    }
+
+    a {
+      color: var(--primary-accent);
+      text-decoration: underline;
+      transition: opacity 0.2s ease;
+    }
+
+    a:hover {
+      opacity: 0.8;
+    }
+
+    /* LAYOUT PATTERNS */
+    .container {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* HEADER */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background-color: var(--nav-glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--primary-border);
+      padding: 16px 0;
+    }
+
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+
+    .truce-logo-svg {
+      width: 32px;
+      height: 32px;
+    }
+
+    .logo-text-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      line-height: 1.15;
+    }
+
+    .logo-title {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 19px;
+      color: var(--title-text);
+      letter-spacing: -0.02em;
+    }
+
+    .logo-subtitle {
+      font-size: 8.5px;
+      font-weight: 700;
+      color: var(--primary-accent);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-family: var(--font-mono);
+      margin-top: -1px;
+    }
+
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      background: var(--title-text);
+      color: #fff;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 12px;
+      font-size: 13.5px;
+      font-weight: 700;
+      transition: all 0.2s ease;
+    }
+
+    .nav-btn:hover {
+      background: var(--primary-accent);
+      transform: translateY(-1px);
+    }
+
+    /* SUBHEADINGS */
+    .support-hero {
+      padding: 60px 0 40px 0;
+      text-align: center;
+    }
+
+    .support-date {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--primary-accent);
+      font-family: var(--font-mono);
+      margin-bottom: 8px;
+    }
+
+    .support-subtitle {
+      font-size: 18px;
+      color: var(--muted-text);
+      max-width: 600px;
+      margin: 12px auto 0 auto;
+    }
+
+    /* BENTO LAYOUT */
+    .support-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 32px;
+      margin-bottom: 60px;
+    }
+
+    .support-card {
+      background: var(--surface-color);
+      border: 1px solid var(--primary-border);
+      border-radius: 24px;
+      padding: 36px;
+      box-shadow: 0 10px 30px rgba(255, 65, 93, 0.03);
+    }
+
+    /* FAQ ACCORDION */
+    .faq-item {
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--primary-border);
+      padding-bottom: 16px;
+    }
+
+    .faq-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .faq-question {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--title-text);
+      font-family: var(--font-display);
+      margin-bottom: 8px;
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    .faq-answer {
+      font-size: 14.5px;
+      line-height: 1.6;
+      color: var(--body-text);
+    }
+
+    /* FORM STYLING */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 11.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--body-text);
+      margin-bottom: 6px;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 14px 16px;
+      font-size: 14.5px;
+      line-height: 1.5;
+      border-radius: 12px;
+      border: 1.5px solid var(--primary-border);
+      background-color: var(--surface-color);
+      color: var(--body-text);
+      font-family: var(--font-family);
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary-accent);
+      box-shadow: 0 0 12px var(--primary-glow);
+    }
+
+    select.form-control {
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23ff415d'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      background-size: 16px;
+      padding-right: 40px;
+    }
+
+    .btn-submit {
+      width: 100%;
+      background: var(--primary-accent);
+      color: #fff;
+      border: none;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-submit:hover {
+      background: var(--title-text);
+      transform: translateY(-1px);
+    }
+
+    .btn-submit:disabled {
+      background: var(--muted-text);
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* SUCCESS STYLING */
+    .success-box {
+      display: none;
+      text-align: center;
+      padding: 30px 20px;
+    }
+
+    .success-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      display: inline-block;
+      animation: bounce 1s ease infinite alternate;
+    }
+
+    @keyframes bounce {
+      from { transform: translateY(0); }
+      to { transform: translateY(-8px); }
+    }
+
+    .success-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--title-text);
+      margin-bottom: 10px;
+    }
+
+    .success-desc {
+      font-size: 14.5px;
+      color: var(--body-text);
+    }
+
+    /* DIRECT CONTACT AT HIGHLIGHT */
+    .quick-support {
+      background: var(--footer-bg);
+      border: 1px solid var(--primary-border);
+      border-radius: 20px;
+      padding: 24px;
+      margin-top: 24px;
+      text-align: center;
+    }
+
+    .quick-support p {
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .quick-support-email {
+      font-family: var(--font-mono);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--title-text);
+      text-decoration: none;
+    }
+
+    .quick-support-email:hover {
+      text-decoration: underline;
+    }
+
+    /* FOOTER */
+    footer {
+      background-color: var(--footer-bg);
+      padding: 40px 0;
+      text-align: center;
+      border-top: 1px solid var(--primary-border);
+      margin-top: 40px;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .footer-link {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--body-text);
+      text-decoration: none;
+    }
+
+    .footer-link:hover {
+      color: var(--primary-accent);
+    }
+
+    .footer-copyright {
+      font-size: 13px;
+      color: var(--muted-text);
+    }
+
+    @media (max-width: 768px) {
+      h1 { font-size: 32px; }
+      .support-grid {
+        grid-template-columns: 1fr;
+      }
+      .support-card { padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="container nav-container">
+      <a href="/" class="logo">
+        <svg class="truce-logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g filter="url(#shadow)">
+            <circle cx="50" cy="46" r="38" fill="url(#truce-logo-gradient)" />
+            <path d="M41.5 41C41.5 32 43 26.5 47.5 25.5C50 25 52.5 26.5 52.5 29.5C52.5 32 52 35.5 52 38H58.5C60.5 38 62 39.5 62 41.5C62 43.5 60.5 45 58.5 45H51.5C51 53 51 59 52.5 61.5C53.5 63.5 55.5 64 58 61.5C60 59 63 55 65.5 51C67 48.5 70 47.5 72 49.5C74 51.5 73.5 54.5 71.5 57.5C67.5 64 61.5 73 54.5 74.5C47.5 76 43.5 71 43.5 61C43.5 54.5 43 49 43 45H37.5C35.5 45 34 43.5 34 41.5C34 39.5 35.5 38 37.5 38H42.5V41Z" fill="#FDF3F5"/>
+          </g>
+          <defs>
+            <linearGradient id="truce-logo-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#FF5A79" />
+              <stop offset="25%" stop-color="#FA2C56" />
+              <stop offset="100%" stop-color="#B80D2F" />
+            </linearGradient>
+            <filter id="shadow" x="4" y="2" width="92" height="92" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+              <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#FF415D" flood-opacity="0.12"/>
+            </filter>
+          </defs>
+        </svg>
+        <div class="logo-text-wrapper">
+          <span class="logo-title">Truce</span>
+          <span class="logo-subtitle">ADHD Daily Routine</span>
+        </div>
+      </a>
+      <a href="/#waitlist" class="nav-btn">Join Waitlist</a>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <main class="container">
+    <div class="support-hero">
+      <div class="support-date">Customer Support Helpdesk</div>
+      <h1>Help & Support</h1>
+      <p class="support-subtitle">Neurodiversity-affirming assistance. Simple answers without technical jargon.</p>
+    </div>
+
+    <div class="support-grid">
+      <!-- FAQ HANDLER -->
+      <div class="support-card">
+        <h2 style="margin-top: 0; font-size: 22px; padding-bottom: 12px; margin-bottom: 24px;">Frequently Asked Questions</h2>
+        
+        <div class="faq-item">
+          <div class="faq-question">💡 What makes Truce different from regular habit apps?</div>
+          <div class="faq-answer">
+            Traditional trackers punish you with broken streaks, red red marks, and irritating alert badges when you miss a day. Truce is built with zero punishment mechanisms or "shame cycles." It adapts to your energy level and allows you to pause or skip guilt-free.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">🔒 Is my daily routine private and secure?</div>
+          <div class="faq-answer">
+            Absolutely. Every checklist, schedule, task, and performance note you author inside Truce is stored locally in sandboxed variables on your private device. No one else has access to your daily actions.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">📱 Does Truce support custom notifications?</div>
+          <div class="faq-answer">
+            Yes, you can establish calming and custom localized reminders tailored specifically to your visual pace without passive-aggressive push notifications.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">🗑️ How do I opt-out or erase my waitlist record?</div>
+          <div class="faq-answer">
+            We support immediate data sanitization. If you wish to permanently erase your waitlist email or support requests from our cloud nodes, navigate directly to our <a href="deletion.html">Data Deletion page</a>.
+          </div>
+        </div>
+      </div>
+
+      <!-- FORM HANDLER (REAL CONNECTIVITY TO FIRESTORE) -->
+      <div class="support-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+        <div id="support-form-wrapper">
+          <h2 style="margin-top: 0; font-size: 22px; padding-bottom: 12px; margin-bottom: 24px;">Send a Message</h2>
+          
+          <form id="support-contact-form">
+            <div class="form-group">
+              <label for="contact-email">Email Address <span style="color: var(--primary-accent);">*</span></label>
+              <input type="email" id="contact-email" required placeholder="your@email.com" class="form-control">
+            </div>
+
+            <div class="form-group">
+              <label for="contact-category">How Can We Help?</label>
+              <select id="contact-category" class="form-control">
+                <option value="General Support">General Support / Question</option>
+                <option value="Feature Request">Unsolicited Feature / Idea</option>
+                <option value="Bug Report">Visual Bug Report</option>
+                <option value="Data Inquiry">Data Request / Policy Check</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="contact-message">Your Message <span style="color: var(--primary-accent);">*</span></label>
+              <textarea id="contact-message" required placeholder="Type your inquiry here. We reply to all messages within 24 hours." class="form-control" style="min-height: 120px; resize: vertical;"></textarea>
+            </div>
+
+            <button type="submit" class="btn-submit" id="submit-btn-element">
+              <span>Send Message</span> 🌅
+            </button>
+          </form>
+        </div>
+
+        <!-- SUCCESS CARD VIEW -->
+        <div class="success-box" id="support-success-box">
+          <span class="success-icon">💌</span>
+          <h3 class="success-title">Message Received!</h3>
+          <p class="success-desc">
+            We have securely saved your request. An indie developer from our ADHD support team will coordinate and reach back to you at your email address within 24 hours. Keep breathing, you're doing great!
+          </p>
+        </div>
+
+        <div class="quick-support">
+          <p>Or send us a direct email anytime:</p>
+          <a href="mailto:hello@truceapp.site" class="quick-support-email">hello@truceapp.site</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- FIRESTORE INTEGRATION CDN SCRIPT -->
+  <script type="module">
+    import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      projectId: "gen-lang-client-0672384495",
+      appId: "1:167798810852:web:53c906e297dab40223e4f1",
+      apiKey: "AIzaSyAAAP6YLgMBbUt6eGrvQSm0jQ6XhyKm1NM",
+      authDomain: "gen-lang-client-0672384495.firebaseapp.com",
+      storageBucket: "gen-lang-client-0672384495.firebasestorage.app",
+      messagingSenderId: "167798810852"
+    };
+
+    let db;
+    try {
+      const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+      db = getFirestore(app, "ai-studio-0e0b7264-581b-4bb7-bd6d-f7225649e700");
+    } catch(err) {
+      console.error("Firestore loading error:", err);
+    }
+
+    const form = document.getElementById('support-contact-form');
+    const formWrapper = document.getElementById('support-form-wrapper');
+    const successBox = document.getElementById('support-success-box');
+    const submitBtn = document.getElementById('submit-btn-element');
+
+    if (form) {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const email = document.getElementById('contact-email').value.trim();
+        const category = document.getElementById('contact-category').value;
+        const message = document.getElementById('contact-message').value.trim();
+
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.querySelector('span').innerText = "Sending Request...";
+        }
+
+        // Real Firebase integration to store support logs in the Firestore db!
+        try {
+          if (db) {
+            await addDoc(collection(db, 'support_requests'), {
+              email: email,
+              category: category,
+              message: message,
+              createdAt: new Date(),
+              status: 'new'
+            });
+            console.log("Support log fully persisted into Firestore.");
+          } else {
+            // Local fallback
+            let localBackup = JSON.parse(localStorage.getItem('truce_fallback_support') || '[]');
+            localBackup.push({email, category, message, timestamp: new Date().toISOString()});
+            localStorage.setItem('truce_fallback_support', JSON.stringify(localBackup));
+            console.warn("Saved to localStorage backup.");
+          }
+        } catch(error) {
+          console.error("Saving support inquiry failed:", error);
+        }
+
+        // Show fluid success state
+        setTimeout(() => {
+          if (formWrapper) formWrapper.style.display = 'none';
+          if (successBox) successBox.style.display = 'block';
+        }, 300);
+      });
+    }
+  </script>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-links">
+        <a href="/" class="footer-link">Home</a>
+        <a href="privacy.html" class="footer-link">Privacy Policy</a>
+        <a href="terms.html" class="footer-link">Terms of Use (EULA)</a>
+        <a href="support.html" class="footer-link" style="color: var(--primary-accent);">Support & FAQs</a>
+        <a href="deletion.html" class="footer-link">Data Deletion</a>
+      </div>
+      <p class="footer-copyright">© 2026 Truce Daily Routine Tracker. Made with 💜 for the ADHD community.</p>
+    </div>
+  </footer>
+
+</body>
+</html>

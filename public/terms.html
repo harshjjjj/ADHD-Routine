@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terms of Use & EULA | Truce — ADHD Daily Routine</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  
+  <!-- Space Grotesk and Inter Fonts from Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* CSS RESET & VARIABLES */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg-color: #fff9fa;
+      --surface-color: #ffffff;
+      --primary-accent: #ff415d;
+      --primary-glow: rgba(255, 65, 93, 0.12);
+      --primary-border: rgba(255, 65, 93, 0.12);
+      --recessed-section: #fdf3f5;
+      --body-text: #453335;
+      --muted-text: #998386;
+      --title-text: #2a0b0e;
+      --badge-bg: rgba(255, 65, 93, 0.08);
+      --nav-glass: rgba(255, 249, 250, 0.85);
+      --footer-bg: #ffeef2;
+      
+      --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-display: 'Space Grotesk', 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--body-text);
+      font-family: var(--font-family);
+      line-height: 1.7;
+      font-size: 16px;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* TYPOGRAPHY */
+    h1, h2, h3, h4 {
+      color: var(--title-text);
+      letter-spacing: -0.03em;
+      font-family: var(--font-display);
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-size: 42px;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    h2 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-top: 2rem;
+      border-bottom: 2px solid var(--primary-border);
+      padding-bottom: 8px;
+    }
+
+    h3 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-top: 1.5rem;
+    }
+
+    p {
+      margin-bottom: 1.25rem;
+      color: var(--body-text);
+    }
+
+    ul, ol {
+      margin-bottom: 1.25rem;
+      padding-left: 1.5rem;
+    }
+
+    li {
+      margin-bottom: 0.5rem;
+    }
+
+    strong {
+      color: var(--title-text);
+    }
+
+    code {
+      font-family: var(--font-mono);
+      font-size: 0.9em;
+      background: var(--badge-bg);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: var(--primary-accent);
+    }
+
+    a {
+      color: var(--primary-accent);
+      text-decoration: underline;
+      transition: opacity 0.2s ease;
+    }
+
+    a:hover {
+      opacity: 0.8;
+    }
+
+    /* LAYOUT PATTERNS */
+    .container {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* HEADER STYLE (MATCHING MAIN LANDING PAGE) */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background-color: var(--nav-glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--primary-border);
+      padding: 16px 0;
+    }
+
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+
+    .truce-logo-svg {
+      width: 32px;
+      height: 32px;
+    }
+
+    .logo-text-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      line-height: 1.15;
+    }
+
+    .logo-title {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 19px;
+      color: var(--title-text);
+      letter-spacing: -0.02em;
+    }
+
+    .logo-subtitle {
+      font-size: 8.5px;
+      font-weight: 700;
+      color: var(--primary-accent);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-family: var(--font-mono);
+      margin-top: -1px;
+    }
+
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      background: var(--title-text);
+      color: #fff;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 12px;
+      font-size: 13.5px;
+      font-weight: 700;
+      transition: all 0.2s ease;
+    }
+
+    .nav-btn:hover {
+      background: var(--primary-accent);
+      transform: translateY(-1px);
+    }
+
+    /* POLICY CONTENT CARDS */
+    .policy-hero {
+      padding: 60px 0 40px 0;
+      text-align: center;
+    }
+
+    .policy-date {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--primary-accent);
+      font-family: var(--font-mono);
+      margin-bottom: 8px;
+    }
+
+    .policy-subtitle {
+      font-size: 18px;
+      color: var(--muted-text);
+      max-width: 600px;
+      margin: 12px auto 0 auto;
+    }
+
+    .policy-card {
+      background: var(--surface-color);
+      border: 1px solid var(--primary-border);
+      border-radius: 24px;
+      padding: 40px;
+      box-shadow: 0 10px 30px rgba(255, 65, 93, 0.03);
+      margin-bottom: 60px;
+    }
+
+    .attention-box {
+      background-color: var(--recessed-section);
+      border-left: 4px solid var(--primary-accent);
+      padding: 20px;
+      border-radius: 0 16px 16px 0;
+      margin-bottom: 2rem;
+    }
+
+    .attention-box p {
+      margin-bottom: 0;
+      font-weight: 500;
+    }
+
+    /* FOOTER */
+    footer {
+      background-color: var(--footer-bg);
+      padding: 40px 0;
+      text-align: center;
+      border-top: 1px solid var(--primary-border);
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .footer-link {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--body-text);
+      text-decoration: none;
+    }
+
+    .footer-link:hover {
+      color: var(--primary-accent);
+    }
+
+    .footer-copyright {
+      font-size: 13px;
+      color: var(--muted-text);
+    }
+
+    @media (max-width: 768px) {
+      h1 { font-size: 32px; }
+      .policy-card { padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="container nav-container">
+      <a href="/" class="logo">
+        <svg class="truce-logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g filter="url(#shadow)">
+            <circle cx="50" cy="46" r="38" fill="url(#truce-logo-gradient)" />
+            <path d="M41.5 41C41.5 32 43 26.5 47.5 25.5C50 25 52.5 26.5 52.5 29.5C52.5 32 52 35.5 52 38H58.5C60.5 38 62 39.5 62 41.5C62 43.5 60.5 45 58.5 45H51.5C51 53 51 59 52.5 61.5C53.5 63.5 55.5 64 58 61.5C60 59 63 55 65.5 51C67 48.5 70 47.5 72 49.5C74 51.5 73.5 54.5 71.5 57.5C67.5 64 61.5 73 54.5 74.5C47.5 76 43.5 71 43.5 61C43.5 54.5 43 49 43 45H37.5C35.5 45 34 43.5 34 41.5C34 39.5 35.5 38 37.5 38H42.5V41Z" fill="#FDF3F5"/>
+          </g>
+          <defs>
+            <linearGradient id="truce-logo-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#FF5A79" />
+              <stop offset="25%" stop-color="#FA2C56" />
+              <stop offset="100%" stop-color="#B80D2F" />
+            </linearGradient>
+            <filter id="shadow" x="4" y="2" width="92" height="92" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+              <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#FF415D" flood-opacity="0.12"/>
+            </filter>
+          </defs>
+        </svg>
+        <div class="logo-text-wrapper">
+          <span class="logo-title">Truce</span>
+          <span class="logo-subtitle">ADHD Daily Routine</span>
+        </div>
+      </a>
+      <a href="/#waitlist" class="nav-btn">Join Waitlist</a>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <main class="container">
+    <div class="policy-hero">
+      <div class="policy-date">Last Updated: June 22, 2026</div>
+      <h1>Terms of Use & EULA</h1>
+      <p class="policy-subtitle">The legal parameters (and gentle guarantees) of our ADHD tracker.</p>
+    </div>
+
+    <div class="policy-card">
+      <div class="attention-box">
+        <p>🌸 <strong>Our Gentle Terms:</strong> Truce permits you to pause, skip, ignore, or modify your routine parameters instantly without losing long-term momentum metrics. There are absolutely <u>no visual streak penalties</u>, shame-based notifications, or push alert harassment.</p>
+      </div>
+
+      <h2>1. Acceptance of Terms</h2>
+      <p>
+        By downloading the Truce mobile application, signing up for the waitlist, or accessing the website and associated services (collectively the "Service"), you agree to be bound by these Terms of Use, including Apple's standard End-User License Agreement ("EULA") and Google Play's respective specifications. If you do not agree to these terms, please delete our Application and cease all service interactions.
+      </p>
+
+      <h2>2. Intellectual Property</h2>
+      <p>
+        Our design tokens, layout styles, bento interfaces, brand iconography, specific custom assets, logos, and code structures are protected by copyright, trade dress, and patent laws of the United States and global jurisdictions. Truce grants you a limited, non-exclusive, non-transferable, revocable license to use the applet for your own personal, non-commercial self-care tracking.
+      </p>
+
+      <h2>3. The ADHD-First Covenant (Rules of Conduct)</h2>
+      <p>
+        Our Service is engineered to establish dynamic visual spaces supporting executive coordination. We explicitly guarantee the following conduct standards inside our mobile experience:
+      </p>
+      <ul>
+        <li><strong>No Forced Linear Consistency:</strong> You are hereby permitted to experience cognitive fluctuation. Toggle Rest Mode, scale tasks down to 2-minute equivalents on low energy levels, or modify routines without negative diagnostic logs.</li>
+        <li><strong>No Gamified Stress Engines:</strong> We will never enforce standard gamified "streak systems" that self-destruct if you miss a single tracking interaction. This is our anti-shame design assurance.</li>
+        <li><strong>Respectful Notifications:</strong> We do not deploy sudden full-display disruptive popups, nagging alerts, or guilt-tripping tracking metrics designed to manipulate your screen focus.</li>
+      </ul>
+
+      <h2>4. Waitlist Registration</h2>
+      <p>
+        When registering for the early access waitlist, you agree to:
+      </p>
+      <ul>
+        <li>Provide a valid and accessible email address to deliver your beta invitation key.</li>
+        <li>Refrain from submitting automated spam, script bots, or invalid addresses that clog our communication servers.</li>
+        <li>Handle standard, non-confidential feedback inputs constructively to support our software development workflow.</li>
+      </ul>
+
+      <h2>5. Apple App Store EULA Requirements</h2>
+      <p>
+        If you downloaded Truce from the Apple App Store, the following legal stipulations apply directly, satisfying Apple’s End-User License Agreement (EULA) protocol:
+      </p>
+      <ol>
+        <li><strong>Acknowledgment:</strong> You and Truce acknowledge that this Agreement is concluded solely between you and Truce, and not Apple Inc. ("Apple"). Truce is solely responsible for the licensed Application and its content.</li>
+        <li><strong>Scope of License:</strong> The license granted to you is limited to a non-transferable license to use the Application on any Apple-branded products that you own or control and as permitted by the Usage Rules set forth in the App Store Terms of Service.</li>
+        <li><strong>Maintenance & Support:</strong> Truce is solely responsible for providing maintenance and support services for the Application. You and Truce acknowledge that Apple has no obligation whatsoever to furnish any maintenance and support services.</li>
+        <li><strong>Warranty:</strong> Truce is solely responsible for any product warranties, whether express or implied by law. In the event of any failure of the Application to conform to any applicable warranty, you may notify Apple, and Apple will refund the purchase price (if any) for the Application. To the maximum extent permitted by law, Apple will have no other warranty obligation whatsoever.</li>
+        <li><strong>Product Claims:</strong> You and Truce acknowledge that Truce, not Apple, is responsible for addressing queries relating to the Application or possession and/or use, including product liability, consumer protection, or regulatory compliance claims.</li>
+        <li><strong>Intellectual Property Rights:</strong> In the event of any third-party claim that the possession or use of the Application infringes that third party's intellectual property rights, Truce, not Apple, will be solely responsible for the investigation, defense, settlement, and discharge of any such intellectual property infringement claim.</li>
+        <li><strong>Legal Compliance:</strong> You must represent and warrant that (i) you are not located in a country that is subject to a U.S. Government embargo, or designated as a "terrorist supporting" country; and (ii) you are not listed on any U.S. Government list of prohibited or restricted parties.</li>
+        <li><strong>Third Party Beneficiary:</strong> You and Truce acknowledge and agree that Apple, and Apple's subsidiaries, are third-party beneficiaries of this EULA, and that, upon your acceptance of this Agreement, Apple will have the right (and will be deemed to have accepted the right) to enforce this EULA against you as a third-party beneficiary.</li>
+      </ol>
+
+      <h2>6. Disclaimer of Warranties</h2>
+      <p>
+        OUR SERVICE IS PROVIDED ON AN "AS IS" AND "AS AVAILABLE" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR COGNITIVE HABIT CURE. TRUCE IS NOT A MEDICAL PROVIDER OR PSYCHIATRIC CLINICAL ENTITY. OUR MATERIAL AND DESIGN FEATURES SERVE PURELY AS GENTLE ORGANIZATIONAL AIDS. CONSULT QUALIFIED MEDICAL PRACTITIONERS FOR COMPREHENSIVE ADHD TREATMENT PLANS.
+      </p>
+
+      <h2>7. Limitation of Liability</h2>
+      <p>
+        TO THE MAXIMUM EXTENT PERMITTED UNDER APPLICABLE LAW, IN NO EVENT SHALL TRUCE, ITS INDEPENDENT DEVELOPERS, CONTRIBUTORS, OR CLOUD PROXY ENTITIES BE LIABLE FOR ANY INDIRECT, SPECIAL, INCIDENTAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES RESOUNDING FROM YOUR USAGE OF THE APP, DATA TRANSITIONS, WAITLIST PLACEMENTS, OR HARDWARE LOSSES.
+      </p>
+
+      <h2>8. Governing Law & Dispute Resolution</h2>
+      <p>
+        These terms shall be governed by, construed, and enforced in accordance with the laws of the State of California, USA, without reference to conflict of laws principles. Any legal challenge or dispute arising from this platform shall be resolved within competent state and federal courts situated in San Francisco, California.
+      </p>
+
+      <h2>9. Contact Information</h2>
+      <p>
+        For inquiries regarding these Terms of Gentle Use or licensed EULA operations, reach out to our legal coordination desk:
+      </p>
+      <p style="padding: 12px 18px; background: var(--recessed-section); border-radius: 12px; font-family: var(--font-mono); font-size: 14px; text-align: center; font-weight: 500;">
+        📬 Corporate Coordination: <a href="mailto:hello@truceapp.site" style="font-weight: 700;">hello@truceapp.site</a>
+      </p>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-links">
+        <a href="/" class="footer-link">Home</a>
+        <a href="privacy.html" class="footer-link">Privacy Policy</a>
+        <a href="terms.html" class="footer-link" style="color: var(--primary-accent);">Terms of Use (EULA)</a>
+        <a href="support.html" class="footer-link">Support & FAQs</a>
+        <a href="deletion.html" class="footer-link">Data Deletion</a>
+      </div>
+      <p class="footer-copyright">© 2026 Truce Daily Routine Tracker. Made with 💜 for the ADHD community.</p>
+    </div>
+  </footer>
+
+</body>
+</html>

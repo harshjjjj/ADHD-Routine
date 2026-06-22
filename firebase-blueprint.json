@@ -32,6 +32,10 @@
         "emailError": {
           "type": "string",
           "description": "Detailed error message if the welcome email failed to send"
+        },
+        "feedback": {
+          "type": "string",
+          "description": "Optional product feedback or requests submitted by the user"
         }
       },
       "required": ["email", "createdAt", "status"]

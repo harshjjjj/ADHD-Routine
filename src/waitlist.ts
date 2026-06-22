@@ -639,7 +639,7 @@ function renderStatus() {
             <table style="width: 100%; border-collapse: collapse; font-size: 11.5px; text-align: left;">
               <thead>
                 <tr style="background: var(--bg-color); border-bottom: 1px solid var(--primary-border);">
-                  <th style="padding: 10px 12px; font-weight: 700;">Email</th>
+                  <th style="padding: 10px 12px; font-weight: 700;">Email / Feedback</th>
                   <th style="padding: 10px 12px; font-weight: 700;">Signup Date</th>
                   <th style="padding: 10px 12px; font-weight: 700;">Sync Status</th>
                   <th style="padding: 10px 12px; font-weight: 700;">Auto-Reply Status</th>
@@ -665,7 +665,14 @@ function renderStatus() {
 
                   return `
                     <tr style="border-bottom: 1px solid rgba(255, 65, 93, 0.05);">
-                      <td style="padding: 10px 12px; font-family: var(--font-mono); font-weight: 500;">${item.email}</td>
+                      <td style="padding: 10px 12px; font-family: var(--font-mono); font-weight: 500;">
+                        <div style="font-weight: 700; color: var(--body-text);">${item.email}</div>
+                        ${item.feedback ? `
+                          <div style="margin-top: 4px; padding: 4px 8px; font-family: var(--font-sans); font-size: 10.5px; background: rgba(255, 65, 93, 0.03); border-left: 2px solid var(--primary-accent); border-radius: 4px; width: fit-content; max-width: 320px; word-break: break-all; white-space: normal; color: var(--body-text);">
+                            💬 "${item.feedback}"
+                          </div>
+                        ` : ''}
+                      </td>
                       <td style="padding: 10px 12px; color: var(--muted-text);">${dateStr}</td>
                       <td style="padding: 10px 12px;">
                         <span style="display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 10px; font-weight: 700; 

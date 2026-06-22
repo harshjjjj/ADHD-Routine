@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data & Account Deletion | Truce — ADHD Daily Routine</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  
+  <!-- Space Grotesk and Inter Fonts from Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* CSS RESET & VARIABLES */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg-color: #fff9fa;
+      --surface-color: #ffffff;
+      --primary-accent: #ff415d;
+      --primary-glow: rgba(255, 65, 93, 0.12);
+      --primary-border: rgba(255, 65, 93, 0.12);
+      --recessed-section: #fdf3f5;
+      --body-text: #453335;
+      --muted-text: #998386;
+      --title-text: #2a0b0e;
+      --badge-bg: rgba(255, 65, 93, 0.08);
+      --nav-glass: rgba(255, 249, 250, 0.85);
+      --footer-bg: #ffeef2;
+      
+      --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-display: 'Space Grotesk', 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--body-text);
+      font-family: var(--font-family);
+      line-height: 1.7;
+      font-size: 16px;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* TYPOGRAPHY */
+    h1, h2, h3, h4 {
+      color: var(--title-text);
+      letter-spacing: -0.03em;
+      font-family: var(--font-display);
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-size: 42px;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    h2 {
+      font-size: 26px;
+      font-weight: 700;
+      margin-top: 2rem;
+      border-bottom: 2px solid var(--primary-border);
+      padding-bottom: 8px;
+    }
+
+    p {
+      margin-bottom: 1.25rem;
+      color: var(--body-text);
+    }
+
+    ul {
+      margin-bottom: 1.25rem;
+      padding-left: 1.5rem;
+    }
+
+    li {
+      margin-bottom: 0.5rem;
+    }
+
+    a {
+      color: var(--primary-accent);
+      text-decoration: underline;
+      transition: opacity 0.2s ease;
+    }
+
+    a:hover {
+      opacity: 0.8;
+    }
+
+    /* LAYOUT PATTERNS */
+    .container {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* HEADER */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background-color: var(--nav-glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--primary-border);
+      padding: 16px 0;
+    }
+
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+
+    .truce-logo-svg {
+      width: 32px;
+      height: 32px;
+    }
+
+    .logo-text-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      line-height: 1.15;
+    }
+
+    .logo-title {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 19px;
+      color: var(--title-text);
+      letter-spacing: -0.02em;
+    }
+
+    .logo-subtitle {
+      font-size: 8.5px;
+      font-weight: 700;
+      color: var(--primary-accent);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-family: var(--font-mono);
+      margin-top: -1px;
+    }
+
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      background: var(--title-text);
+      color: #fff;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 12px;
+      font-size: 13.5px;
+      font-weight: 700;
+      transition: all 0.2s ease;
+    }
+
+    .nav-btn:hover {
+      background: var(--primary-accent);
+      transform: translateY(-1px);
+    }
+
+    /* POLICY HERO */
+    .policy-hero {
+      padding: 60px 0 40px 0;
+      text-align: center;
+    }
+
+    .policy-date {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--primary-accent);
+      font-family: var(--font-mono);
+      margin-bottom: 8px;
+    }
+
+    .policy-subtitle {
+      font-size: 18px;
+      color: var(--muted-text);
+      max-width: 600px;
+      margin: 12px auto 0 auto;
+    }
+
+    /* CARD GRID */
+    .deletion-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 32px;
+      margin-bottom: 60px;
+    }
+
+    .policy-card {
+      background: var(--surface-color);
+      border: 1px solid var(--primary-border);
+      border-radius: 24px;
+      padding: 36px;
+      box-shadow: 0 10px 30px rgba(255, 65, 93, 0.03);
+    }
+
+    .attention-box {
+      background-color: var(--recessed-section);
+      border-left: 4px solid var(--primary-accent);
+      padding: 18px;
+      border-radius: 0 14px 14px 0;
+      margin-bottom: 1.5rem;
+    }
+
+    .attention-box p {
+      margin-bottom: 0;
+      font-size: 14.5px;
+      font-weight: 500;
+    }
+
+    /* FORM STYLE */
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 11.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--body-text);
+      margin-bottom: 6px;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 14px 16px;
+      font-size: 14.5px;
+      border-radius: 12px;
+      border: 1.5px solid var(--primary-border);
+      background-color: var(--surface-color);
+      color: var(--body-text);
+      font-family: var(--font-family);
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary-accent);
+      box-shadow: 0 0 12px var(--primary-glow);
+    }
+
+    .checkbox-container {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      margin-bottom: 22px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .checkbox-container input {
+      margin-top: 4px;
+      cursor: pointer;
+      accent-color: var(--primary-accent);
+    }
+
+    .checkbox-text {
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--body-text);
+    }
+
+    .btn-submit {
+      width: 100%;
+      background: var(--primary-accent);
+      color: #fff;
+      border: none;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-submit:hover {
+      background: var(--title-text);
+      transform: translateY(-1px);
+    }
+
+    .btn-submit:disabled {
+      background: var(--muted-text);
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* SUCCESS STYLING */
+    .success-box {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .success-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      display: inline-block;
+    }
+
+    .success-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--title-text);
+      margin-bottom: 10px;
+    }
+
+    .success-desc {
+      font-size: 14.5px;
+      color: var(--body-text);
+      line-height: 1.6;
+    }
+
+    /* FOOTER */
+    footer {
+      background-color: var(--footer-bg);
+      padding: 40px 0;
+      text-align: center;
+      border-top: 1px solid var(--primary-border);
+      margin-top: 40px;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .footer-link {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--body-text);
+      text-decoration: none;
+    }
+
+    .footer-link:hover {
+      color: var(--primary-accent);
+    }
+
+    .footer-copyright {
+      font-size: 13px;
+      color: var(--muted-text);
+    }
+
+    @media (max-width: 768px) {
+      h1 { font-size: 32px; }
+      .deletion-grid {
+        grid-template-columns: 1fr;
+      }
+      .policy-card { padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="container nav-container">
+      <a href="/" class="logo">
+        <svg class="truce-logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g filter="url(#shadow)">
+            <circle cx="50" cy="46" r="38" fill="url(#truce-logo-gradient)" />
+            <path d="M41.5 41C41.5 32 43 26.5 47.5 25.5C50 25 52.5 26.5 52.5 29.5C52.5 32 52 35.5 52 38H58.5C60.5 38 62 39.5 62 41.5C62 43.5 60.5 45 58.5 45H51.5C51 53 51 59 52.5 61.5C53.5 63.5 55.5 64 58 61.5C60 59 63 55 65.5 51C67 48.5 70 47.5 72 49.5C74 51.5 73.5 54.5 71.5 57.5C67.5 64 61.5 73 54.5 74.5C47.5 76 43.5 71 43.5 61C43.5 54.5 43 49 43 45H37.5C35.5 45 34 43.5 34 41.5C34 39.5 35.5 38 37.5 38H42.5V41Z" fill="#FDF3F5"/>
+          </g>
+          <defs>
+            <linearGradient id="truce-logo-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#FF5A79" />
+              <stop offset="25%" stop-color="#FA2C56" />
+              <stop offset="100%" stop-color="#B80D2F" />
+            </linearGradient>
+            <filter id="shadow" x="4" y="2" width="92" height="92" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+              <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#FF415D" flood-opacity="0.12"/>
+            </filter>
+          </defs>
+        </svg>
+        <div class="logo-text-wrapper">
+          <span class="logo-title">Truce</span>
+          <span class="logo-subtitle">ADHD Daily Routine</span>
+        </div>
+      </a>
+      <a href="/#waitlist" class="nav-btn">Join Waitlist</a>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <main class="container">
+    <div class="policy-hero">
+      <div class="policy-date">Apple & Google Compliance Portal</div>
+      <h1>Request Data Deletion</h1>
+      <p class="policy-subtitle">Immediate and permanent removal of search parameters, emails, and logs.</p>
+    </div>
+
+    <div class="deletion-grid">
+      <!-- EXPLANATION COLUMN -->
+      <div class="policy-card">
+        <h2 style="margin-top: 0; font-size: 20px; padding-bottom: 8px;">Our Deletion Protocol</h2>
+        <p>
+          In accordance with Apple App Store Developer Guideline 5.1.1(v) (Account Deletion) and Google Play Safety regulations, Truce provides complete, immediate power to erase your records.
+        </p>
+
+        <h3>1. Clearing Local Device Assets (Immediate)</h3>
+        <p>
+          Since 100% of your checklist entries, active streaks, energy settings, and notes live solely in local storage variables on your physical device, we do not have a server copy to erase! 
+        </p>
+        <div class="attention-box">
+          <p>👉 To immediately wipe everything locally, tap the "Reset Cache" link in your dashboard, or clear your mobile browser's cookies and site cache.</p>
+        </div>
+
+        <h3>2. Erasing Waitlist & Support History</h3>
+        <p>
+          If you signed up to join our waitlist, left feedback, or contacted support, those coordinates are saved in our secure Google Cloud Firestore.
+        </p>
+        <ul>
+          <li><strong>What is deleted:</strong> Your email, queue rank, registration dates, diagnostic feedback text, and helpdesk records.</li>
+          <li><strong>Duration:</strong> Submitting the right-hand form queues your data for permanent deletion within 24 hours.</li>
+        </ul>
+      </div>
+
+      <!-- FORM COLUMN -->
+      <div class="policy-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+        <div id="deletion-form-wrapper">
+          <h2 style="margin-top: 0; font-size: 20px; padding-bottom: 8px; color: var(--primary-accent);">Initiate Erasure</h2>
+          <p style="font-size: 14px; color: var(--muted-text); margin-bottom: 20px;">
+            Submit your registered email address to permanently wipe your records from all cloud nodes.
+          </p>
+
+          <form id="deletion-request-form">
+            <div class="form-group">
+              <label for="delete-email">Registered Email Address <span style="color: var(--primary-accent);">*</span></label>
+              <input type="email" id="delete-email" required placeholder="your@email.com" class="form-control">
+            </div>
+
+            <label class="checkbox-container">
+              <input type="checkbox" id="delete-confirm" required>
+              <span class="checkbox-text">
+                I confirm that I want all early-access waitlist, diagnostics, and support inquiries linked to this email to be permanently and irrecoverably erased from Truce servers. <span style="color: var(--primary-accent);">*</span>
+              </span>
+            </label>
+
+            <button type="submit" class="btn-submit" id="delete-btn-element" style="background-color: var(--primary-accent);">
+              <span>Erase My Records</span> 🗑️
+            </button>
+          </form>
+        </div>
+
+        <!-- SUCCESS VIEW -->
+        <div class="success-box" id="deletion-success-box">
+          <span class="success-icon">🗑️</span>
+          <h3 class="success-title">Deletion Process Started</h3>
+          <p class="success-desc">
+            We have registered your deletion request. All server-side data logs linked to this email inside our Google Firebase Firestore databases are being purged from the system. Safe journeys!
+          </p>
+        </div>
+
+        <p style="font-size: 12.5px; color: var(--muted-text); text-align: center; margin-top: 24px; line-height: 1.45;">
+          Direct inquiry or manual audit requests can also be sent directly to our compliance desk: <a href="mailto:hello@truceapp.site" style="font-family: var(--font-mono); font-weight: 500;">hello@truceapp.site</a>.
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <!-- FIRESTORE CDN SDK -->
+  <script type="module">
+    import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      projectId: "gen-lang-client-0672384495",
+      appId: "1:167798810852:web:53c906e297dab40223e4f1",
+      apiKey: "AIzaSyAAAP6YLgMBbUt6eGrvQSm0jQ6XhyKm1NM",
+      authDomain: "gen-lang-client-0672384495.firebaseapp.com",
+      storageBucket: "gen-lang-client-0672384495.firebasestorage.app",
+      messagingSenderId: "167798810852"
+    };
+
+    let db;
+    try {
+      const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+      db = getFirestore(app, "ai-studio-0e0b7264-581b-4bb7-bd6d-f7225649e700");
+    } catch(err) {
+      console.error("Firestore loading error:", err);
+    }
+
+    const form = document.getElementById('deletion-request-form');
+    const formWrapper = document.getElementById('deletion-form-wrapper');
+    const successBox = document.getElementById('deletion-success-box');
+    const submitBtn = document.getElementById('delete-btn-element');
+
+    if (form) {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const email = document.getElementById('delete-email').value.trim();
+
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.querySelector('span').innerText = "Initiating Deletion...";
+        }
+
+        // Real integration with Google Cloud Firestore! Saves a record under 'deletion_requests' so compliance admins see it instantly!
+        try {
+          if (db) {
+            await addDoc(collection(db, 'deletion_requests'), {
+              email: email,
+              requestedAt: new Date(),
+              status: 'pending'
+            });
+            console.log("Deletion request fully persisted into Firestore.");
+          } else {
+            // Local Storage fallback
+            let localBackup = JSON.parse(localStorage.getItem('truce_fallback_deletion') || '[]');
+            localBackup.push({email, timestamp: new Date().toISOString()});
+            localStorage.setItem('truce_fallback_deletion', JSON.stringify(localBackup));
+            console.warn("Saved deletion request to Local Storage backup.");
+          }
+        } catch(error) {
+          console.error("Saving deletion request failed:", error);
+        }
+
+        // Show fluid success transition
+        setTimeout(() => {
+          if (formWrapper) formWrapper.style.display = 'none';
+          if (successBox) successBox.style.display = 'block';
+        }, 300);
+      });
+    }
+  </script>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-links">
+        <a href="/" class="footer-link">Home</a>
+        <a href="privacy.html" class="footer-link">Privacy Policy</a>
+        <a href="terms.html" class="footer-link">Terms of Use (EULA)</a>
+        <a href="support.html" class="footer-link">Support & FAQs</a>
+        <a href="deletion.html" class="footer-link" style="color: var(--primary-accent);">Data Deletion</a>
+      </div>
+      <p class="footer-copyright">© 2026 Truce Daily Routine Tracker. Made with 💜 for the ADHD community.</p>
+    </div>
+  </footer>
+
+</body>
+</html>

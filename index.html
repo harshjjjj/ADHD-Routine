@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Truce — ADHD-focused daily routine tracker for iOS</title>
+  <title>Truce — ADHD Daily Routine & Guilt-Free Tracker</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   
   <!-- Space Grotesk, Inter, and JetBrains Mono Fonts from Google Fonts -->
@@ -2642,7 +2642,7 @@
   <!-- SECTION 1 — STICKY NAV -->
   <header id="main-header">
     <div class="container nav-container">
-      <a href="#" class="logo">
+      <a href="/" class="logo" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
         <svg class="truce-logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <linearGradient id="truce-logo-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -2665,7 +2665,10 @@
             <path d="M41.5 41C41.5 32 43 26.5 47.5 25.5C50 25 52.5 26.5 52.5 29.5C52.5 32 52 35.5 52 38H58.5C60.5 38 62 39.5 62 41.5C62 43.5 60.5 45 58.5 45H51.5C51 53 51 59 52.5 61.5C53.5 63.5 55.5 64 58 61.5C60 59 63 55 65.5 51C67 48.5 70 47.5 72 49.5C74 51.5 73.5 54.5 71.5 57.5C67.5 64 61.5 73 54.5 74.5C47.5 76 43.5 71 43.5 61C43.5 54.5 43 49 43 45H37.5C35.5 45 34 43.5 34 41.5C34 39.5 35.5 38 37.5 38H42.5V41Z" fill="#FDF3F5"/>
           </g>
         </svg>
-        Truce
+        <div style="display: flex; flex-direction: column; align-items: flex-start; line-height: 1.15;">
+          <span style="font-family: var(--font-display); font-weight: 800; font-size: 21px; color: var(--title-text); letter-spacing: -0.02em;">Truce</span>
+          <span style="font-size: 9px; font-weight: 700; color: var(--primary-accent); text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--font-mono); margin-top: -1px;">ADHD Daily Routine</span>
+        </div>
       </a>
       
       <nav class="nav-links">
@@ -2700,7 +2703,7 @@
   <section class="hero-section">
     <div class="container hero-grid">
       <div class="hero-left">
-        <h1 class="hero-headline">Your ADHD Brain Deserves Better Than Broken Streaks.</h1>
+        <h1 class="hero-headline">Your ADHD Daily Routine Deserves Better Than Broken Streaks.</h1>
         <p class="hero-subheadline">
           Truce is the first routine tracker designed around how ADHD brains actually work — with zero shame, zero punishment, and progress that survives a bad day.
         </p>
@@ -3515,9 +3518,24 @@
         <p>Join 2,400+ people waiting for an app that finally gets how their brain works.</p>
         
         <!-- Waitlist Email Form -->
-        <form class="waitlist-form" id="waitlist-form-el" onsubmit="handleWaitlistSubmit(event)">
-          <input type="email" required placeholder="your@email.com" class="form-input" id="waitlist-email">
-          <button type="submit" class="btn btn-primary">Join Waitlist</button>
+        <form class="waitlist-form" id="waitlist-form-el" onsubmit="handleWaitlistSubmit(event)" style="display: flex; flex-direction: column; gap: 16px; max-width: 520px; margin: 24px auto 20px auto; text-align: left;">
+          <div>
+            <label for="waitlist-email" style="display: block; font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--body-text); margin-bottom: 6px;">Email Address <span style="color: var(--primary-accent);">*</span></label>
+            <input type="email" required placeholder="your@email.com" class="form-input" id="waitlist-email" style="width: 100%; box-shadow: 0 4px 12px rgba(0,0,0,0.02); background-color: var(--surface-color); color: var(--body-text);">
+          </div>
+          
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; flex-wrap: wrap; gap: 4px;">
+              <label for="waitlist-feedback" style="font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--body-text);">Your Feedback (Optional)</label>
+              <span style="font-size: 11px; color: var(--muted-text); font-weight: 500;">What can be added, liked, disliked, or changed?</span>
+            </div>
+            <textarea id="waitlist-feedback" placeholder="What features would you love to see? What do you like, dislike, or want changed in current routine trackers? Help us build the perfect app for your brain." 
+                      style="width: 100%; min-height: 110px; padding: 14px 16px; font-size: 14px; line-height: 1.55; border-radius: 14px; border: 1.5px solid var(--primary-border); background-color: var(--surface-color); color: var(--body-text); font-family: var(--font-family); outline: none; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); resize: vertical; box-shadow: 0 4px 12px rgba(0,0,0,0.02);"
+                      onfocus="this.style.borderColor='var(--primary-accent)'; this.style.boxShadow='0 0 15px var(--primary-glow)';"
+                      onblur="this.style.borderColor='var(--primary-border)'; this.style.boxShadow='none';"></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="height: 52px; font-size: 16px; font-weight: 700; border-radius: 14px; margin-top: 6px; width: 100%;">Submit & Join Waitlist</button>
         </form>
 
         <!-- Success Animation Box -->
@@ -3540,7 +3558,7 @@
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
-          <div class="logo">
+          <div class="logo" style="display: flex; align-items: center; gap: 8px;">
             <svg class="truce-logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
               <defs>
                 <linearGradient id="truce-logo-gradient-footer" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -3563,7 +3581,10 @@
                 <path d="M41.5 41C41.5 32 43 26.5 47.5 25.5C50 25 52.5 26.5 52.5 29.5C52.5 32 52 35.5 52 38H58.5C60.5 38 62 39.5 62 41.5C62 43.5 60.5 45 58.5 45H51.5C51 53 51 59 52.5 61.5C53.5 63.5 55.5 64 58 61.5C60 59 63 55 65.5 51C67 48.5 70 47.5 72 49.5C74 51.5 73.5 54.5 71.5 57.5C67.5 64 61.5 73 54.5 74.5C47.5 76 43.5 71 43.5 61C43.5 54.5 43 49 43 45H37.5C35.5 45 34 43.5 34 41.5C34 39.5 35.5 38 37.5 38H42.5V41Z" fill="#FDF3F5"/>
               </g>
             </svg>
-            Truce
+            <div style="display: flex; flex-direction: column; align-items: flex-start; line-height: 1.15;">
+              <span style="font-family: var(--font-display); font-weight: 800; font-size: 21px; color: var(--title-text); letter-spacing: -0.02em;">Truce</span>
+              <span style="font-size: 9px; font-weight: 700; color: var(--primary-accent); text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--font-mono); margin-top: -1px;">ADHD Daily Routine</span>
+            </div>
           </div>
           <p>Built for ADHD brains. Not against them. Your morning, your pace, with absolutely zero shame spirals.</p>
         </div>
@@ -3578,11 +3599,19 @@
         </div>
         
         <div class="footer-links">
-          <h5>Company</h5>
+          <h5>Legal</h5>
           <nav class="footer-links-list">
-            <a href="javascript:void(0)" onclick="openTruceModal()">Truce Policy & Pact</a>
-            <a href="javascript:void(0)" onclick="openTruceModal()">Terms of Gentle Service</a>
-            <a href="mailto:support@truce.app">Contact Support</a>
+            <a href="/privacy.html">Privacy Policy</a>
+            <a href="/terms.html">Terms of Use (EULA)</a>
+            <a href="/deletion.html">Data Deletion</a>
+          </nav>
+        </div>
+
+        <div class="footer-links">
+          <h5>Support</h5>
+          <nav class="footer-links-list">
+            <a href="/support.html">Help & Support</a>
+            <a href="mailto:hello@truceapp.site">Contact Email</a>
           </nav>
         </div>
       </div>
@@ -4129,14 +4158,14 @@
     try {
       const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
       db = getFirestore(app, "ai-studio-0e0b7264-581b-4bb7-bd6d-f7225649e700");
-      console.log("Firebase CDN module initialized successfully for truceapp.site waitlist submissions with database ID ai-studio-0e0b7264-581b-4bb7-bd6d-f7225649e700.");
+      console.log("Firebase CDN module initialized successfully.");
     } catch(err) {
       console.error("Failed to initialize Firebase CDN module:", err);
     }
 
-    async function registerEmailInFirebase(email) {
+    async function registerEmailInFirebase(email, feedback = '') {
       // 1. Back up immediately in localStorage so it is never lost and displays instantly on the local device
-      saveToBackup(email);
+      saveToBackup(email, feedback);
 
       if (!db) {
         console.warn("Firestore not available! Saved waitlist email safely inside browser backup.");
@@ -4147,6 +4176,7 @@
       try {
         const docRef = await addDoc(collection(db, 'waitlist'), {
           email: email,
+          feedback: feedback,
           createdAt: new Date(),
           status: 'pending',
           emailStatus: 'none',
@@ -4240,14 +4270,19 @@
       }
     }
 
-    function saveToBackup(email) {
+    function saveToBackup(email, feedback = '') {
       try {
         let list = JSON.parse(localStorage.getItem('truce_offline_waitlist') || '[]');
-        // Don't duplicate if already in backup
-        if (!list.some(item => item.email === email)) {
-          list.push({ email: email, timestamp: new Date().toISOString() });
-          localStorage.setItem('truce_offline_waitlist', JSON.stringify(list));
+        // Don't duplicate if already in backup, or update feedback if it changes
+        const existingIndex = list.findIndex(item => item.email === email);
+        if (existingIndex !== -1) {
+          if (feedback) {
+            list[existingIndex].feedback = feedback;
+          }
+        } else {
+          list.push({ email: email, feedback: feedback, timestamp: new Date().toISOString() });
         }
+        localStorage.setItem('truce_offline_waitlist', JSON.stringify(list));
       } catch(e) {
         console.error("Local storage backup failed:", e);
       }
@@ -4258,11 +4293,13 @@
       if (event) event.preventDefault();
       
       const emailInput = document.getElementById('waitlist-email');
+      const feedbackInput = document.getElementById('waitlist-feedback');
       const waitlistForm = document.getElementById('waitlist-form-el');
       const successBox = document.getElementById('waitlist-success');
 
       if (!emailInput || !emailInput.value.trim()) return;
       const email = emailInput.value.trim();
+      const feedback = feedbackInput ? feedbackInput.value.trim() : '';
 
       const submitBtn = waitlistForm.querySelector('button');
       if (submitBtn) {
@@ -4272,7 +4309,7 @@
       }
 
       // Fire Firestore register in a non-blocking/instant manner
-      registerEmailInFirebase(email);
+      registerEmailInFirebase(email, feedback);
 
       // Force UI update to success immediately after 400ms for premium fluid feel
       setTimeout(() => {
