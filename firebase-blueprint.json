@@ -23,6 +23,15 @@
           "type": "string",
           "format": "date-time",
           "description": "Timestamp when synced to Google Sheet"
+        },
+        "emailStatus": {
+          "type": "string",
+          "enum": ["none", "sent", "failed"],
+          "description": "Status of auto-reply welcome email send"
+        },
+        "emailError": {
+          "type": "string",
+          "description": "Detailed error message if the welcome email failed to send"
         }
       },
       "required": ["email", "createdAt", "status"]
@@ -43,6 +52,51 @@
         }
       },
       "required": ["spreadsheetId"]
+    },
+    "EmailConfig": {
+      "title": "Email Auto-Reply Config",
+      "description": "Configuration settings for automatic welcome emails when a user signs up to the waitlist",
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Whether welcome auto-reply email is enabled"
+        },
+        "serviceId": {
+          "type": "string",
+          "description": "EmailJS Service ID"
+        },
+        "templateId": {
+          "type": "string",
+          "description": "EmailJS Template ID"
+        },
+        "publicKey": {
+          "type": "string",
+          "description": "EmailJS API/Public Key"
+        },
+        "senderName": {
+          "type": "string",
+          "description": "Name of the sender showing up in the email header"
+        },
+        "replyTo": {
+          "type": "string",
+          "description": "Reply-to address for subscribers"
+        },
+        "emailSubject": {
+          "type": "string",
+          "description": "Subject of the email greeting"
+        },
+        "emailBody": {
+          "type": "string",
+          "description": "Body description of the welcome email"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Date when setting was adjusted"
+        }
+      },
+      "required": ["enabled"]
     }
   },
   "firestore": {
@@ -53,6 +107,10 @@
     "/config/sheets": {
       "schema": "SheetsConfig",
       "description": "Google Sheet spreadsheet configuration"
+    },
+    "/config/email": {
+      "schema": "EmailConfig",
+      "description": "Email credentials and customizable auto-reply parameters"
     }
   }
 }

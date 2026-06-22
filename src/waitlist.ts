@@ -39,6 +39,7 @@ googleProvider.addScope('https://www.googleapis.com/auth/drive.file');
 let activeUser: User | null = null;
 let googleAccessToken: string | null = null;
 let activeSpreadsheetId: string | null = null;
+let activeEmailConfig: any = null;
 let subscribersList: any[] = [];
 let unsubscribeListener: (() => void) | null = null;
 
@@ -145,6 +146,47 @@ async function saveSheetConfig(id: string) {
   }
 }
 
+// Fetch welcome auto-reply email configuration
+async function fetchEmailConfig() {
+  const path = 'config/email';
+  try {
+    const configDoc = await getDoc(doc(db, 'config', 'email'));
+    if (configDoc.exists()) {
+      return configDoc.data();
+    }
+  } catch (err: any) {
+    console.error('Failed to load email config from Firestore:', err);
+  }
+  // fallback default template values if not created yet
+  return {
+    enabled: false,
+    serviceId: '',
+    templateId: '',
+    publicKey: '',
+    senderName: 'Truce Team',
+    replyTo: 'hello@truceapp.site',
+    emailSubject: 'Welcome to Truce! 🌅',
+    emailBody: 'Hi there,\n\nThank you for your interest in Truce! We are excited to have you on our waitlist. We will reach out as soon as we make more spots available!\n\nBest,\nThe Truce Team'
+  };
+}
+
+// Save email config to Firestore
+async function saveEmailConfig(config: any) {
+  const path = 'config/email';
+  activeEmailConfig = config;
+  renderStatus();
+
+  try {
+    await setDoc(doc(db, 'config', 'email'), {
+      ...config,
+      updatedAt: Timestamp.now()
+    }, { merge: true });
+  } catch (err: any) {
+    console.error('Failed to save email config to Firestore:', err);
+    alert('Failed to save email settings to Firestore config.');
+  }
+}
+
 // Check if user is already logged in
 onAuthStateChanged(auth, async (user) => {
   activeUser = user;
@@ -156,14 +198,16 @@ onAuthStateChanged(auth, async (user) => {
   
   if (user) {
     console.log('Admin user authenticated:', user.email);
-    // If the admin signed in, retrieve spreadsheet configuration
+    // If the admin signed in, retrieve spreadsheet and email configurations
     activeSpreadsheetId = await fetchSheetConfig();
+    activeEmailConfig = await fetchEmailConfig();
     
     // Listen for waitlist updates real-time
     listenToSubscribers();
   } else {
     console.log('No active authenticated session.');
     activeSpreadsheetId = null;
+    activeEmailConfig = null;
     subscribersList = [];
     renderStatus();
   }
@@ -501,6 +545,78 @@ function renderStatus() {
         </div>
       </div>
 
+      <!-- Auto-Reply Email Config Panel (Only renders for authenticated administrators) -->
+      ${activeUser ? `
+        <div style="background: rgba(66, 133, 244, 0.02); border: 1px dashed var(--primary-border); border-radius: 14px; padding: 16px; margin-bottom: 20px;">
+          <h5 style="font-weight: 700; font-size: 13px; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">📧 Auto-Reply Email Setup (via EmailJS)</h5>
+          <p style="font-size: 11.5px; color: var(--muted-text); margin-bottom: 14px;">Automatically send a welcome thank-you email immediately when someone joins the waitlist.</p>
+          
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <!-- Status Toggle Row -->
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <input type="checkbox" id="email-enabled-toggle" ${activeEmailConfig?.enabled ? 'checked' : ''} style="cursor: pointer; width: 16px; height: 16px; accent-color: var(--primary-accent);">
+              <label for="email-enabled-toggle" style="font-size: 12.5px; font-weight: 700; cursor: pointer; color: var(--body-text);">Enable Auto-Reply Email</label>
+            </div>
+
+            <!-- Configuration Helper Tip -->
+            <div style="background: rgba(66, 133, 244, 0.05); padding: 10px 14px; border-radius: 10px; font-size: 11px; color: var(--body-text); border: 1px solid rgba(66, 133, 244, 0.12); font-family: var(--font-sans); line-height: 1.4;">
+              🌅 <strong>EmailJS Setup:</strong> Create a free account at <a href="https://www.emailjs.com/" target="_blank" style="color: var(--primary-accent); text-decoration: underline; font-weight: 600;">emailjs.com</a>, link an email service provider, and create an Email Template. Use template keys <code>{{email_subject}}</code>, <code>{{message}}</code>, and <code>{{to_email}}</code> to map content.
+            </div>
+
+            <!-- EmailJS Service Credentials Grid -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px;">
+              <div>
+                <label style="font-size: 10px; color: var(--muted-text); text-transform: uppercase; font-weight: 700; display: block; margin-bottom: 3.5px;">EmailJS Service ID</label>
+                <input type="text" id="email-service-id" placeholder="e.g. service_gxx8sae" value="${activeEmailConfig?.serviceId || ''}" 
+                       style="width: 100%; padding: 8px 12px; font-size: 12px; border-radius: 8px; border: 1px solid var(--primary-border); font-family: var(--font-mono); background: var(--surface-color); outline: none; color: var(--body-text);">
+              </div>
+              <div>
+                <label style="font-size: 10px; color: var(--muted-text); text-transform: uppercase; font-weight: 700; display: block; margin-bottom: 3.5px;">EmailJS Template ID</label>
+                <input type="text" id="email-template-id" placeholder="e.g. template_p93b8sh" value="${activeEmailConfig?.templateId || ''}" 
+                       style="width: 100%; padding: 8px 12px; font-size: 12px; border-radius: 8px; border: 1px solid var(--primary-border); font-family: var(--font-mono); background: var(--surface-color); outline: none; color: var(--body-text);">
+              </div>
+            </div>
+            <div>
+              <label style="font-size: 10px; color: var(--muted-text); text-transform: uppercase; font-weight: 700; display: block; margin-bottom: 3.5px;">EmailJS Public Key</label>
+              <input type="text" id="email-public-key" placeholder="e.g. kH3g4XnsY8_xxxxxx" value="${activeEmailConfig?.publicKey || ''}" 
+                     style="width: 100%; padding: 8px 12px; font-size: 12px; border-radius: 8px; border: 1px solid var(--primary-border); font-family: var(--font-mono); background: var(--surface-color); outline: none; color: var(--body-text);">
+            </div>
+
+            <!-- Sender configuration Row -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px;">
+              <div>
+                <label style="font-size: 10px; color: var(--muted-text); text-transform: uppercase; font-weight: 700; display: block; margin-bottom: 3.5px;">Sender Header Name</label>
+                <input type="text" id="email-sender-name" placeholder="e.g. Truce Team" value="${activeEmailConfig?.senderName || 'Truce Team'}" 
+                       style="width: 100%; padding: 8px 12px; font-size: 12.5px; border-radius: 8px; border: 1px solid var(--primary-border); background: var(--surface-color); outline: none; color: var(--body-text);">
+              </div>
+              <div>
+                <label style="font-size: 10px; color: var(--muted-text); text-transform: uppercase; font-weight: 700; display: block; margin-bottom: 3.5px;">Reply-To Address</label>
+                <input type="text" id="email-reply-to" placeholder="e.g. contact@truceapp.site" value="${activeEmailConfig?.replyTo || 'hello@truceapp.site'}" 
+                       style="width: 100%; padding: 8px 12px; font-size: 12.5px; border-radius: 8px; border: 1px solid var(--primary-border); background: var(--surface-color); outline: none; color: var(--body-text);">
+              </div>
+            </div>
+
+            <!-- Template customizer subject/body -->
+            <div>
+              <label style="font-size: 10px; color: var(--muted-text); text-transform: uppercase; font-weight: 700; display: block; margin-bottom: 3.5px;">Email Subject Line</label>
+              <input type="text" id="email-subject" placeholder="Welcome to Truce! 🌅" value="${activeEmailConfig?.emailSubject || 'Welcome to Truce! 🌅'}" 
+                     style="width: 100%; padding: 8px 12px; font-size: 12.5px; border-radius: 8px; border: 1px solid var(--primary-border); background: var(--surface-color); outline: none; color: var(--body-text); margin-bottom: 8px;">
+              
+              <label style="font-size: 10px; color: var(--muted-text); text-transform: uppercase; font-weight: 700; display: block; margin-bottom: 3.5px;">Thank-You Message Body</label>
+              <textarea id="email-body" rows="4" placeholder="Customize the thank-you note content..." 
+                        style="width: 100%; padding: 10px 12px; font-size: 12px; border-radius: 8px; border: 1px solid var(--primary-border); background: var(--surface-color); outline: none; color: var(--body-text); font-family: var(--font-sans); line-height: 1.45; resize: vertical;">${activeEmailConfig?.emailBody || 'Hi there,\n\nThank you for your interest in Truce! We are excited to have you on our waitlist. We will reach out as soon as we make more spots available!\n\nBest regards,\nThe Truce Team'}</textarea>
+            </div>
+
+            <!-- Save settings action -->
+            <div style="display: flex; justify-content: flex-end; margin-top: 4px;">
+              <button id="btn-save-email-settings" style="background: var(--body-text); color: white; padding: 10px 18px; border-radius: 10px; font-size: 12px; font-weight: 700; border: none; cursor: pointer;">
+                Save Email Configurations
+              </button>
+            </div>
+          </div>
+        </div>
+      ` : ''}
+
       <!-- Logs database -->
       <div>
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
@@ -514,7 +630,7 @@ function renderStatus() {
           `}
         </div>
 
-        <div style="max-height: 180px; overflow-y: auto; background: var(--surface-color); border: 1px solid var(--primary-border); border-radius: 10px;">
+        <div style="max-height: 240px; overflow-y: auto; background: var(--surface-color); border: 1px solid var(--primary-border); border-radius: 10px;">
           ${subscribersList.length === 0 ? `
             <div style="padding: 24px; text-align: center; color: var(--muted-text); font-size: 12px; font-style: italic;">
               No waitlist subscribers registered yet. Try submitting an email address on the main page!
@@ -523,25 +639,43 @@ function renderStatus() {
             <table style="width: 100%; border-collapse: collapse; font-size: 11.5px; text-align: left;">
               <thead>
                 <tr style="background: var(--bg-color); border-bottom: 1px solid var(--primary-border);">
-                  <th style="padding: 8px 12px; font-weight: 700;">Email</th>
-                  <th style="padding: 8px 12px; font-weight: 700;">Signup Date</th>
-                  <th style="padding: 8px 12px; font-weight: 700;">Sync Status</th>
+                  <th style="padding: 10px 12px; font-weight: 700;">Email</th>
+                  <th style="padding: 10px 12px; font-weight: 700;">Signup Date</th>
+                  <th style="padding: 10px 12px; font-weight: 700;">Sync Status</th>
+                  <th style="padding: 10px 12px; font-weight: 700;">Auto-Reply Status</th>
                 </tr>
               </thead>
               <tbody>
                 ${subscribersList.map(item => {
                   const dateStr = item.createdAt ? new Date(item.createdAt.seconds * 1000).toLocaleDateString() : 'Just Now';
                   const isSynced = item.status === 'synced';
+                  
+                  // Draft auto-reply welcome email delivery badge based on status fields
+                  const mailStatus = item.emailStatus || 'none';
+                  let mailBadge = '';
+                  if (mailStatus === 'sent') {
+                    mailBadge = `<span style="display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 10px; font-weight: 700; background: rgba(5, 202, 151, 0.08); color: #05ca97;">🟢 Sent</span>`;
+                  } else if (mailStatus === 'failed') {
+                    mailBadge = `<span style="display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 10px; font-weight: 700; background: rgba(255, 65, 93, 0.08); color: #ff415d; cursor: help;" title="${item.emailError || 'Email validation or API configuration key mismatch.'}">🔴 Failed</span>`;
+                  } else if (mailStatus === 'sending') {
+                    mailBadge = `<span style="display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 10px; font-weight: 700; background: rgba(66, 133, 244, 0.08); color: #4285f4Animation;">⏳ Sending...</span>`;
+                  } else {
+                    mailBadge = `<span style="display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 10px; font-weight: 700; background: rgba(140, 140, 140, 0.08); color: #888;">⚪ Off/None</span>`;
+                  }
+
                   return `
                     <tr style="border-bottom: 1px solid rgba(255, 65, 93, 0.05);">
-                      <td style="padding: 8px 12px; font-family: var(--font-mono); font-weight: 500;">${item.email}</td>
-                      <td style="padding: 8px 12px; color: var(--muted-text);">${dateStr}</td>
-                      <td style="padding: 8px 12px;">
+                      <td style="padding: 10px 12px; font-family: var(--font-mono); font-weight: 500;">${item.email}</td>
+                      <td style="padding: 10px 12px; color: var(--muted-text);">${dateStr}</td>
+                      <td style="padding: 10px 12px;">
                         <span style="display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 10px; font-weight: 700; 
                                      background: ${isSynced ? 'rgba(5, 202, 151, 0.08)' : 'rgba(255, 159, 28, 0.08)'}; 
                                      color: ${isSynced ? '#05ca97' : '#ff9f1c'};">
                           ${isSynced ? 'Synced' : 'Pending'}
                         </span>
+                      </td>
+                      <td style="padding: 10px 12px;">
+                        ${mailBadge}
                       </td>
                     </tr>
                   `;
@@ -578,6 +712,45 @@ function renderStatus() {
         alert('Sheets ID linked successfully!');
       } else {
         alert('Please fill out a valid Spreadsheet ID first.');
+      }
+    };
+  }
+
+  // Save Email Configurations click listener
+  const saveEmailSettingsBtn = document.getElementById('btn-save-email-settings');
+  if (saveEmailSettingsBtn) {
+    saveEmailSettingsBtn.onclick = async () => {
+      const enabledToggle = document.getElementById('email-enabled-toggle') as HTMLInputElement | null;
+      const serviceIdInput = document.getElementById('email-service-id') as HTMLInputElement | null;
+      const templateIdInput = document.getElementById('email-template-id') as HTMLInputElement | null;
+      const publicKeyInput = document.getElementById('email-public-key') as HTMLInputElement | null;
+      const senderNameInput = document.getElementById('email-sender-name') as HTMLInputElement | null;
+      const replyToInput = document.getElementById('email-reply-to') as HTMLInputElement | null;
+      const subjectInput = document.getElementById('email-subject') as HTMLInputElement | null;
+      const bodyTextarea = document.getElementById('email-body') as HTMLTextAreaElement | null;
+
+      const newConfig = {
+        enabled: enabledToggle ? enabledToggle.checked : false,
+        serviceId: serviceIdInput ? serviceIdInput.value.trim() : '',
+        templateId: templateIdInput ? templateIdInput.value.trim() : '',
+        publicKey: publicKeyInput ? publicKeyInput.value.trim() : '',
+        senderName: senderNameInput ? senderNameInput.value.trim() : 'Truce Team',
+        replyTo: replyToInput ? replyToInput.value.trim() : 'hello@truceapp.site',
+        emailSubject: subjectInput ? subjectInput.value.trim() : 'Welcome to Truce! 🌅',
+        emailBody: bodyTextarea ? bodyTextarea.value : ''
+      };
+
+      saveEmailSettingsBtn.textContent = 'Saving configs...';
+      (saveEmailSettingsBtn as HTMLButtonElement).disabled = true;
+
+      try {
+        await saveEmailConfig(newConfig);
+        alert('Email Auto-Reply configurations saved in Firestore successfully!');
+      } catch (e: any) {
+        alert('Failed to save email settings: ' + (e.message || e));
+      } finally {
+        saveEmailSettingsBtn.textContent = 'Save Email Configurations';
+        (saveEmailSettingsBtn as HTMLButtonElement).disabled = false;
       }
     };
   }

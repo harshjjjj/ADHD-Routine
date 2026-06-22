@@ -2553,6 +2553,88 @@
       background-color: var(--surface-hover);
       border-color: var(--primary-accent);
     }
+
+    /* FAQ SECTION STYLES */
+    .faq-section {
+      background-color: var(--recessed-section-alt);
+    }
+    .faq-container {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .faq-item {
+      background: var(--white-always);
+      border: 1px solid var(--primary-border);
+      border-radius: 16px !important;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 18px rgba(255, 65, 93, 0.02);
+      overflow: hidden;
+    }
+    .faq-item:hover {
+      border-color: rgba(255, 65, 93, 0.3);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(255, 65, 93, 0.04);
+    }
+    .faq-item[open] {
+      border-color: var(--primary-accent);
+      box-shadow: 0 12px 30px rgba(255, 65, 93, 0.06);
+    }
+    .faq-question {
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 24px;
+      font-weight: 700;
+      font-size: 16.5px;
+      color: var(--title-text);
+      font-family: var(--font-display);
+      cursor: pointer;
+      outline: none;
+      user-select: none;
+    }
+    .faq-question::-webkit-details-marker {
+      display: none;
+    }
+    .faq-icon-box {
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: var(--badge-bg);
+      color: var(--primary-accent);
+      font-size: 16px;
+      font-weight: 700;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      flex-shrink: 0;
+    }
+    .faq-item[open] .faq-icon-box {
+      background: var(--primary-accent);
+      color: var(--white-always);
+      transform: rotate(45deg);
+    }
+    .faq-answer {
+      padding: 0 24px 22px 24px;
+      font-size: 15px;
+      color: var(--body-text);
+      line-height: 1.65;
+      animation: faq-slide 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes faq-slide {
+      from {
+        opacity: 0;
+        transform: translateY(-4px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
   </style>
 </head>
 <body>
@@ -3346,6 +3428,85 @@
   </section>
 
 
+  <!-- SECTION 7 — INTERACTIVE FAQ -->
+  <section class="section-padding faq-section fade-in-section" id="faq">
+    <div class="container">
+      <div class="section-title-wrapper" style="text-align: center; max-width: 680px; margin: 0 auto 40px auto;">
+        <span class="section-subtitle" style="display: inline-block; background: var(--badge-bg); color: var(--primary-accent); padding: 4px 12px; border-radius: 20px; font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px; font-family: var(--font-mono);">Have Questions?</span>
+        <h2 style="font-size: 36px; font-weight: 800; line-height: 1.25; font-family: var(--font-display); color: var(--title-text);">Common Questions</h2>
+        <p style="color: var(--muted-text); margin-top: 10px; font-size: 15px; line-height: 1.6;">Designed for different brains. Here is how Truce works, why it is different, and how it helps you thrive without the guilt.</p>
+      </div>
+
+      <div class="faq-container">
+        <!-- FAQ Item 1 -->
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>How is Truce different from standard routine trackers?</span>
+            <div class="faq-icon-box">+</div>
+          </summary>
+          <div class="faq-answer">
+            <p style="color: var(--body-text); font-size: 14.5px; line-height: 1.65; margin: 0;">
+              Traditional routine trackers are built for neurotypical minds. They demand unbroken streaks and make you feel guilty when life gets in the way. Truce is built explicitly for ADHD and neurodiverse coping mechanisms. Instead of streaks, we measure long-term completion percentages. If you miss a day, you don't lose your momentum, making it much easier to pick up where you left off.
+            </p>
+          </div>
+        </details>
+
+        <!-- FAQ Item 2 -->
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>What is a "guilt-free routine builder"?</span>
+            <div class="faq-icon-box">+</div>
+          </summary>
+          <div class="faq-answer">
+            <p style="color: var(--body-text); font-size: 14.5px; line-height: 1.65; margin: 0;">
+              Your focus and energy levels change daily. On some days, you have high focus; on others, getting out of bed is a victory. Truce allows you to adjust your routine's difficulty on the fly based on your current dopamine energy level (Low, Standard, or High). Checking off a simplified 2-minute version of your routine on a low-energy day still counts as 100% success!
+            </p>
+          </div>
+        </details>
+
+        <!-- FAQ Item 3 -->
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>How does the weekly overview help with object permanence?</span>
+            <div class="faq-icon-box">+</div>
+          </summary>
+          <div class="faq-answer">
+            <p style="color: var(--body-text); font-size: 14.5px; line-height: 1.65; margin: 0;">
+              For many of us, out of sight means out of mind. Truce uses persistent visual widget cards, color-coded energy gauges, and a playful "smiley-face calendar" instead of intimidating checklists. It offers immediate sensory rewards and gentle visual cues to keep your routines visible and engaging, without resorting to nagging pings.
+            </p>
+          </div>
+        </details>
+
+        <!-- FAQ Item 4 -->
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>Will Truce always remain free?</span>
+            <div class="faq-icon-box">+</div>
+          </summary>
+          <div class="faq-answer">
+            <p style="color: var(--body-text); font-size: 14.5px; line-height: 1.65; margin: 0;">
+              The core guilt-free tracker, flexible energy adjuster, and milestone boards will always remain free. By joining the early-access waitlist today, you are guaranteed a lifetime free beta spot. As we grow, we will introduce completely optional premium modules (like deeper team synchronization, advanced analytical insights, and integrated custom soundscapes) that help us fund independent development.
+            </p>
+          </div>
+        </details>
+
+        <!-- FAQ Item 5 -->
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>How and when will I get my early access invitation?</span>
+            <div class="faq-icon-box">+</div>
+          </summary>
+          <div class="faq-answer">
+            <p style="color: var(--body-text); font-size: 14.5px; line-height: 1.65; margin: 0;">
+              We are releasing early access spots in small batches to preserve community quality and let us implement feedback incrementally. When your spot is ready, you will receive an automatic invite with download instructions. Make sure to whitelist <strong>hello@truceapp.site</strong> in your mail client so you don't miss your entry ticket!
+            </p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+
   <!-- SECTION 8 — FINAL CTA / WAITLIST -->
   <section class="cta-section" id="waitlist">
     <div class="container">
@@ -3953,7 +4114,7 @@
   <!-- Robust Live Firebase Waitlist Integration Module (CDN-based for 100% static hosting / GitHub Pages reliability) -->
   <script type="module">
     import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
       projectId: "gen-lang-client-0672384495",
@@ -3984,21 +4145,97 @@
 
       // Try saving to Firestore in a non-blocking race so the UI updates instantly
       try {
-        const firestorePromise = addDoc(collection(db, 'waitlist'), {
+        const docRef = await addDoc(collection(db, 'waitlist'), {
           email: email,
           createdAt: new Date(),
-          status: 'pending'
-        }).then((docRef) => {
-          console.log("Successfully registered email in Google Firebase:", email, docRef.id);
-          return true;
+          status: 'pending',
+          emailStatus: 'none',
+          emailError: ''
         });
 
-        // Limit waiting to 800ms max so the customer never waits
-        const timeoutPromise = new Promise((resolve) => setTimeout(() => resolve(false), 800));
-        await Promise.race([firestorePromise, timeoutPromise]);
+        console.log("Successfully registered email in Google Firebase:", email, docRef.id);
+
+        // 2. Spawn fully asynchronous welcome email check and dispatch in the background so customer UI doesn't stall
+        getDoc(doc(db, 'config', 'email')).then(async (configSnap) => {
+          if (!configSnap.exists()) return;
+          const config = configSnap.data();
+          if (!config || !config.enabled) return;
+
+          console.log("Auto-reply is enabled. Attempting email dispatch via EmailJS package backend...");
+          await updateDoc(doc(db, 'waitlist', docRef.id), {
+            emailStatus: 'sending'
+          }).catch(e => console.error("Error setting emailStatus to sending:", e));
+
+          const serviceId = config.serviceId;
+          const templateId = config.templateId;
+          const publicKey = config.publicKey;
+          const subject = config.emailSubject || "Welcome to Truce! 🌅";
+          const body = config.emailBody || "Thank you for joining our waitlist! We will reach out soon.";
+          const senderName = config.senderName || "Truce Team";
+          const replyTo = config.replyTo || "";
+
+          if (!serviceId || !templateId || !publicKey) {
+            console.warn("EmailJS credentials incomplete in Admin settings.");
+            await updateDoc(doc(db, 'waitlist', docRef.id), {
+              emailStatus: 'failed',
+              emailError: "Credentials incomplete inside Admin configurations panel."
+            }).catch(() => {});
+            return;
+          }
+
+          // Trigger email via EmailJS HTTP Client REST API
+          try {
+            const res = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({
+                service_id: serviceId,
+                template_id: templateId,
+                user_id: publicKey,
+                template_params: {
+                  to_email: email,
+                  to_name: email.split('@')[0],
+                  subject_line: subject,
+                  email_subject: subject,
+                  subject: subject,
+                  message: body,
+                  email_body: body,
+                  body_text: body,
+                  sender_name: senderName,
+                  reply_to: replyTo
+                }
+              })
+            });
+
+            if (res.ok) {
+              console.log("Email auto-reply triggered successfully to:", email);
+              await updateDoc(doc(db, 'waitlist', docRef.id), {
+                emailStatus: 'sent'
+              }).catch(() => {});
+            } else {
+              const text = await res.text();
+              console.error("EmailJS dispatch failed with response:", text);
+              await updateDoc(doc(db, 'waitlist', docRef.id), {
+                emailStatus: 'failed',
+                emailError: `EmailJS server error: ${text || res.statusText}`
+              }).catch(() => {});
+            }
+          } catch(err) {
+            console.error("Error dispatching REST email request:", err);
+            await updateDoc(doc(db, 'waitlist', docRef.id), {
+              emailStatus: 'failed',
+              emailError: String(err.message || err)
+            }).catch(() => {});
+          }
+        }).catch(err => {
+          console.error("Failed to read email dynamic config document:", err);
+        });
+
         return true;
       } catch (err) {
-        console.warn("Firestore submission failed/timed out, but email is saved locally:", err);
+        console.warn("Firestore submission failed:", err);
         return false;
       }
     }
