@@ -1,0 +1,58 @@
+{
+  "entities": {
+    "WaitlistSubscriber": {
+      "title": "Waitlist Subscriber",
+      "description": "A person who joined the morning app waitlist",
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "User email address"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when waitlist email was submitted"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["pending", "synced"],
+          "description": "Status of Google Sheet sync"
+        },
+        "syncedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when synced to Google Sheet"
+        }
+      },
+      "required": ["email", "createdAt", "status"]
+    },
+    "SheetsConfig": {
+      "title": "Google Sheets System Config",
+      "description": "Stores user config mapping for Sheets integration",
+      "type": "object",
+      "properties": {
+        "spreadsheetId": {
+          "type": "string",
+          "description": "ID of Google Sheet where waitlist is synchronized"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Date when setting was adjusted"
+        }
+      },
+      "required": ["spreadsheetId"]
+    }
+  },
+  "firestore": {
+    "/waitlist/{subscriberId}": {
+      "schema": "WaitlistSubscriber",
+      "description": "Registered morning block waitlist emails"
+    },
+    "/config/sheets": {
+      "schema": "SheetsConfig",
+      "description": "Google Sheet spreadsheet configuration"
+    }
+  }
+}

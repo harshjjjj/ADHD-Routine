@@ -1,0 +1,42 @@
+<svg width="512" height="512" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Background Gradient mimicking the soft coral-rose clay/plastic 3D app icon -->
+    <linearGradient id="rose-clay-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FF5A79" />
+      <stop offset="25%" stop-color="#FA2C56" />
+      <stop offset="100%" stop-color="#AA062D" />
+    </linearGradient>
+
+    <!-- Top Highlight for 3D bezel glow -->
+    <linearGradient id="bevel-highlight" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.45" />
+      <stop offset="12%" stop-color="#FFFFFF" stop-opacity="0.2" />
+      <stop offset="45%" stop-color="#FFFFFF" stop-opacity="0.0" />
+    </linearGradient>
+
+    <!-- 3D drop shadow beneath the 't' ribbon -->
+    <filter id="ribbon-shadow" x="-10%" y="-10%" width="130%" height="130%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="2.5" stdDeviation="1.8" flood-color="#730018" flood-opacity="0.32" />
+      <feDropShadow dx="0" dy="5.0" stdDeviation="4.0" flood-color="#4E000F" flood-opacity="0.18" />
+    </filter>
+
+    <!-- Subtle global shadow for the entire squircle -->
+    <filter id="squircle-shadow" x="-15%" y="-15%" width="130%" height="130%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="12" stdDeviation="15" flood-color="#FA2C56" flood-opacity="0.22" />
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#000000" flood-opacity="0.15" />
+    </filter>
+  </defs>
+
+  <!-- Shadow Group for Squircle -->
+  <g filter="url(#squircle-shadow)">
+    <!-- Base Squircle with soft Apple iOS corner aesthetic (rx=28 for 100x100 canvas is typical) -->
+    <rect x="4" y="4" width="92" height="92" rx="26" fill="url(#rose-clay-grad)" />
+    <!-- Bevel Inner Stroke / Lighting Glow -->
+    <rect x="4.5" y="4.5" width="91" height="91" rx="25.5" stroke="url(#bevel-highlight)" stroke-width="1.0" />
+  </g>
+
+  <!-- The stylized cursive 't' with a drop shadow to give 3D floating volume -->
+  <g filter="url(#ribbon-shadow)">
+    <path d="M41.5 41C41.5 32 43 26.5 47.5 25.5C50 25 52.5 26.5 52.5 29.5C52.5 32 52 35.5 52 38H58.5C60.5 38 62 39.5 62 41.5C62 43.5 60.5 45 58.5 45H51.5C51 53 51 59 52.5 61.5C53.5 63.5 55.5 64 58 61.5C60 59 63 55 65.5 51C67 48.5 70 47.5 72 49.5C74 51.5 73.5 54.5 71.5 57.5C67.5 64 61.5 73 54.5 74.5C47.5 76 43.5 71 43.5 61C43.5 54.5 43 49 43 45H37.5C35.5 45 34 43.5 34 41.5C34 39.5 35.5 38 37.5 38H42.5V41Z" fill="#FDF3F5"/>
+  </g>
+</svg>

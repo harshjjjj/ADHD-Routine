@@ -1,0 +1,6 @@
+{
+  "name": "Truce",
+  "description": "An ADHD-focused daily routine tracker. Form a gentle truce between your current energy level and your daily goals.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

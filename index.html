@@ -1,0 +1,4015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Truce — ADHD-focused daily routine tracker for iOS</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  
+  <!-- Space Grotesk, Inter, and JetBrains Mono Fonts from Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* CSS RESET & VARIABLES */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      scroll-behavior: smooth;
+    }
+
+    :root {
+      /* Theme: Healthy Rose Quartz & Coral Vitality (Healthy Pinkish/Light-Reddish Wellness Palette) */
+      --bg-color: #fff9fa;          /* Delicate warm blossom / healthy pinkish blush */
+      --surface-color: #ffffff;     /* Flat pure white bento cards */
+      --surface-hover: #ffeef2;     /* Soft peach-blossom light hover */
+      --primary-accent: #ff415d;    /* Vivid healthy blossom red (energetic, warm, human) */
+      --primary-glow: rgba(255, 65, 93, 0.12);
+      --primary-glow-subtle: rgba(255, 65, 93, 0.04);
+      --primary-border: rgba(255, 65, 93, 0.12);
+      --secondary-accent: #05ca97;  /* Serene healthy mint tea green */
+      --secondary-glow: rgba(5, 202, 151, 0.12);
+      --warning-accent: #ff9f1c;    /* Warm marigold orange */
+      --warning-glow: rgba(255, 159, 28, 0.12);
+      --body-text: #453335;         /* Readable deep warm espresso-chocolate - highly ergonomic */
+      --muted-text: #998386;        /* Soft dusty-rose gray */
+      --nav-glass: rgba(255, 249, 250, 0.85);
+      --white: #FFFFFF;
+      --white-always: #FFFFFF;
+      --btn-text: #ffffff;
+      --title-text: #2a0b0e;        /* Bold boysenberry crimson-black */
+      --card-shadow: 0 16px 40px rgba(255, 65, 93, 0.05);
+      --phone-bg: #fffbfb;
+      --phone-frame: #ffd6db;
+      --badge-bg: rgba(255, 65, 93, 0.08);
+      --form-input-bg: #ffffff;
+      --footer-bg: #ffeef2;
+      --recessed-section: rgba(255, 65, 93, 0.02);
+      --recessed-section-alt: rgba(255, 65, 93, 0.012);
+      --inner-surface: rgba(255, 65, 93, 0.012);
+      --inner-border: rgba(255, 65, 93, 0.05);
+      --success-alpha-bg: rgba(5, 202, 151, 0.05);
+      --success-alpha-border: rgba(5, 202, 151, 0.18);
+      --recessed-shadow: inset 0 2px 6px rgba(0,0,0,0.02), 0 4px 12px rgba(255,65,93,0.015);
+
+      --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --font-display: 'Space Grotesk', 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    /* Transition layout settings for beautiful layout shifts */
+    body {
+      background-color: var(--bg-color);
+      color: var(--body-text);
+      font-family: var(--font-family);
+      line-height: 1.7;
+      font-size: 16px;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* GLOBAL TYPOGRAPHY */
+    h1, h2, h3, h4 {
+      color: var(--title-text);
+      letter-spacing: -0.03em;
+      font-family: var(--font-display);
+      transition: color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    h1 {
+      font-size: 56px;
+      line-height: 1.15;
+      font-weight: 800;
+    }
+
+    h2 {
+      font-size: 38px;
+      line-height: 1.25;
+      font-weight: 700;
+    }
+
+    h3 {
+      font-size: 24px;
+      line-height: 1.35;
+      font-weight: 700;
+    }
+
+    p {
+      color: var(--body-text);
+      transition: color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* INTERSECTION OBSERVER ANIMATION CLASSES */
+    .fade-in-section {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      visibility: hidden;
+    }
+
+    .fade-in-section.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+      visibility: visible;
+    }
+
+    /* LAYOUT UTILITIES */
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .section-padding {
+      padding: 110px 0;
+    }
+
+    @media (max-width: 768px) {
+      .section-padding {
+        padding: 70px 0;
+      }
+      h1 {
+        font-size: 38px;
+      }
+      h2 {
+        font-size: 30px;
+      }
+    }
+
+    /* GLASS CARDS & ACCENTS */
+    .glass-card {
+      background-color: var(--surface-color);
+      border: 1px solid var(--primary-border);
+      border-radius: 24px;
+      padding: 36px;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .glass-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--primary-accent);
+      box-shadow: 0 16px 40px var(--primary-glow);
+    }
+
+    /* BUTTONS */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 28px;
+      border-radius: 14px;
+      font-weight: 600;
+      font-family: var(--font-display);
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      border: none;
+      font-size: 15px;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background-color: var(--primary-accent);
+      color: var(--white);
+      box-shadow: 0 4px 14px var(--primary-glow);
+    }
+
+    .btn-primary:hover {
+      background-color: #ff5c7a;
+      box-shadow: 0 8px 24px var(--primary-glow);
+      transform: translateY(-2px);
+    }
+
+    .btn-primary:active {
+      transform: translateY(1px);
+    }
+
+    .btn-secondary {
+      background-color: transparent;
+      border: 1.5px solid var(--primary-border);
+      color: var(--primary-accent);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--primary-glow-subtle);
+      border-color: var(--primary-accent);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary:active {
+      transform: translateY(1px);
+    }
+
+    /* STICKY NAV */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      background-color: transparent;
+      transition: background-color 0.3s ease, backdrop-filter 0.3s ease, border-color 0.3s ease;
+      border-bottom: 1px solid transparent;
+    }
+
+    header.scrolled {
+      background-color: var(--nav-glass);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--primary-border);
+    }
+
+    .nav-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 84px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 24px;
+      color: var(--title-text);
+      font-family: var(--font-display);
+      text-decoration: none;
+    }
+
+    .truce-logo-svg {
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      flex-shrink: 0;
+      /* Soft 3D drop shadow mimicking the app-icon feel */
+      filter: drop-shadow(0 4px 6px rgba(223, 46, 91, 0.25));
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      align-items: center;
+    }
+
+    .nav-link {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--muted-text);
+      font-family: var(--font-display);
+    }
+
+    .nav-link:hover {
+      color: var(--primary-accent);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+    }
+
+    /* HAMBURGER */
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+      cursor: pointer;
+      border: none;
+      background: none;
+      padding: 4px;
+      z-index: 1001;
+    }
+
+    .menu-toggle .bar {
+      width: 24px;
+      height: 2px;
+      background-color: var(--title-text);
+      transition: all 0.3s ease;
+    }
+
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 290px;
+      height: 100vh;
+      background-color: var(--bg-color);
+      border-left: 1px solid var(--primary-border);
+      padding: 100px 32px 32px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      transition: right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 999;
+    }
+
+    .mobile-menu.active {
+      right: 0;
+    }
+
+    .mobile-menu .nav-link {
+      font-size: 18px;
+    }
+
+    /* HERO SECTION */
+    .hero-section {
+      padding-top: 170px;
+      padding-bottom: 120px;
+      background: radial-gradient(circle at 75% 25%, rgba(255, 65, 93, 0.08) 0%, transparent 45%),
+                  radial-gradient(circle at 15% 75%, rgba(5, 202, 151, 0.04) 0%, transparent 40%);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 72px;
+      align-items: center;
+    }
+
+    .hero-headline {
+      margin-bottom: 24px;
+      font-size: 58px;
+    }
+
+    .hero-subheadline {
+      font-size: 18px;
+      color: var(--body-text);
+      line-height: 1.7;
+      margin-bottom: 36px;
+      max-width: 580px;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .social-proof {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted-text);
+      background-color: var(--surface-color);
+      border: 1px solid var(--primary-border);
+      padding: 12px 22px;
+      border-radius: 50px;
+      display: inline-flex;
+      box-shadow: var(--card-shadow);
+    }
+
+    /* PHONE MOCKUP PACKED IN BENTO BOX */
+    .phone-mockup-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      background-color: var(--surface-color);
+      border: 1px solid var(--primary-border);
+      border-radius: 32px;
+      padding: 36px;
+      box-shadow: 0 25px 60px rgba(255, 65, 93, 0.03), inset 0 1px 2px rgba(255, 255, 255, 0.3);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .phone-mockup-wrapper:hover {
+      border-color: var(--primary-accent);
+      box-shadow: 0 25px 60px var(--primary-glow), inset 0 1px 2px rgba(255, 255, 255, 0.5);
+    }
+
+    .phone-mockup {
+      width: 300px;
+      height: 600px;
+      background-color: #1a1012;
+      border: 10px solid #ffd6db;
+      border-radius: 40px;
+      box-shadow: 0 15px 40px rgba(255, 65, 93, 0.08);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Inner phone header/camera notch */
+    .phone-notch {
+      width: 130px;
+      height: 22px;
+      background-color: #ffd6db;
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      border-bottom-left-radius: 16px;
+      border-bottom-right-radius: 16px;
+      z-index: 10;
+    }
+
+    .phone-screen {
+      padding: 36px 16px 16px 16px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      background-color: #fffafb;
+    }
+
+    .phone-header {
+      margin-bottom: 16px;
+    }
+
+    .phone-greeting {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--title-text);
+      margin-bottom: 2px;
+    }
+
+    .phone-date {
+      font-size: 11px;
+      color: var(--muted-text);
+      font-family: var(--font-mono);
+    }
+
+    .phone-progress-card {
+      background-color: var(--surface-color);
+      border: 1px solid var(--primary-border);
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 16px;
+    }
+
+    .progress-stats {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      margin-bottom: 8px;
+    }
+
+    .progress-label {
+      color: var(--title-text);
+      font-weight: 600;
+    }
+
+    .progress-percent {
+      color: var(--primary-accent);
+      font-weight: 700;
+      font-family: var(--font-mono);
+    }
+
+    .progress-bar-bg {
+      height: 6px;
+      width: 100%;
+      background-color: rgba(255, 65, 93, 0.08);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 40%;
+      background-color: var(--primary-accent);
+      border-radius: 3px;
+      transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .progress-encouragement {
+      font-size: 10.5px;
+      color: var(--muted-text);
+      font-style: italic;
+    }
+
+    .phone-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex-grow: 1;
+    }
+
+    .phone-task {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background-color: var(--surface-color);
+      border: 1px solid var(--inner-border);
+      padding: 10px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .phone-task:hover {
+      background-color: var(--surface-hover);
+      border-color: var(--primary-accent);
+    }
+
+    .phone-task.completed {
+      background-color: var(--success-alpha-bg);
+      border-color: var(--success-alpha-border);
+    }
+
+    .checkbox-circle {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 1.5px solid var(--muted-text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.2s ease;
+    }
+
+    .phone-task.completed .checkbox-circle {
+      border-color: var(--secondary-accent);
+      background-color: var(--secondary-accent);
+    }
+
+    .checkbox-tick {
+      width: 7px;
+      height: 4.5px;
+      border-left: 2px solid #ffffff;
+      border-bottom: 2px solid #ffffff;
+      transform: rotate(-45deg) translate(0.5px, -0.5px);
+      opacity: 0;
+      transition: all 0.2s ease;
+    }
+
+    .phone-task.completed .checkbox-tick {
+      opacity: 1;
+    }
+
+    .task-meta {
+      flex-grow: 1;
+    }
+
+    .task-title {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--body-text);
+      transition: all 0.2s ease;
+    }
+
+    .phone-task.completed .task-title {
+      text-decoration: line-through;
+      color: var(--muted-text);
+    }
+
+    .task-duration {
+      font-size: 10.5px;
+      color: var(--muted-text);
+      display: flex;
+      align-items: center;
+    }
+
+    .task-bullet-dot {
+      display: inline-block;
+      width: 5px;
+      height: 5px;
+      background-color: var(--primary-accent);
+      border-radius: 50%;
+      margin-right: 4px;
+    }
+
+    /* RESPONSIVE LAYOUT HERO */
+    @media (max-width: 1024px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 56px;
+        text-align: center;
+      }
+      .hero-headline {
+        font-size: 44px;
+      }
+      .hero-subheadline {
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .hero-ctas {
+        justify-content: center;
+      }
+      .social-proof {
+        justify-content: center;
+      }
+    }
+
+    /* SECTION 3 — PAIN POINTS (BENTO BOX DESIGNS WITH COLORED AURAS) */
+    .pain-section {
+      background-color: var(--recessed-section);
+      position: relative;
+    }
+
+    .section-title-wrapper {
+      text-align: center;
+      margin-bottom: 60px;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .section-subtitle {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--primary-accent);
+      margin-bottom: 12px;
+      font-family: var(--font-display);
+    }
+
+    .pain-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-bottom: 50px;
+    }
+
+    .pain-card {
+      border: 1px solid var(--primary-border);
+      background-color: var(--surface-color);
+      border-radius: 24px;
+      padding: 38px 32px;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Colored visual top-border highlights for explicit Bento hierarchy */
+    .pain-card:nth-child(1) {
+      border-top: 3.5px solid var(--warning-accent);
+    }
+    .pain-card:nth-child(2) {
+      border-top: 3.5px solid var(--primary-accent);
+    }
+    .pain-card:nth-child(3) {
+      border-top: 3.5px solid var(--secondary-accent);
+    }
+
+    .pain-card:nth-child(1):hover {
+      border-color: var(--warning-accent);
+      box-shadow: 0 16px 40px var(--warning-glow);
+      transform: translateY(-6px);
+    }
+
+    .pain-card:nth-child(2):hover {
+      border-color: var(--primary-accent);
+      box-shadow: 0 16px 40px var(--primary-glow);
+      transform: translateY(-6px);
+    }
+
+    .pain-card:nth-child(3):hover {
+      border-color: var(--secondary-accent);
+      box-shadow: 0 16px 40px var(--secondary-glow);
+      transform: translateY(-6px);
+    }
+
+    .pain-card .icon-emoji {
+      font-size: 32px;
+      margin-bottom: 24px;
+    }
+
+    .pain-card h4 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .pain-card p {
+      color: var(--muted-text);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .pain-section-bottom {
+      text-align: center;
+      font-size: 21px;
+      font-weight: 700;
+      color: var(--primary-accent);
+      font-style: italic;
+      margin-top: 24px;
+      font-family: var(--font-display);
+    }
+
+    @media (max-width: 1024px) {
+      .pain-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+    }
+
+    /* SECTION 3.5 — STORE REVIEWS COMPARISONS */
+    .reality-section {
+      background-color: var(--surface-color);
+      position: relative;
+    }
+
+    .reality-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      margin-top: 50px;
+    }
+
+    .reality-card {
+      background-color: var(--bg-color);
+      border: 1px solid var(--primary-border);
+      border-radius: 28px;
+      padding: 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reality-card:hover {
+      box-shadow: var(--card-shadow);
+      border-color: var(--primary-accent);
+      transform: translateY(-4px);
+    }
+
+    .reality-header-unit {
+      margin-bottom: 4px;
+    }
+
+    .reality-badge-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .store-complaint-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background-color: rgba(255, 65, 93, 0.08);
+      color: var(--primary-accent);
+      font-size: 11.5px;
+      padding: 5px 12px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-family: var(--font-mono);
+    }
+
+    .focus-cure-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background-color: var(--success-alpha-bg);
+      color: var(--secondary-accent);
+      border: 1px solid var(--success-alpha-border);
+      font-size: 11.5px;
+      padding: 5px 12px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-family: var(--font-display);
+    }
+
+    .pain-quote-block {
+      background-color: var(--white);
+      border-left: 3px solid var(--primary-accent);
+      padding: 16px;
+      border-radius: 12px;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      font-size: 13.5px;
+      line-height: 1.55;
+      font-style: italic;
+      color: var(--body-text);
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.01);
+    }
+
+    .pain-stars {
+      color: #ffd166;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .cure-box {
+      background-color: rgba(5, 202, 151, 0.02);
+      border: 1.5px dashed var(--success-alpha-border);
+      border-radius: 16px;
+      padding: 20px;
+    }
+
+    .cure-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--title-text);
+      margin-bottom: 8px;
+      font-family: var(--font-display);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .cure-desc {
+      font-size: 14px;
+      color: var(--body-text);
+      line-height: 1.55;
+    }
+
+    @media (max-width: 991px) {
+      .reality-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+    }
+
+    /* SECTION 4 — FEATURES (2x2 BENTO GRID OF CARDS ON DESKTOP) */
+    .features-section {
+      background: radial-gradient(circle at 10% 30%, rgba(255, 65, 93, 0.03) 0%, transparent 40%);
+    }
+
+    .features-container {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .feature-item {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background-color: var(--surface-color);
+      border: 1px solid var(--primary-border);
+      border-radius: 28px;
+      padding: 32px;
+      gap: 24px;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .feature-item:hover {
+      transform: translateY(-4px);
+      border-color: var(--primary-accent);
+      box-shadow: 0 16px 40px var(--primary-glow);
+    }
+
+    .feature-content {
+      max-width: 100%;
+    }
+
+    .feature-icon-wrapper {
+      font-size: 38px;
+      margin-bottom: 16px;
+      display: inline-block;
+    }
+
+    .feature-content h3 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .feature-content p {
+      color: var(--muted-text);
+      font-size: 15px;
+      line-height: 1.65;
+    }
+
+    /* RECESSED INTEGRATED BENTO DISPLAY BAYS */
+    .feature-visual {
+      background-color: var(--surface-hover);
+      border: 1px solid var(--inner-border);
+      border-radius: 18px;
+      padding: 24px;
+      min-height: 300px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      box-shadow: var(--recessed-shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Bento Grid layout applied on desktop (min-width: 1024px) */
+    @media (min-width: 1024px) {
+      .features-container {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 28px;
+      }
+      
+      .feature-item, .feature-item.reverse {
+        grid-column: span 6;
+        padding: 44px;
+        gap: 28px;
+        height: 100%;
+      }
+
+      .feature-item .feature-visual, .feature-item.reverse .feature-visual {
+        order: 2;
+        margin-top: auto;
+      }
+      .feature-item .feature-content, .feature-item.reverse .feature-content {
+        order: 1;
+      }
+    }
+
+    /* Feature 1 Visual: Draggable routine interactive demo */
+    .demo-builder-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .dragger-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background-color: var(--surface-color);
+      border: 1.5px dashed var(--primary-border);
+      padding: 12px 14px;
+      border-radius: 10px;
+      cursor: grab;
+      position: relative;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .dragger-item.active-drag {
+      border: 1.5px solid var(--primary-accent);
+      background-color: var(--surface-color);
+      box-shadow: 0 4px 15px var(--primary-glow);
+    }
+
+    .drag-handle {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      width: 12px;
+      cursor: grab;
+    }
+
+    .drag-handle span {
+      width: 100%;
+      height: 2px;
+      background-color: var(--muted-text);
+      border-radius: 1px;
+    }
+
+    .dragger-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--body-text);
+      flex-grow: 1;
+    }
+
+    .dragger-tag {
+      font-size: 10px;
+      padding: 3px 6px;
+      border-radius: 5px;
+      background-color: var(--badge-bg);
+      color: var(--primary-accent);
+      font-weight: 700;
+    }
+
+    /* Feature 2 Visual: No-Streak Percentage tracker */
+    .percentage-visual-box {
+      text-align: center;
+    }
+
+    .percentage-circle {
+      position: relative;
+      width: 110px;
+      height: 110px;
+      margin: 0 auto 20px auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .circle-svg {
+      transform: rotate(-90deg);
+      width: 100%;
+      height: 100%;
+    }
+
+    .circle-bg {
+      fill: none;
+      stroke: rgba(255, 65, 93, 0.05);
+      stroke-width: 9;
+    }
+
+    .circle-progress {
+      fill: none;
+      stroke: var(--secondary-accent);
+      stroke-width: 9;
+      stroke-linecap: round;
+      stroke-dasharray: 314;
+      stroke-dashoffset: 62.8; /* 80% */
+    }
+
+    .circle-text {
+      position: absolute;
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--title-text);
+      display: flex;
+      flex-direction: column;
+      font-family: var(--font-mono);
+    }
+
+    .circle-sub {
+      font-size: 10px;
+      color: var(--muted-text);
+      font-weight: 500;
+      margin-top: -2px;
+      font-family: var(--font-display);
+    }
+
+    .streak-calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+      max-width: 250px;
+      margin: 0 auto;
+    }
+
+    .day-box {
+      aspect-ratio: 1;
+      border-radius: 6px;
+      font-size: 10.5px;
+      font-weight: 600;
+      color: var(--body-text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--surface-color);
+      border: 1px solid var(--inner-border);
+    }
+
+    .day-box.done {
+      background-color: var(--success-alpha-bg);
+      border-color: var(--success-alpha-border);
+      color: var(--secondary-accent);
+    }
+
+    .day-box.missed {
+      background-color: rgba(255, 159, 28, 0.05);
+      border-color: rgba(255, 159, 28, 0.2);
+      color: var(--warning-accent);
+      position: relative;
+    }
+
+    .day-box.missed::after {
+      content: "/";
+      position: absolute;
+      font-size: 13px;
+      color: rgba(255, 159, 28, 0.3);
+    }
+
+    /* Feature 3 Visual: Time Awareness */
+    .timer-visual {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .time-bar-item {
+      background-color: var(--surface-color);
+      border: 1px solid var(--inner-border);
+      border-radius: 10px;
+      padding: 12px;
+    }
+
+    .time-bar-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12.5px;
+      margin-bottom: 6px;
+      color: var(--body-text);
+    }
+
+    .time-bar-bg {
+      height: 5px;
+      background-color: var(--inner-border);
+      border-radius: 2.5px;
+      overflow: hidden;
+    }
+
+    .time-bar-fill-1 { width: 45%; background-color: var(--primary-accent); }
+    .time-bar-fill-2 { width: 70%; background-color: var(--warning-accent); }
+
+    .clock-badge {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      background-color: var(--badge-bg);
+      color: var(--primary-accent);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+
+    /* Feature 4 Visual: Weekly Wins */
+    .weekly-wins-visual {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .win-stat-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background-color: var(--success-alpha-bg);
+      border: 1px solid var(--success-alpha-border);
+      padding: 14px;
+      border-radius: 12px;
+    }
+
+    .win-stat-badge .win-icon {
+      font-size: 22px;
+    }
+
+    .win-stat-badge .win-details h4 {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--title-text);
+      margin-bottom: 2px;
+    }
+
+    .win-stat-badge .win-details p {
+      font-size: 11px;
+      color: var(--muted-text);
+    }
+
+    .mini-logs-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .mini-log {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11.5px;
+      padding: 8px 12px;
+      background-color: var(--surface-color);
+      border-radius: 6px;
+      border: 1px solid var(--inner-border);
+      border-left: 3px solid var(--secondary-accent);
+      color: var(--body-text);
+    }
+
+    /* HERO WAITLIST INLINE FORM widget */
+    .hero-waitlist-form {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+
+    .hero-waitlist-container {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      background-color: var(--surface-color);
+      border: 1.5px solid var(--primary-border);
+      border-radius: 50px;
+      padding: 4px 4px 4px 16px;
+      box-shadow: var(--card-shadow);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      flex-grow: 1;
+      max-width: 420px;
+      min-width: 250px;
+    }
+
+    .hero-waitlist-container:focus-within {
+      border-color: var(--primary-accent);
+      box-shadow: 0 0 16px var(--primary-glow);
+    }
+
+    .hero-waitlist-input {
+      border: none;
+      background: none;
+      outline: none;
+      font-size: 14.5px;
+      color: var(--title-text);
+      flex-grow: 1;
+      padding: 8px 0;
+      font-family: var(--font-family);
+      width: 100%;
+    }
+
+    .hero-waitlist-input::placeholder {
+      color: var(--muted-text);
+    }
+
+    .hero-waitlist-btn {
+      background-color: var(--primary-accent);
+      color: var(--white);
+      border: none;
+      outline: none;
+      border-radius: 50px;
+      padding: 12px 24px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: var(--font-display);
+      transition: background-color 0.2s, transform 0.2s;
+      white-space: nowrap;
+    }
+
+    .hero-waitlist-btn:hover {
+      background-color: #ff5c7a;
+      transform: scale(1.02);
+    }
+
+    .hero-explore-btn {
+      white-space: nowrap;
+    }
+
+    @media (max-width: 768px) {
+      .hero-waitlist-form {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .hero-waitlist-container {
+        max-width: 100%;
+      }
+      .hero-explore-btn {
+        width: 100%;
+        text-align: center;
+      }
+    }
+
+    /* SECTION 5 — HOW IT WORKS (DYNAMIC APP TOUR & SCREENSHOTS SHOWCASE) */
+    .how-section {
+      background-color: var(--recessed-section);
+      position: relative;
+    }
+
+    .walkthrough-stage {
+      display: grid;
+      grid-template-columns: 1.25fr 1fr;
+      gap: 60px;
+      align-items: center;
+      margin-top: 50px;
+    }
+
+    .walkthrough-left {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .timeline-step {
+      display: flex;
+      gap: 20px;
+      padding: 24px;
+      border-radius: 20px;
+      background-color: transparent;
+      border: 1px solid transparent;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .timeline-step:hover {
+      background-color: var(--surface-color);
+      border-color: var(--primary-border);
+    }
+
+    .timeline-step.active {
+      background-color: var(--surface-color);
+      border-color: var(--primary-accent);
+      box-shadow: var(--card-shadow);
+    }
+
+    .timeline-icon-box {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background-color: var(--primary-glow-subtle);
+      border: 1px solid var(--primary-border);
+      color: var(--primary-accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 18px;
+      flex-shrink: 0;
+      transition: all 0.3s ease;
+      font-family: var(--font-display);
+    }
+
+    .timeline-step.active .timeline-icon-box {
+      background-color: var(--primary-accent);
+      color: var(--white);
+      box-shadow: 0 4px 12px var(--primary-glow);
+    }
+
+    .timeline-content h4 {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--title-text);
+      margin-bottom: 6px;
+      font-family: var(--font-display);
+    }
+
+    .timeline-content p {
+      font-size: 14px;
+      color: var(--muted-text);
+      line-height: 1.55;
+    }
+
+    /* WALKTHROUGH INTERACTIVE APP PREVIEW ("SCREENSHOTS") */
+    .walkthrough-right {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    .showcase-phone {
+      width: 320px;
+      height: 640px;
+      background-color: #1a1012;
+      border: 10px solid #ffd6db;
+      border-radius: 42px;
+      box-shadow: 0 25px 60px rgba(255, 65, 93, 0.08), inset 0 1px 2px rgba(255, 255, 255, 0.3);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      z-index: 5;
+    }
+
+    .showcase-phone-notch {
+      width: 120px;
+      height: 20px;
+      background-color: #ffd6db;
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      border-bottom-left-radius: 16px;
+      border-bottom-right-radius: 16px;
+      z-index: 10;
+    }
+
+    .showcase-phone-screen {
+      flex-grow: 1;
+      background-color: #fffafb;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .screen-wrapper {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .screenshot-slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(12px);
+      transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+                  transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+                  visibility 0.4s;
+      padding: 24px 18px 20px 18px;
+    }
+
+    .screenshot-slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    /* SCREEN DESIGNS */
+    .screenshot-header {
+      padding: 12px 0 12px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      border-bottom: 1px solid var(--primary-border);
+      margin-bottom: 16px;
+    }
+
+    .screenshot-header span {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--primary-accent);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-family: var(--font-mono);
+    }
+
+    .screenshot-header h3 {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--title-text);
+      font-family: var(--font-display);
+    }
+
+    /* TRUCE PACT ONBOARDING SPECIFIC */
+    .truce-pact-box {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      padding: 4px 6px;
+    }
+
+    .truce-visual {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      margin-top: 4px;
+      background: var(--surface-color);
+      border: 1px solid var(--inner-border);
+      padding: 12px 10px;
+      border-radius: 16px;
+    }
+
+    .truce-energy-indicator, .truce-goals-indicator {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1;
+    }
+
+    .indicator-title {
+      font-size: 10px;
+      font-family: var(--font-mono);
+      color: var(--muted-text);
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .indicator-bar {
+      font-size: 11px;
+      font-weight: 800;
+      color: white;
+      text-align: center;
+      padding: 6px;
+      border-radius: 8px;
+      font-family: var(--font-display);
+    }
+
+    .truce-shaking-hands {
+      font-size: 24px;
+      animation: shakeHand 2s infinite ease-in-out;
+    }
+
+    @keyframes shakeHand {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-3px) rotate(-8deg); }
+    }
+
+    .truce-pact-text {
+      font-size: 12.5px;
+      line-height: 1.6;
+      font-weight: 500;
+      color: var(--body-text);
+      text-align: center;
+      background-color: rgba(255, 65, 93, 0.03);
+      padding: 14px;
+      border-radius: 14px;
+      border: 1px solid var(--primary-border);
+    }
+
+    .truce-pact-highlight {
+      font-weight: 700;
+      color: var(--primary-accent);
+    }
+
+    .truce-badge-signed {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background-color: var(--success-alpha-bg);
+      border: 1px solid var(--success-alpha-border);
+      color: var(--secondary-accent);
+      padding: 8px;
+      border-radius: 30px;
+      font-size: 11.5px;
+      font-family: var(--font-display);
+      font-weight: 700;
+      text-align: center;
+    }
+
+    /* SCREEN 1 SPECIFIC: BUILDER */
+    .setup-task-builder {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .builder-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background-color: var(--surface-color);
+      border: 1px solid var(--inner-border);
+      border-radius: 12px;
+      padding: 10px 12px;
+      box-shadow: 0 2px 4px rgba(255, 65, 93, 0.01);
+    }
+
+    .builder-drag-handle {
+      color: var(--muted-text);
+      font-size: 13px;
+      cursor: grab;
+      font-weight: bold;
+    }
+
+    .builder-title {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--body-text);
+      flex-grow: 1;
+      font-family: var(--font-family);
+    }
+
+    .builder-duration {
+      font-size: 10.5px;
+      font-family: var(--font-mono);
+      background-color: var(--badge-bg);
+      color: var(--primary-accent);
+      padding: 3px 6px;
+      border-radius: 5px;
+      font-weight: 700;
+    }
+
+    .builder-add-pill {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1.5px dashed var(--primary-border);
+      border-radius: 12px;
+      padding: 11px;
+      font-size: 12px;
+      color: var(--primary-accent);
+      font-weight: 600;
+      margin-top: 8px;
+      cursor: pointer;
+      background-color: transparent;
+      transition: background-color 0.2s, border-color 0.2s;
+    }
+
+    .builder-add-pill:hover {
+      background-color: var(--primary-glow-subtle);
+      border-color: var(--primary-accent);
+    }
+
+    /* SCREEN 2 SPECIFIC: REMINDERS (LOCKSCREEN BLURRY CARD) */
+    .lockscreen-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at 50% 30%, #ffd6db 0%, #fffbfb 70%, #fff4f5 100%);
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+    }
+
+    .lockscreen-time {
+      font-family: var(--font-display);
+      font-size: 42px;
+      font-weight: 800;
+      color: var(--title-text);
+      margin-top: 35px;
+      margin-bottom: 2px;
+      letter-spacing: -0.01em;
+    }
+
+    .lockscreen-date {
+      font-size: 12px;
+      color: var(--muted-text);
+      font-weight: 600;
+      margin-bottom: 50px;
+    }
+
+    .lockscreen-alert-card {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(15px);
+      border: 1.5px solid rgba(255, 255, 255, 0.7);
+      border-radius: 18px;
+      padding: 16px;
+      box-shadow: 0 12px 24px rgba(255, 65, 93, 0.06);
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      text-align: left;
+    }
+
+    .alert-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--primary-accent);
+      font-family: var(--font-mono);
+    }
+
+    .alert-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--title-text);
+    }
+
+    .alert-body {
+      font-size: 11.5px;
+      color: var(--body-text);
+      line-height: 1.4;
+    }
+
+    .alert-actions {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .alert-btn {
+      padding: 7px;
+      border-radius: 8px;
+      font-size: 10.5px;
+      font-weight: 700;
+      text-align: center;
+      cursor: pointer;
+      font-family: var(--font-display);
+      transition: all 0.2s;
+    }
+
+    .alert-btn-primary {
+      background-color: var(--primary-accent);
+      color: var(--white);
+    }
+
+    .alert-btn-secondary {
+      background-color: var(--surface-color);
+      border: 1px solid var(--primary-border);
+      color: var(--primary-accent);
+    }
+
+    /* SCREEN 3 SPECIFIC: FOCUS TRACKER */
+    .tracker-card {
+      background-color: var(--surface-color);
+      border: 1px solid var(--primary-border);
+      border-radius: 16px;
+      padding: 12px;
+      box-shadow: 0 4px 12px rgba(255, 65, 93, 0.02);
+      margin-bottom: 12px;
+    }
+
+    .tracker-progress-bar {
+      height: 6px;
+      width: 100%;
+      background-color: var(--inner-border);
+      border-radius: 3px;
+      overflow: hidden;
+      margin: 8px 0;
+    }
+
+    .tracker-progress-fill {
+      height: 100%;
+      background-color: var(--primary-accent);
+      border-radius: 3px;
+      transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .tracker-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .tracker-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background-color: var(--surface-color);
+      border: 1px solid var(--inner-border);
+      border-radius: 12px;
+      padding: 9px 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: left;
+    }
+
+    .tracker-item:hover {
+      background-color: var(--surface-hover);
+    }
+
+    .tracker-item.completed {
+      background-color: var(--success-alpha-bg);
+      border-color: var(--success-alpha-border);
+    }
+
+    .tracker-item.completed .builder-title {
+      text-decoration: line-through;
+      color: var(--muted-text);
+    }
+
+    /* SCREEN 4 SPECIFIC: WEEKLY WINS */
+    .wins-streak-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background-color: var(--success-alpha-bg);
+      border: 1px solid var(--success-alpha-border);
+      padding: 10px 12px;
+      border-radius: 12px;
+      margin-bottom: 14px;
+      text-align: left;
+    }
+
+    .wins-badge-icon {
+      font-size: 18px;
+    }
+
+    .wins-badge-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--secondary-accent);
+    }
+
+    .wins-badge-sub {
+      font-size: 10.5px;
+      color: var(--muted-text);
+    }
+
+    .wins-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+      margin-bottom: 14px;
+    }
+
+    .wins-day {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .wins-day-label {
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--muted-text);
+    }
+
+    .wins-day-circle {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+      background-color: var(--inner-border);
+      border: 1px solid transparent;
+      color: var(--body-text);
+    }
+
+    .wins-day-circle.done {
+      background-color: var(--success-alpha-bg);
+      border-color: var(--secondary-accent);
+      color: var(--secondary-accent);
+    }
+
+    .wins-day-circle.preserved {
+      background-color: rgba(255, 159, 28, 0.05);
+      border-color: var(--warning-accent);
+      color: var(--warning-accent);
+    }
+
+    .wins-message-card {
+      background-color: var(--surface-color);
+      border: 1px solid var(--inner-border);
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 11.5px;
+      color: var(--body-text);
+      line-height: 1.4;
+      text-align: center;
+    }
+
+    @media (max-width: 1024px) {
+      .walkthrough-stage {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+      .walkthrough-right {
+        order: -1; /* Place phone frame on top on mobiles */
+      }
+      .timeline-step {
+        padding: 18px;
+      }
+    }
+
+    /* SECTION 6 — TESTIMONIALS (ASYMMETRIC BENTO MASONRY) */
+    .testimonials-section {
+      background: radial-gradient(circle at 90% 80%, rgba(5, 202, 151, 0.04) 0%, transparent 40%);
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    .testimonial-card {
+      border: 1px solid var(--primary-border);
+      background-color: var(--surface-color);
+      border-radius: 24px;
+      padding: 38px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .testimonial-card:hover {
+      border-color: var(--primary-accent);
+      transform: translateY(-5px);
+      box-shadow: 0 16px 40px var(--primary-glow);
+    }
+
+    @media (min-width: 1024px) {
+      .testimonials-grid {
+        grid-template-columns: repeat(12, 1fr);
+        gap: 24px;
+      }
+      .testimonial-card:nth-child(1) {
+        grid-column: span 7;
+      }
+      .testimonial-card:nth-child(2) {
+        grid-column: span 5;
+      }
+      .testimonial-card:nth-child(3) {
+        grid-column: span 12;
+      }
+    }
+
+    .stars {
+      color: var(--warning-accent);
+      font-size: 13px;
+      margin-bottom: 16px;
+    }
+
+    .testimonial-text {
+      color: var(--body-text);
+      font-size: 15px;
+      line-height: 1.65;
+      font-style: italic;
+      margin-bottom: 24px;
+    }
+
+    .testimonial-author {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--title-text);
+      border-top: 1px solid var(--inner-border);
+      padding-top: 16px;
+    }
+
+    .author-info {
+      color: var(--muted-text);
+      font-weight: 500;
+      font-size: 11px;
+      margin-top: 2px;
+    }
+
+    /* SECTION 7 — PRICING (HIGH CONTRAST BENTO BLOCKS) */
+    .pricing-section {
+      background-color: var(--recessed-section);
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 32px;
+      max-width: 900px;
+      margin: 0 auto;
+      align-items: stretch;
+    }
+
+    .pricing-card {
+      background-color: var(--surface-color);
+      border: 1px solid var(--primary-border);
+      border-radius: 28px;
+      padding: 48px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .pricing-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--primary-accent);
+      box-shadow: 0 16px 40px var(--primary-glow);
+    }
+
+    .pricing-card.premium {
+      border: 2px solid var(--primary-accent);
+      background: linear-gradient(180deg, var(--surface-color) 0%, var(--surface-hover) 100%);
+      box-shadow: 0 16px 40px var(--primary-glow);
+    }
+
+    .pricing-card.premium:hover {
+      border-color: var(--primary-accent);
+      box-shadow: 0 20px 50px rgba(255, 65, 93, 0.18);
+    }
+
+    .badge-most-popular {
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: var(--primary-accent);
+      color: var(--white);
+      padding: 4px 16px;
+      border-radius: 50px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-family: var(--font-display);
+    }
+
+    .pricing-label {
+      font-size: 13.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted-text);
+      margin-bottom: 8px;
+      font-family: var(--font-display);
+    }
+
+    .pricing-card.premium .pricing-label {
+      color: var(--primary-accent);
+    }
+
+    .pricing-price-box {
+      margin-bottom: 24px;
+    }
+
+    .price-amount {
+      font-size: 44px;
+      font-weight: 800;
+      color: var(--title-text);
+      font-family: var(--font-display);
+    }
+
+    .price-period {
+      font-size: 15px;
+      color: var(--muted-text);
+    }
+
+    .discount-badge {
+      display: inline-block;
+      font-size: 10.5px;
+      background-color: var(--success-alpha-bg);
+      color: var(--secondary-accent);
+      padding: 4px 12px;
+      border-radius: 50px;
+      font-weight: 700;
+      margin-top: 6px;
+      font-family: var(--font-display);
+    }
+
+    .pricing-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 40px;
+      flex-grow: 1;
+    }
+
+    .pricing-features li {
+      font-size: 15px;
+      color: var(--body-text);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .pricing-features li strong {
+      color: var(--title-text);
+    }
+
+    .pricing-features .check-icon {
+      color: var(--secondary-accent);
+      font-weight: bold;
+    }
+
+    .pricing-card .btn {
+      width: 100%;
+    }
+
+    .pricing-note {
+      text-align: center;
+      font-size: 12.5px;
+      color: var(--muted-text);
+      margin-top: 16px;
+    }
+
+    @media (min-width: 768px) {
+      .pricing-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 32px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .pricing-card {
+        padding: 38px 24px;
+      }
+    }
+
+    /* SECTION 8 — FINAL CTA / WAITLIST BENTO BLOCK */
+    .cta-section {
+      background: linear-gradient(180deg, transparent 0%, rgba(255, 65, 93, 0.04) 100%);
+      padding: 120px 0;
+    }
+
+    .cta-card {
+      background-color: var(--surface-color);
+      border: 1px solid var(--primary-border);
+      border-radius: 32px;
+      padding: 64px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      max-width: 1000px;
+      margin: 0 auto;
+      box-shadow: 0 20px 50px var(--primary-glow);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .cta-card:hover {
+      border-color: var(--primary-accent);
+      box-shadow: 0 25px 60px var(--primary-glow);
+    }
+
+    .cta-card h2 {
+      margin-bottom: 20px;
+    }
+
+    .cta-card p {
+      font-size: 18px;
+      color: var(--body-text);
+      max-width: 600px;
+      margin: 0 auto 40px auto;
+    }
+
+    /* WAITLIST FORM */
+    .waitlist-form {
+      display: flex;
+      gap: 12px;
+      max-width: 500px;
+      margin: 0 auto 20px auto;
+    }
+
+    .form-input {
+      flex-grow: 1;
+      height: 52px;
+      background-color: var(--surface-color);
+      border: 1.5px solid var(--primary-border);
+      border-radius: 14px;
+      padding: 0 20px;
+      color: var(--title-text);
+      font-size: 15px;
+      font-family: var(--font-family);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary-accent);
+      box-shadow: 0 0 15px var(--primary-glow);
+    }
+
+    .form-input::placeholder {
+      color: var(--muted-text);
+    }
+
+    .form-note {
+      font-size: 13px;
+      color: var(--muted-text);
+    }
+
+    .success-message {
+      display: none;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--secondary-accent);
+      padding: 20px 28px;
+      border-radius: 14px;
+      background-color: var(--success-alpha-bg);
+      border: 1px solid var(--success-alpha-border);
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 768px) {
+      .cta-card {
+        padding: 48px 24px;
+      }
+      .waitlist-form {
+        flex-direction: column;
+      }
+      .form-input {
+        width: 100%;
+      }
+      .cta-card p {
+        font-size: 16px;
+      }
+    }
+
+    /* SECTION 9 — FOOTER */
+    footer {
+      background-color: var(--footer-bg);
+      border-top: 1px solid var(--primary-border);
+      padding: 70px 0 40px 0;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 0.8fr;
+      gap: 60px;
+      margin-bottom: 40px;
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .footer-brand .logo {
+      font-size: 20px;
+    }
+
+    .footer-brand p {
+      font-size: 14px;
+      color: var(--muted-text);
+      max-width: 280px;
+    }
+
+    .footer-links h5, .footer-social h5 {
+      color: var(--title-text);
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 20px;
+      font-family: var(--font-display);
+    }
+
+    .footer-links-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-links-list a {
+      font-size: 14px;
+      color: var(--body-text);
+    }
+
+    .footer-links-list a:hover {
+      color: var(--primary-accent);
+    }
+
+    .footer-social-wrapper {
+      display: flex;
+      gap: 12px;
+    }
+
+    .social-icon-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: var(--surface-color);
+      border: 1px solid var(--primary-border);
+      color: var(--muted-text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .social-icon-btn:hover {
+      color: var(--white);
+      background-color: var(--primary-accent);
+      border-color: var(--primary-accent);
+      transform: translateY(-2px);
+    }
+
+    .footer-bottom-bar {
+      border-top: 1px solid var(--primary-border);
+      padding-top: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: var(--muted-text);
+    }
+
+    @media (max-width: 768px) {
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+      .footer-bottom-bar {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+      }
+    }
+
+    /* MINI REFLECTION CALENDAR & ENERGY MOMENTS STYLING */
+    .energy-moment-btn {
+      background: var(--surface-color);
+      border: 1px solid var(--inner-border);
+      color: var(--body-text);
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 6px 11px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-family: var(--font-display);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .energy-moment-btn:hover {
+      border-color: var(--primary-accent);
+      color: var(--primary-accent);
+      transform: translateY(-1px);
+    }
+    .energy-moment-btn.active {
+      background: var(--primary-accent);
+      border-color: var(--primary-accent);
+      color: white;
+      box-shadow: 0 4px 12px var(--primary-glow-subtle);
+    }
+    .energy-moment-btn.active#moment-energy-high {
+      background: var(--secondary-accent);
+      border-color: var(--secondary-accent);
+      box-shadow: 0 4px 12px rgba(25, 235, 172, 0.2);
+    }
+    .energy-moment-btn.active#moment-energy-med {
+      background: #3498db;
+      border-color: #3498db;
+      box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
+    }
+
+    /* Day Box Rest Style */
+    .day-box.rest {
+      background-color: rgba(142, 68, 173, 0.08);
+      border-color: rgba(142, 68, 173, 0.25);
+      color: #9b59b6;
+    }
+
+    /* Cal Day styles */
+    .cal-day {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      border-radius: 6px;
+      padding: 4px 2px;
+      aspect-ratio: 0.9;
+      transition: all 0.2s ease;
+    }
+    .cal-day.empty {
+      background: transparent;
+      border: none;
+    }
+    .cal-day .cal-num {
+      font-size: 8px;
+      font-weight: 600;
+      color: var(--muted-text);
+      line-height: 1;
+    }
+    .cal-day .cal-emoji {
+      font-size: 11px;
+      margin-top: 3px;
+      line-height: 1;
+    }
+    .cal-day.done-smile {
+      background-color: var(--success-alpha-bg);
+      border-color: var(--success-alpha-border);
+    }
+    .cal-day.rest-smile {
+      background-color: rgba(142, 68, 173, 0.08); /* Lavender mood */
+      border-color: rgba(142, 68, 173, 0.25);
+    }
+    .cal-day.great-smile {
+      background-color: rgba(255, 107, 129, 0.08); /* warm focus alpha */
+      border-color: rgba(255, 107, 129, 0.25);
+    }
+    .cal-day.quiet-smile {
+      background-color: rgba(52, 152, 219, 0.08);
+      border-color: rgba(52, 152, 219, 0.25);
+    }
+    .cal-day.future {
+      background: transparent;
+      opacity: 0.45;
+    }
+
+    /* TRUCE MODAL CSS */
+    .truce-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .truce-modal-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(18, 12, 14, 0.6);
+      backdrop-filter: blur(4px);
+    }
+
+    .truce-modal-content {
+      position: relative;
+      background: var(--surface-color);
+      border: 1px solid var(--primary-border);
+      border-radius: 20px;
+      padding: 28px;
+      max-width: 520px;
+      width: 100%;
+      box-shadow: 0 20px 40px rgba(18, 12, 14, 0.15);
+      z-index: 10;
+      animation: modalFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.96) translateY(8px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .truce-modal-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      border: none;
+      background: transparent;
+      font-size: 24px;
+      color: var(--muted-text);
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .truce-modal-close:hover {
+      color: var(--primary-accent);
+    }
+
+    /* Admin Floating Button */
+    .admin-floating-toggle {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 48px;
+      height: 48px;
+      background: var(--body-text);
+      color: white;
+      border-radius: 50%;
+      display: none; /* Hidden from ordinary visitors by default */
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      z-index: 1000;
+      font-size: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .admin-floating-toggle:hover {
+      transform: rotate(45deg) scale(1.08);
+      background: var(--primary-accent);
+      box-shadow: 0 6px 20px rgba(255, 65, 93, 0.3);
+    }
+
+    /* Admin Dashboard panel overlay */
+    .admin-panel-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1001;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    .admin-panel-overlay.active {
+      display: flex;
+      opacity: 1;
+    }
+    .admin-panel-card {
+      background: var(--bg-color);
+      width: 90%;
+      max-width: 580px;
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+      border: 1px solid var(--primary-border);
+      animation: adminPanelSlide 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+    }
+    @keyframes adminPanelSlide {
+      from {
+        transform: translateY(20px) scale(0.97);
+      }
+      to {
+        transform: translateY(0) scale(1);
+      }
+    }
+    .admin-panel-close {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      background: none;
+      border: none;
+      color: var(--muted-text);
+      font-size: 26px;
+      cursor: pointer;
+      line-height: 1;
+      transition: color 0.15s;
+    }
+    .admin-panel-close:hover {
+      color: var(--primary-accent);
+    }
+
+    /* Google Sign-In Material Button compliance styles */
+    .gsi-material-button {
+      -moz-user-select: none;
+      -webkit-user-select: none;
+      -ms-user-select: none;
+      -webkit-appearance: none;
+      background-color: WHITE;
+      background-image: none;
+      border: 1px solid #c8b9bc;
+      border-radius: 10px;
+      box-sizing: border-box;
+      color: var(--body-text);
+      cursor: pointer;
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 600;
+      height: 36px;
+      letter-spacing: 0.25px;
+      outline: none;
+      padding: 0 12px;
+      position: relative;
+      text-align: center;
+      transition: background-color .218s, border-color .218s, box-shadow .218s;
+      user-select: none;
+      width: auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .gsi-material-button .gsi-material-button-icon {
+      height: 20px;
+      min-width: 20px;
+      width: 20px;
+      margin-right: 8px;
+    }
+    .gsi-material-button .gsi-material-button-content-wrapper {
+      align-items: center;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      height: 100%;
+      justify-content: space-between;
+      position: relative;
+      width: 100%;
+    }
+    .gsi-material-button .gsi-material-button-contents {
+      flex-grow: 1;
+      white-space: nowrap;
+    }
+    .gsi-material-button:hover {
+      background-color: var(--surface-hover);
+      border-color: var(--primary-border);
+    }
+    .gsi-material-button:focus {
+      background-color: var(--surface-hover);
+      border-color: var(--primary-accent);
+    }
+    .gsi-material-button:active {
+      background-color: var(--surface-hover);
+      border-color: var(--primary-accent);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SECTION 1 — STICKY NAV -->
+  <header id="main-header">
+    <div class="container nav-container">
+      <a href="#" class="logo">
+        <svg class="truce-logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="truce-logo-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#FF5A79" />
+              <stop offset="25%" stop-color="#FA2C56" />
+              <stop offset="100%" stop-color="#AA062D" />
+            </linearGradient>
+            <linearGradient id="truce-logo-bevel" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.45" />
+              <stop offset="20%" stop-color="#FFFFFF" stop-opacity="0.15" />
+              <stop offset="60%" stop-color="#FFFFFF" stop-opacity="0.0" />
+            </linearGradient>
+            <filter id="truce-logo-shadow" x="-5%" y="-5%" width="110%" height="110%">
+              <feDropShadow dx="0" dy="1.5" stdDeviation="1" flood-color="#730018" flood-opacity="0.25" />
+            </filter>
+          </defs>
+          <rect width="100" height="100" rx="26" fill="url(#truce-logo-gradient)" />
+          <rect x="0.5" y="0.5" width="99" height="99" rx="25.5" stroke="url(#truce-logo-bevel)" stroke-width="1.0" />
+          <g filter="url(#truce-logo-shadow)">
+            <path d="M41.5 41C41.5 32 43 26.5 47.5 25.5C50 25 52.5 26.5 52.5 29.5C52.5 32 52 35.5 52 38H58.5C60.5 38 62 39.5 62 41.5C62 43.5 60.5 45 58.5 45H51.5C51 53 51 59 52.5 61.5C53.5 63.5 55.5 64 58 61.5C60 59 63 55 65.5 51C67 48.5 70 47.5 72 49.5C74 51.5 73.5 54.5 71.5 57.5C67.5 64 61.5 73 54.5 74.5C47.5 76 43.5 71 43.5 61C43.5 54.5 43 49 43 45H37.5C35.5 45 34 43.5 34 41.5C34 39.5 35.5 38 37.5 38H42.5V41Z" fill="#FDF3F5"/>
+          </g>
+        </svg>
+        Truce
+      </a>
+      
+      <nav class="nav-links">
+        <a href="#features" class="nav-link">Features</a>
+        <a href="#how-it-works" class="nav-link">How It Works</a>
+        <a href="#why-truce" class="nav-link">Why Truce</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="#waitlist" class="btn btn-primary" style="padding: 10px 20px; font-size: 14px; border-radius: 10px;">Join Waitlist</a>
+      </div>
+
+      <button class="menu-toggle" aria-label="Toggle menu" id="hamburger">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="#features" class="nav-link">Features</a>
+    <a href="#how-it-works" class="nav-link">How It Works</a>
+    <a href="#why-truce" class="nav-link">Why Truce</a>
+    <a href="#waitlist" class="btn btn-primary" style="margin-top: 10px;">Join Waitlist</a>
+
+
+  </div>
+
+  <!-- SECTION 2 — HERO -->
+  <section class="hero-section">
+    <div class="container hero-grid">
+      <div class="hero-left">
+        <h1 class="hero-headline">Your ADHD Brain Deserves Better Than Broken Streaks.</h1>
+        <p class="hero-subheadline">
+          Truce is the first routine tracker designed around how ADHD brains actually work — with zero shame, zero punishment, and progress that survives a bad day.
+        </p>
+        <form class="hero-waitlist-form" onsubmit="handleHeroWaitlist(event)">
+          <div class="hero-waitlist-container">
+            <input type="email" placeholder="Enter your email to join waitlist..." required class="hero-waitlist-input" id="hero-waitlist-email">
+            <button type="submit" class="hero-waitlist-btn" id="hero-waitlist-btn-id">Join Waitlist</button>
+          </div>
+          <a href="#how-it-works" class="btn btn-secondary hero-explore-btn">See How It Works</a>
+        </form>
+        <div class="social-proof">
+          <span>🧠 400+ people on the waitlist</span>
+          <span>·</span>
+          <span>⭐ Designed with ADHD adults</span>
+          <span>·</span>
+          <span>🇺🇸 🇨🇦 🇬🇧 Attractive Results</span>
+        </div>
+      </div>
+      
+      <div class="phone-mockup-wrapper">
+        <div class="phone-mockup">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div class="phone-header">
+              <div class="phone-greeting">Good morning, Alex 👋</div>
+              <div class="phone-date" id="live-date">Friday, June 19</div>
+            </div>
+            
+            <div class="phone-progress-card">
+              <div class="progress-stats">
+                <span class="progress-label">Today's Routine</span>
+                <span class="progress-percent" id="phone-percentage">40%</span>
+              </div>
+              <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="phone-progress-fill" style="width: 40%;"></div>
+              </div>
+              <div class="progress-encouragement" id="phone-encouragement">Today: 2 of 5 done — you're moving!</div>
+            </div>
+
+            <div class="phone-list">
+              <div class="phone-task completed" onclick="toggleHeroTask(this, 0)">
+                <div class="checkbox-circle">
+                  <div class="checkbox-tick"></div>
+                </div>
+                <div class="task-meta">
+                  <div class="task-title">Drink water & take meds</div>
+                  <div class="task-duration"><span class="task-bullet-dot"></span>5 mins</div>
+                </div>
+              </div>
+
+              <div class="phone-task completed" onclick="toggleHeroTask(this, 1)">
+                <div class="checkbox-circle">
+                  <div class="checkbox-tick"></div>
+                </div>
+                <div class="task-meta">
+                  <div class="task-title">Do 5 deep breaths</div>
+                  <div class="task-duration"><span class="task-bullet-dot"></span>2 mins</div>
+                </div>
+              </div>
+
+              <div class="phone-task" onclick="toggleHeroTask(this, 2)">
+                <div class="checkbox-circle">
+                  <div class="checkbox-tick"></div>
+                </div>
+                <div class="task-meta">
+                  <div class="task-title">Step on yoga mat</div>
+                  <div class="task-duration"><span class="task-bullet-dot"></span>10 mins</div>
+                </div>
+              </div>
+
+              <div class="phone-task" onclick="toggleHeroTask(this, 3)">
+                <div class="checkbox-circle">
+                  <div class="checkbox-tick"></div>
+                </div>
+                <div class="task-meta">
+                  <div class="task-title">Eat high-protein fuel</div>
+                  <div class="task-duration"><span class="task-bullet-dot"></span>15 mins</div>
+                </div>
+              </div>
+
+              <div class="phone-task" onclick="toggleHeroTask(this, 4)">
+                <div class="checkbox-circle">
+                  <div class="checkbox-tick"></div>
+                </div>
+                <div class="task-meta">
+                  <div class="task-title">Review the daily focus</div>
+                  <div class="task-duration"><span class="task-bullet-dot"></span>3 mins</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 3 — PAIN POINT -->
+  <section class="section-padding pain-section fade-in-section" id="why-truce">
+    <div class="container">
+      <div class="section-title-wrapper">
+        <span class="section-subtitle">The Struggle is Real</span>
+        <h2>Every other app was built for neurotypical brains.</h2>
+      </div>
+
+      <div class="pain-grid">
+        <!-- Card 1 -->
+        <div class="pain-card">
+          <div class="icon-emoji">💔</div>
+          <h4>The Streak Trap</h4>
+          <p>
+            Miss one day and the app shows you a broken chain. Your brain spirals. You abandon the app entirely. Sound familiar?
+          </p>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="pain-card">
+          <div class="icon-emoji">😵</div>
+          <h4>Notification Overload</h4>
+          <p>
+            Twelve reminders a day. Badges everywhere. Your phone becomes another source of anxiety instead of a tool for calm.
+          </p>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="pain-card">
+          <div class="icon-emoji">🧱</div>
+          <h4>Built for Other Brains</h4>
+          <p>
+            Generic habit apps assume linear thinking, consistent motivation, and perfect memory. That's not ADHD. That's not you.
+          </p>
+        </div>
+      </div>
+
+      <div class="pain-section-bottom">
+        "You didn't fail the app. The app failed you."
+      </div>
+    </div>
+  </section>
+
+  <!-- STORE REVIEWS COMPARISONS -->
+  <section class="section-padding reality-section fade-in-section" id="reality-check">
+    <div class="container">
+      <div class="section-title-wrapper" style="margin-bottom: 50px;">
+        <span class="section-subtitle">ADHD Reality Check</span>
+        <h2>Built from 4,000 bad reviews of other apps.</h2>
+        <p style="color: var(--muted-text); max-width: 700px; margin: 15px auto 0 auto; font-size: 16px;">
+          We analyzed standard habit tracking complaints on the App Store and Google Play. Here is what people hate about other planners, and how Truce was built from scratch to prevent it.
+        </p>
+      </div>
+
+      <div class="reality-grid">
+        
+        <!-- Case 1: Streak Guilt -->
+        <div class="reality-card">
+          <div class="reality-badge-row">
+            <span class="store-complaint-badge">⚠️ PLAY STORE ANXIETY</span>
+            <span class="pain-stars">★☆☆☆☆</span>
+          </div>
+          <div class="pain-quote-block">
+            "I had a fever on Wednesday and didn't open the app. It wiped out my entire 90-day streak. That ruined my week and I deleted it."
+          </div>
+          <div class="cure-box">
+            <div class="cure-title">
+              <span>🛡️</span>
+              <span>Auto-Defense & Rest Protection</span>
+            </div>
+            <p class="cure-desc">
+              Truce includes a rest protection shield. Skip days or select Rest Mode, and your momentum is preserved without breaks or shame bars.
+            </p>
+          </div>
+        </div>
+
+        <!-- Case 2: Alarm Rage --->
+        <div class="reality-card">
+          <div class="reality-badge-row">
+            <span class="store-complaint-badge">⚠️ APP STORE OVERWHELM</span>
+            <span class="pain-stars">★★☆☆☆</span>
+          </div>
+          <div class="pain-quote-block">
+            "It spams my phone with 12 alarms for every tiny step. If I run late by 5 minutes, it sends me anxious alerts that turn my day into a stress cycle."
+          </div>
+          <div class="cure-box">
+            <div class="cure-title">
+              <span>🍃</span>
+              <span>Single Boundary Prompts</span>
+            </div>
+            <p class="cure-desc">
+              Instead of micro-managing your day, Truce only triggers one gentle notification when your custom block opens. No repetitive buzzing or loud alarms.
+            </p>
+          </div>
+        </div>
+
+        <!-- Case 3: Setup Paralysis -->
+        <div class="reality-card">
+          <div class="reality-badge-row">
+            <span class="store-complaint-badge">⚠️ GOOGLE PLAY ANXIETY</span>
+            <span class="pain-stars">★☆☆☆☆</span>
+          </div>
+          <div class="pain-quote-block">
+            "Setting up is so daunting. It expects me to load a detailed schedule of 20 elements. The setups take so long, I burn out before I even start."
+          </div>
+          <div class="cure-box">
+            <div class="cure-title">
+              <span>⚡</span>
+              <span>3-Second Tiny Setups</span>
+            </div>
+            <p class="cure-desc">
+              Truce restricts active morning routines to 3–5 items maximum. Drag, drop, enter time estimates, and start. Action beats long plan paralysis.
+            </p>
+          </div>
+        </div>
+
+        <!-- Case 4: Subscription Interference -->
+        <div class="reality-card">
+          <div class="reality-badge-row">
+            <span class="store-complaint-badge">⚠️ APP STORE INTRUSION</span>
+            <span class="pain-stars">★★☆☆☆</span>
+          </div>
+          <div class="pain-quote-block">
+            "Right as I was doing my morning breath exercises and building flow, a full-screen premium pop-up came up. I lost my focus immediately."
+          </div>
+          <div class="cure-box">
+            <div class="cure-title">
+              <span>🧘</span>
+              <span>Distraction-free focus flows</span>
+            </div>
+            <p class="cure-desc">
+              All core tracking controls in Truce are entirely non-intrusive and clean. No premium upsell banners will ever pop up or interrupt your flow during active tasks.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 4 — FEATURES -->
+  <section class="section-padding features-section" id="features">
+    <div class="container">
+      <div class="section-title-wrapper">
+        <span class="section-subtitle">ADHD-First Architecture</span>
+        <h2>Finally built for the way your brain works.</h2>
+        <p style="color: var(--muted-text); max-width: 600px; margin: 15px auto 0 auto; font-size: 16px;">
+          Every decision in Truce was made with ADHD in mind.
+        </p>
+      </div>
+
+      <div class="features-container">
+        <!-- Feature 1 -->
+        <div class="feature-item fade-in-section">
+          <div class="feature-content">
+            <div class="feature-icon-wrapper">🌅</div>
+            <h3>Morning Routine Builder</h3>
+            <p>
+              Truce lets you customize and adapt routines based on your energetic capacity. Select a physical/mental state to see how your routine dynamically scales for that exact moment.
+            </p>
+          </div>
+          <div class="feature-visual">
+            <!-- Energy moments selector representing "real feeling of moments" -->
+            <div class="moment-energy-selector" style="display: flex; gap: 6px; justify-content: center; margin-bottom: 12px; flex-wrap: wrap;">
+              <button class="energy-moment-btn active" id="btn-moment-med" onclick="setBuilderMomentEnergy('med')">⚡ Medium Energy</button>
+              <button class="energy-moment-btn" id="btn-moment-low" onclick="setBuilderMomentEnergy('low')">🔋 Low Battery</button>
+              <button class="energy-moment-btn" id="btn-moment-high" onclick="setBuilderMomentEnergy('high')">🔥 High Momentum</button>
+            </div>
+
+            <!-- Simulated draggable routine interactive demo -->
+            <div class="demo-builder-list" id="builder-demo-list-id">
+              <div class="dragger-item" id="drag-item-1" onclick="shiftDraggableItem(1)">
+                <div class="drag-handle">
+                  <span></span><span></span><span></span>
+                </div>
+                <span class="dragger-title">💧 Drink water & take meds</span>
+                <span class="dragger-tag">Step 1</span>
+              </div>
+              <div class="dragger-item active-drag" id="drag-item-2" onclick="shiftDraggableItem(2)">
+                <div class="drag-handle">
+                  <span></span><span></span><span></span>
+                </div>
+                <span class="dragger-title">🧘 Do 5 deep breaths & center</span>
+                <span class="dragger-tag">Step 2 (Active)</span>
+              </div>
+              <div class="dragger-item" id="drag-item-3" onclick="shiftDraggableItem(3)">
+                <div class="drag-handle">
+                  <span></span><span></span><span></span>
+                </div>
+                <span class="dragger-title">🍳 High-protein easy breakfast</span>
+                <span class="dragger-tag">Step 3</span>
+              </div>
+            </div>
+            <div style="font-size: 11px; text-align: center; margin-top: 16px; color: var(--muted-text);">
+              💡 Try toggling energy levels above or click cards to shuffle order.
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature 2 (Reverse) -->
+        <div class="feature-item reverse fade-in-section">
+          <div class="feature-visual">
+            <div class="percentage-visual-box">
+              <div class="percentage-circle">
+                <svg class="circle-svg">
+                  <circle class="circle-bg" cx="60" cy="60" r="50"></circle>
+                  <circle class="circle-progress" cx="60" cy="60" r="50" id="percent-circle-node" style="stroke-dashoffset: 44px;"></circle>
+                </svg>
+                <div class="circle-text">
+                  <span id="percent-text-display">86%</span>
+                  <span class="circle-sub">Done</span>
+                </div>
+              </div>
+              <div class="streak-calendar" id="demo-streak-calendar-id" style="width: 100%; max-width: 320px; display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px;">
+                <div class="day-box done" onclick="toggleCalendarDemoDay(0)" style="cursor: pointer;" title="Monday: Fully Completed (Click to toggle!)"><span>M</span><span class="day-smile">😊</span></div>
+                <div class="day-box done" onclick="toggleCalendarDemoDay(1)" style="cursor: pointer;" title="Tuesday: Fully Completed (Click to toggle!)"><span>T</span><span class="day-smile">😊</span></div>
+                <div class="day-box rest" onclick="toggleCalendarDemoDay(2)" style="cursor: pointer;" title="Wednesday: Rest Day Protected (Click to toggle!)"><span>W</span><span class="day-smile">😌</span></div>
+                <div class="day-box done" onclick="toggleCalendarDemoDay(3)" style="cursor: pointer;" title="Thursday: Fully Completed (Click to toggle!)"><span>T</span><span class="day-smile">😊</span></div>
+                <div class="day-box done" onclick="toggleCalendarDemoDay(4)" style="cursor: pointer;" title="Friday: Fully Completed (Click to toggle!)"><span>F</span><span class="day-smile">😊</span></div>
+                <div class="day-box done" onclick="toggleCalendarDemoDay(5)" style="cursor: pointer;" title="Saturday: Fully Completed (Click to toggle!)"><span>S</span><span class="day-smile">😊</span></div>
+                <div class="day-box done" onclick="toggleCalendarDemoDay(6)" style="cursor: pointer;" title="Sunday: Fully Completed (Click to toggle!)"><span>S</span><span class="day-smile">😊</span></div>
+              </div>
+              <div style="font-size: 11px; margin-top: 14px; color: var(--muted-text); text-align: center;">
+                Wednesday was a sleep/rest day (😌), but look: progress stayed strong at <strong id="demo-calendar-percent">86%</strong>! Click days to cycle smiles.
+              </div>
+            </div>
+          </div>
+          <div class="feature-content">
+            <div class="feature-icon-wrapper">📊</div>
+            <h3>No More Streak Punishment</h3>
+            <p>
+              We replaced streaks with an honest 30-day completion percentage. Miss Wednesday? Thursday still counts toward your goals. No shame resets. Ever.
+            </p>
+          </div>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="feature-item fade-in-section">
+          <div class="feature-content">
+            <div class="feature-icon-wrapper">⏱️</div>
+            <h3>Time-Awareness Built In</h3>
+            <p>
+              Each task shows how long it takes. See your total routine time at the top. ADHD time-blindness meets its match — gently.
+            </p>
+          </div>
+          <div class="feature-visual">
+            <div class="timer-visual">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <span style="font-size:14px; font-weight:700;">Remaining Morning Focus</span>
+                <span class="clock-badge">20m left</span>
+              </div>
+              <div class="time-bar-item">
+                <div class="time-bar-header">
+                  <span>🚿 Refreshing Shower</span>
+                  <span style="color:var(--primary-accent); font-weight:600;">8 mins</span>
+                </div>
+                <div class="time-bar-bg">
+                  <div class="time-bar-fill-1"></div>
+                </div>
+              </div>
+              <div class="time-bar-item">
+                <div class="time-bar-header">
+                  <span>🍳 Quick Breakfast Assembly</span>
+                  <span style="color:var(--warning-accent); font-weight:600;">12 mins</span>
+                </div>
+                <div class="time-bar-bg">
+                  <div class="time-bar-fill-2"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature 4 (Reverse) -->
+        <div class="feature-item reverse fade-in-section">
+          <div class="feature-visual">
+            <div class="weekly-wins-visual">
+              <div class="win-stat-badge">
+                <span class="win-icon">🏆</span>
+                <div class="win-details">
+                  <h4>This Week's Real Victories</h4>
+                  <p>You completed 18 items with heart and grit!</p>
+                </div>
+              </div>
+              <div class="mini-logs-list">
+                <div class="mini-log">
+                  <span>💊 Morning health routine</span>
+                  <span style="color:var(--secondary-accent);">5 / 5 days</span>
+                </div>
+                <div class="mini-log">
+                  <span>🧘 Breathwork session</span>
+                  <span style="color:var(--secondary-accent);">4 / 5 days</span>
+                </div>
+                <div class="mini-log">
+                  <span>💧 Consistent hydration bounds</span>
+                  <span style="color:var(--secondary-accent);">4 / 5 days</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="feature-content">
+            <div class="feature-icon-wrapper">🏆</div>
+            <h3>Weekly Wins View</h3>
+            <p>
+              Every Sunday, see everything you completed that week. Not what you missed — what you DID. Your brain needs to see the evidence of your effort.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 5 — HOW IT WORKS -->
+  <section class="section-padding how-section fade-in-section" id="how-it-works">
+    <div class="container">
+      <div class="section-title-wrapper">
+        <span class="section-subtitle">Interface Walkthrough</span>
+        <h2>Explore how Truce saves your day.</h2>
+        <p style="color: var(--muted-text); margin-top:12px; font-weight: 500;">
+          Select a feature step below to see the corresponding application interface block on our mobile screens.
+        </p>
+      </div>
+
+      <div class="walkthrough-stage">
+        <!-- Left Side: Custom Step Selectors (Tabs) -->
+        <div class="walkthrough-left">
+          <!-- Step 1: Routine Builder -->
+          <button class="timeline-step active" id="step-btn-0" aria-label="Step 1: Mindful Routine Builder">
+            <div class="timeline-icon-box">1</div>
+            <div class="timeline-content">
+              <h4>Mindful Routine Builder</h4>
+              <p>Add 3–5 items you desire to resolve. Drag to reorder, set time estimates, and keep things simple without overloading your memory.</p>
+            </div>
+          </button>
+
+          <!-- Step 2 -->
+          <button class="timeline-step" id="step-btn-1" aria-label="Step 2: Low-Pressure Prompts">
+            <div class="timeline-icon-box">2</div>
+            <div class="timeline-content">
+              <h4>Low-Pressure Prompts</h4>
+              <p>Receive ONE clean notification when your boundary opens. No hyperactive alarms or passive-aggressive reminder logs.</p>
+            </div>
+          </button>
+
+          <!-- Step 3 -->
+          <button class="timeline-step" id="step-btn-2" aria-label="Step 3: Calm Tracker Dashboard">
+            <div class="timeline-icon-box">3</div>
+            <div class="timeline-content">
+              <h4>Calm Tracker Dashboard</h4>
+              <p>Tap off tasks as you breeze through them, generating a dopamine loop. Watch progress percentages grow without any broken-streak shame.</p>
+            </div>
+          </button>
+
+          <!-- Step 4 -->
+          <button class="timeline-step" id="step-btn-3" aria-label="Step 4: Non-Judgmental Reflection">
+            <div class="timeline-icon-box">4</div>
+            <div class="timeline-content">
+              <h4>Non-Judgmental Reflection</h4>
+              <p>Review your personal calendar filled with calm smiley progress states. Complete or skip rest days safely with no cold red markers.</p>
+            </div>
+          </button>
+        </div>
+
+        <!-- Right Side: Interactive Mobile Mockup Platform -->
+        <div class="walkthrough-right">
+          <div class="showcase-phone">
+            <div class="showcase-phone-notch"></div>
+            <div class="showcase-phone-screen">
+              <div class="screen-wrapper">
+                
+                <!-- SHOWCASE SCREEN 1: BUILDER -->
+                <div class="screenshot-slide active" id="win-slide-0">
+                  <div class="screenshot-header">
+                    <span>Routine setup</span>
+                    <h3>Morning Block</h3>
+                  </div>
+                  <div class="setup-task-builder">
+                    <div style="font-size:11.5px; color:var(--muted-text); margin-bottom: 6px; font-weight:600;">Drag and drop tasks to prioritize:</div>
+                    <div class="builder-item">
+                      <span class="builder-drag-handle">☰</span>
+                      <span class="builder-title">💧 Drink water & meds</span>
+                      <span class="builder-duration">5m</span>
+                    </div>
+                    <div class="builder-item" style="border-color: var(--primary-accent); box-shadow: 0 4px 12px var(--primary-glow-subtle)">
+                      <span class="builder-drag-handle" style="color:var(--primary-accent)">☰</span>
+                      <span class="builder-title" style="font-weight:700">🧘 Do 5 deep breaths</span>
+                      <span class="builder-duration" style="background-color: var(--primary-accent); color: white;">5m</span>
+                    </div>
+                    <div class="builder-item">
+                      <span class="builder-drag-handle">☰</span>
+                      <span class="builder-title">🍳 High-protein meal</span>
+                      <span class="builder-duration">15m</span>
+                    </div>
+                    <div class="builder-add-pill">
+                      <span>➕ Add custom task</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- SHOWCASE SCREEN 2: ALERT -->
+                <div class="screenshot-slide" id="win-slide-1" style="padding:0;">
+                  <div class="lockscreen-bg">
+                    <div class="lockscreen-time">08:00</div>
+                    <div class="lockscreen-date" id="walkthrough-lockscreen-date">Friday, June 19</div>
+                    
+                    <div class="lockscreen-alert-card">
+                      <div class="alert-header">
+                        <div style="display:flex; align-items:center; gap:5px;">
+                          <svg class="truce-logo-svg" style="width:14px; height:14px; border-radius:4px;" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="100" height="100" rx="28" fill="url(#truce-logo-gradient)" />
+                            <path d="M41.5 41C41.5 32 43 26.5 47.5 25.5C50 25 52.5 26.5 52.5 29.5C52.5 32 52 35.5 52 38H58.5C60.5 38 62 39.5 62 41.5C62 43.5 60.5 45 58.5 45H51.5C51 53 51 59 52.5 61.5C53.5 63.5 55.5 64 58 61.5C60 59 63 55 65.5 51C67 48.5 70 47.5 72 49.5C74 51.5 73.5 54.5 71.5 57.5C67.5 64 61.5 73 54.5 74.5C47.5 76 43.5 71 43.5 61C43.5 54.5 43 49 43 45H37.5C35.5 45 34 43.5 34 41.5C34 39.5 35.5 38 37.5 38H42.5V41Z" fill="#FDF3F5"/>
+                          </svg>
+                          <span style="font-weight:800; font-size:10px; color:#c71638; letter-spacing:0.02em; font-family: var(--font-display);">TRUCE</span>
+                        </div>
+                        <span>now</span>
+                      </div>
+                      <div class="alert-title">Your Morning Block Starts Now</div>
+                      <div class="alert-body">No pressure, Alex. Let's tackle your routine at your own speed today. Drink a quick glass of water to build momentum. ✨</div>
+                      <div class="alert-actions">
+                        <button class="alert-btn alert-btn-primary" onclick="setActiveWalkthrough(2)">Start Routine</button>
+                        <button class="alert-btn alert-btn-secondary" onclick="alert('Snoozed for 10 minutes with zero shame or penalty!')">Snooze 10m</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- SHOWCASE SCREEN 3: TRACKER -->
+                <div class="screenshot-slide" id="win-slide-2">
+                  <div class="screenshot-header">
+                    <span>Active Block</span>
+                    <h3>Alex's Routine</h3>
+                  </div>
+                  <div class="tracker-card">
+                    <div style="display:flex; justify-content:space-between; font-weight:700; font-size:12px; margin-bottom: 2px;">
+                      <span style="color:var(--title-text);">Today's Progress</span>
+                      <span id="walkthrough-percent" style="color:var(--primary-accent);">25%</span>
+                    </div>
+                    <div class="tracker-progress-bar">
+                      <div class="tracker-progress-fill" id="walkthrough-progress-fill" style="width: 25%;"></div>
+                    </div>
+                    <div id="walkthrough-encouragement" style="font-size:11px; color:var(--muted-text); text-align:center; font-style:italic;">
+                      1 of 4 completed — slow and steady.
+                    </div>
+                  </div>
+                  <div class="tracker-list">
+                    <div style="font-size:11px; color:var(--muted-text); margin-bottom: 4px; font-weight:600; text-align:left;">Check off completed actions:</div>
+                    
+                    <div class="tracker-item completed" onclick="toggleWalkthroughTask(this, 0)">
+                      <div class="checkbox-circle" style="width:16px; height:16px; margin-right:8px; flex-shrink:0;">
+                        <div class="checkbox-tick" style="width:5px; height:9px; border-width:0 2px 2px 0;"></div>
+                      </div>
+                      <span class="builder-title">💧 Drink water & meds</span>
+                    </div>
+                    
+                    <div class="tracker-item" onclick="toggleWalkthroughTask(this, 1)">
+                      <div class="checkbox-circle" style="width:16px; height:16px; margin-right:8px; flex-shrink:0;">
+                        <div class="checkbox-tick" style="width:5px; height:9px; border-width:0 2px 2px 0;"></div>
+                      </div>
+                      <span class="builder-title">🧘 Do 5 deep breaths</span>
+                    </div>
+ 
+                    <div class="tracker-item" onclick="toggleWalkthroughTask(this, 2)">
+                      <div class="checkbox-circle" style="width:16px; height:16px; margin-right:8px; flex-shrink:0;">
+                        <div class="checkbox-tick" style="width:5px; height:9px; border-width:0 2px 2px 0;"></div>
+                      </div>
+                      <span class="builder-title">🍳 High-protein breakfast</span>
+                    </div>
+ 
+                    <div class="tracker-item" onclick="toggleWalkthroughTask(this, 3)">
+                      <div class="checkbox-circle" style="width:16px; height:16px; margin-right:8px; flex-shrink:0;">
+                        <div class="checkbox-tick" style="width:5px; height:9px; border-width:0 2px 2px 0;"></div>
+                      </div>
+                      <span class="builder-title">📝 Write 1 focus item</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- SHOWCASE SCREEN 4: WINS WITH CALENDAR & SMILEYS -->
+                <div class="screenshot-slide" id="win-slide-3">
+                  <div class="screenshot-header">
+                    <span>End of block</span>
+                    <h3>Weekly Reflections</h3>
+                  </div>
+                  
+                  <div class="wins-streak-badge" style="margin-bottom: 6px;">
+                    <span class="wins-badge-icon">🛡️</span>
+                    <div>
+                      <div class="wins-badge-title">Rest Day Protection Active</div>
+                      <div class="wins-badge-sub font-mono">Wednesday rest day score preserved</div>
+                    </div>
+                  </div>
+
+                  <div class="reflection-month-header" style="display:flex; justify-content:space-between; align-items:center; margin: 4px 0 4px 0;">
+                    <span style="font-size:12px; font-weight:800; color:var(--title-text);">June 2026</span>
+                    <span style="font-size:10px; font-family:var(--font-mono); color:var(--secondary-accent); font-weight:700;">6/7 Days Met</span>
+                  </div>
+                  
+                  <div class="mini-calendar-grid" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 6px; background: rgba(255,255,255,0.01); padding: 5px; border-radius: 8px; border: 1px solid var(--inner-border);">
+                    <!-- Weekday names -->
+                    <span style="font-size: 8px; font-weight:700; color:var(--muted-text); text-align:center;">S</span>
+                    <span style="font-size: 8px; font-weight:700; color:var(--muted-text); text-align:center;">M</span>
+                    <span style="font-size: 8px; font-weight:700; color:var(--muted-text); text-align:center;">T</span>
+                    <span style="font-size: 8px; font-weight:700; color:var(--muted-text); text-align:center;">W</span>
+                    <span style="font-size: 8px; font-weight:700; color:var(--muted-text); text-align:center;">T</span>
+                    <span style="font-size: 8px; font-weight:700; color:var(--muted-text); text-align:center;">F</span>
+                    <span style="font-size: 8px; font-weight:700; color:var(--muted-text); text-align:center;">S</span>
+                    
+                    <div class="cal-day empty"></div>
+                    <div class="cal-day done-smile" title="Completed Goal! 😊">
+                      <span class="cal-num">1</span><span class="cal-emoji">😊</span>
+                    </div>
+                    <div class="cal-day done-smile" title="Completed Goal! 😊">
+                      <span class="cal-num">2</span><span class="cal-emoji">😊</span>
+                    </div>
+                    <div class="cal-day rest-smile" title="Rest Protected 😌">
+                      <span class="cal-num">3</span><span class="cal-emoji">😌</span>
+                    </div>
+                    <div class="cal-day done-smile" title="Completed Goal! 😊">
+                      <span class="cal-num">4</span><span class="cal-emoji">😊</span>
+                    </div>
+                    <div class="cal-day great-smile" title="High momentum! 😎">
+                      <span class="cal-num">5</span><span class="cal-emoji">😎</span>
+                    </div>
+                    <div class="cal-day done-smile" title="Completed Goal! 😊">
+                      <span class="cal-num">6</span><span class="cal-emoji">😊</span>
+                    </div>
+                    <div class="cal-day done-smile" title="Completed Goal! 😊">
+                      <span class="cal-num">7</span><span class="cal-emoji">😊</span>
+                    </div>
+                    <div class="cal-day done-smile" title="Completed Goal! 😊">
+                      <span class="cal-num">8</span><span class="cal-emoji">😊</span>
+                    </div>
+                    <div class="cal-day rest-smile" title="Rest Protected 😌">
+                      <span class="cal-num">9</span><span class="cal-emoji">😌</span>
+                    </div>
+                    <div class="cal-day done-smile" title="Completed Goal! 😊">
+                      <span class="cal-num">10</span><span class="cal-emoji">😊</span>
+                    </div>
+                    <div class="cal-day quiet-smile" title="Micro task checked 🙂">
+                      <span class="cal-num">11</span><span class="cal-emoji">🙂</span>
+                    </div>
+                    <div class="cal-day done-smile" title="Completed Goal! 😊">
+                      <span class="cal-num">12</span><span class="cal-emoji">😊</span>
+                    </div>
+                    <div class="cal-day done-smile" title="Completed Goal! 😊">
+                      <span class="cal-num">13</span><span class="cal-emoji">😊</span>
+                    </div>
+                    <div class="cal-day done-smile" title="Completed Goal! 😊">
+                      <span class="cal-num">14</span><span class="cal-emoji">😊</span>
+                    </div>
+                    <div class="cal-day done-smile" title="Today completed! 😊" style="border: 1px solid var(--secondary-accent); transform: scale(1.05);">
+                      <span class="cal-num" style="color:var(--secondary-accent); font-weight:800;">15</span><span class="cal-emoji">😊</span>
+                    </div>
+                    <div class="cal-day future"><span class="cal-num">16</span></div>
+                    <div class="cal-day future"><span class="cal-num">17</span></div>
+                    <div class="cal-day future"><span class="cal-num">18</span></div>
+                    <div class="cal-day future"><span class="cal-num">19</span></div>
+                    <div class="cal-day future"><span class="cal-num">20</span></div>
+                    <div class="cal-day future"><span class="cal-num">21</span></div>
+                  </div>
+
+                  <div class="wins-message-card" style="padding: 10px; font-size:11.5px; line-height:1.4;">
+                    🏆 <strong>Amazing Effort, Alex!</strong><br>
+                    Your calendar displays beautiful, guilt-free smiley check-ins. Your momentum survived every single low-energy or rest day gracefully!
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 6 — SOCIAL PROOF / TESTIMONIALS -->
+  <section class="section-padding testimonials-section fade-in-section">
+    <div class="container">
+      <div class="section-title-wrapper">
+        <span class="section-subtitle">Real Relief</span>
+        <h2>From the ADHD community</h2>
+        <p style="color: var(--muted-text); margin-top:12px;">These are real reactions from our beta testers.</p>
+      </div>
+
+      <div class="testimonials-grid">
+        <!-- Card 1 -->
+        <div class="testimonial-card">
+          <div>
+            <div class="stars">⭐⭐⭐⭐⭐</div>
+            <p class="testimonial-text">
+              "I've tried every habit app. They all made me feel worse about myself after a week. Truce is the first one I've used for more than 14 days."
+            </p>
+          </div>
+          <div class="testimonial-author">
+            Sarah K., 29
+            <div class="author-info">diagnosed at 26</div>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="testimonial-card">
+          <div>
+            <div class="stars">⭐⭐⭐⭐⭐</div>
+            <p class="testimonial-text">
+              "The percentage instead of streaks changed everything for me. I missed two days and I didn't spiral. That's never happened before."
+            </p>
+          </div>
+          <div class="testimonial-author">
+            Marcus T., 34
+            <div class="author-info">ADHD + anxiety</div>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="testimonial-card">
+          <div>
+            <div class="stars">⭐⭐⭐⭐⭐</div>
+            <p class="testimonial-text">
+               "Finally an app that doesn't feel like it was designed by someone who's never had ADHD. The time estimates alone are a game changer."
+            </p>
+          </div>
+          <div class="testimonial-author">
+            Priya M., 31
+            <div class="author-info">diagnosed last year</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- SECTION 8 — FINAL CTA / WAITLIST -->
+  <section class="cta-section" id="waitlist">
+    <div class="container">
+      <div class="cta-card">
+        <h2>Your routine. Your pace. Starting now.</h2>
+        <p>Join 2,400+ people waiting for an app that finally gets how their brain works.</p>
+        
+        <!-- Waitlist Email Form -->
+        <form class="waitlist-form" id="waitlist-form-el" onsubmit="handleWaitlistSubmit(event)">
+          <input type="email" required placeholder="your@email.com" class="form-input" id="waitlist-email">
+          <button type="submit" class="btn btn-primary">Join Waitlist</button>
+        </form>
+
+        <!-- Success Animation Box -->
+        <div class="success-message" id="waitlist-success">
+          🎉 You're on the list! We'll be in touch.<br>
+          <span style="font-size:14px; font-weight:normal; opacity:0.85; margin-top:8px; display:inline-block;">
+            Check your inbox when you have the dopamine for it. No rush.
+          </span>
+        </div>
+
+        <div class="form-note" style="margin-top:20px;">
+          🔒 No spam. Ever. Unsubscribe any time.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 9 — FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="logo">
+            <svg class="truce-logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="truce-logo-gradient-footer" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#FF5A79" />
+                  <stop offset="25%" stop-color="#FA2C56" />
+                  <stop offset="100%" stop-color="#AA062D" />
+                </linearGradient>
+                <linearGradient id="truce-logo-bevel-footer" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.45" />
+                  <stop offset="20%" stop-color="#FFFFFF" stop-opacity="0.15" />
+                  <stop offset="60%" stop-color="#FFFFFF" stop-opacity="0.0" />
+                </linearGradient>
+                <filter id="truce-logo-shadow-footer" x="-5%" y="-5%" width="110%" height="110%">
+                  <feDropShadow dx="0" dy="1.5" stdDeviation="1" flood-color="#730018" flood-opacity="0.25" />
+                </filter>
+              </defs>
+              <rect width="100" height="100" rx="26" fill="url(#truce-logo-gradient-footer)" />
+              <rect x="0.5" y="0.5" width="99" height="99" rx="25.5" stroke="url(#truce-logo-bevel-footer)" stroke-width="1.0" />
+              <g filter="url(#truce-logo-shadow-footer)">
+                <path d="M41.5 41C41.5 32 43 26.5 47.5 25.5C50 25 52.5 26.5 52.5 29.5C52.5 32 52 35.5 52 38H58.5C60.5 38 62 39.5 62 41.5C62 43.5 60.5 45 58.5 45H51.5C51 53 51 59 52.5 61.5C53.5 63.5 55.5 64 58 61.5C60 59 63 55 65.5 51C67 48.5 70 47.5 72 49.5C74 51.5 73.5 54.5 71.5 57.5C67.5 64 61.5 73 54.5 74.5C47.5 76 43.5 71 43.5 61C43.5 54.5 43 49 43 45H37.5C35.5 45 34 43.5 34 41.5C34 39.5 35.5 38 37.5 38H42.5V41Z" fill="#FDF3F5"/>
+              </g>
+            </svg>
+            Truce
+          </div>
+          <p>Built for ADHD brains. Not against them. Your morning, your pace, with absolutely zero shame spirals.</p>
+        </div>
+        
+        <div class="footer-links">
+          <h5>Product</h5>
+          <nav class="footer-links-list">
+            <a href="#features">Features</a>
+            <a href="#how-it-works">How It Works</a>
+            <a href="#why-truce">Why Truce</a>
+          </nav>
+        </div>
+        
+        <div class="footer-links">
+          <h5>Company</h5>
+          <nav class="footer-links-list">
+            <a href="javascript:void(0)" onclick="openTruceModal()">Truce Policy & Pact</a>
+            <a href="javascript:void(0)" onclick="openTruceModal()">Terms of Gentle Service</a>
+            <a href="mailto:support@truce.app">Contact Support</a>
+          </nav>
+        </div>
+      </div>
+
+      <div class="footer-bottom-bar">
+        <span>© 2026 Truce. Made with 💜 for the ADHD community.</span>
+        
+        <div class="footer-social-wrapper">
+          <a href="#" class="social-icon-btn" aria-label="X / Twitter" title="Follow us on X">𝕏</a>
+          <a href="#" class="social-icon-btn" aria-label="Instagram" title="Follow us on Instagram">📸</a>
+          <a href="#" class="social-icon-btn" aria-label="Reddit" title="Join r/Truce on Reddit">👽</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- TRUCE POLICY MODAL -->
+  <div class="truce-modal" id="truce-policy-modal" style="display: none;">
+    <div class="truce-modal-overlay" onclick="closeTruceModal()"></div>
+    <div class="truce-modal-content">
+      <button class="truce-modal-close" onclick="closeTruceModal()">×</button>
+      <h3 style="font-family: var(--font-display); font-weight: 800; font-size: 20px; color: var(--title-text); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">🛡️ The Truce Pact & Policy</h3>
+      
+      <div style="font-size: 14px; line-height: 1.6; color: var(--body-text); display: flex; flex-direction: column; gap: 14px; max-height: 400px; overflow-y: auto; padding-right: 8px; text-align: left;">
+        <p>
+          At <strong>Truce</strong>, we take a radical ADHD-first approach to daily life. This document serves as our policy, philosophy framework, and explicit agreement.
+        </p>
+        
+        <div style="background-color: rgba(255, 65, 93, 0.04); border-left: 3px solid var(--primary-accent); padding: 12px 16px; border-radius: 0 12px 12px 0;">
+          <h4 style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--primary-accent); margin-bottom: 6px; font-family: var(--font-mono);">Mitigating the "Hidden Risk" of Truce</h4>
+          <p style="margin: 0; font-size: 13.5px;">
+            The only risk with the name <strong>Truce</strong> is that to a highly cynical user, a "truce" might imply a weak compromise — a state where neither side gets what they want, leading to a feeling of stagnation.
+          </p>
+        </div>
+
+        <p>
+          We explicitly reject this cynical definition.
+        </p>
+
+        <p>
+          <strong>What the Truce Actionably Is:</strong><br>
+          The Truce is an active, compassionate agreement between your <strong>current energy level</strong> and your <strong>daily goals</strong>.
+        </p>
+
+        <p>
+          Instead of forced compliance or rigid tracking, Truce operates under the law of dynamic capacity. On a high-energy day, your goals stay elevated. On a low-energy day, your routine dynamically soft-scales to support you. Neither side "loses" — your brain wins by maintaining continuity, and your body wins by avoiding burnout.
+        </p>
+
+        <h4 style="font-family: var(--font-display); font-size: 15px; font-weight: 700; color: var(--title-text); margin-top: 10px;">Our Data Privacy Promise</h4>
+        <p>
+          Your daily checklists, routines, schedules, and reflection notes are stored entirely locally on your device. We do not track, process, sell, or monitor your personal routines. Your ADHD journey is yours alone to see and navigate.
+        </p>
+
+        <h4 style="font-family: var(--font-display); font-size: 15px; font-weight: 700; color: var(--title-text); margin-top: 10px;">Terms of Gentle Service</h4>
+        <p>
+          You are hereby permitted to skip days, toggle Rest Mode, and adjust goals without penalty, guilt letters, or push alert passive-aggression.
+        </p>
+      </div>
+
+      <div style="margin-top: 20px; text-align: right;">
+        <button class="btn btn-primary" onclick="closeTruceModal()" style="font-size: 13px; padding: 8px 18px; border-radius: 8px;">Decline Cynicism, Accept Pact</button>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- LIGHTWEIGHT INTERACTION JAVASCRIPT -->
+  <script>
+    // 1. MOBILE MENU TOGGLE
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('active');
+      mobileMenu.classList.toggle('active');
+    });
+
+    // Close menu when clicking links
+    const mobileLinks = mobileMenu.querySelectorAll('a');
+    mobileLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('active');
+        mobileMenu.classList.remove('active');
+      });
+    });
+
+    // 2. NAV BAR SCROLL EVENT
+    const mainHeader = document.getElementById('main-header');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        mainHeader.classList.add('scrolled');
+      } else {
+        mainHeader.classList.remove('scrolled');
+      }
+    });
+
+    // 3. INTERACTIVE HERO PHONE MOCKUP TASK MANAGER
+    const taskStates = [true, true, false, false, false];
+    const phonePercentText = document.getElementById('phone-percentage');
+    const phonePercentFill = document.getElementById('phone-progress-fill');
+    const phoneEncouragementText = document.getElementById('phone-encouragement');
+
+    function toggleHeroTask(element, index) {
+      taskStates[index] = !taskStates[index];
+      
+      if (taskStates[index]) {
+        element.classList.add('completed');
+      } else {
+        element.classList.remove('completed');
+      }
+
+      // Calculate new completion status
+      const completedCount = taskStates.filter(Boolean).length;
+      const totalCount = taskStates.length;
+      const percent = Math.round((completedCount / totalCount) * 100);
+
+      // Update Phone Mockup UI
+      phonePercentText.textContent = percent + '%';
+      phonePercentFill.style.width = percent + '%';
+
+      // Update supportive messages on state
+      let msg = '';
+      if (percent === 100) {
+        msg = "You finished your routine! Beautifully done! 🎉";
+      } else if (percent >= 80) {
+        msg = `4 of 5 done — basically complete! You got this!`;
+      } else if (percent >= 50) {
+        msg = `Today: ${completedCount} of ${totalCount} done — solid progress!`;
+      } else if (percent > 0) {
+        msg = `Today: ${completedCount} of ${totalCount} done — slow and steady, no rush.`;
+      } else {
+        msg = "Ready when you are. One simple step is enough.";
+      }
+      
+      phoneEncouragementText.textContent = msg;
+
+      // Make a brief ripple impact on percentage
+      phonePercentText.style.transform = 'scale(1.15)';
+      phonePercentText.style.transition = 'transform 0.15s ease';
+      setTimeout(() => {
+        phonePercentText.style.transform = 'scale(1)';
+      }, 150);
+    }
+
+    // 4. INTERACTIVE BUILDER REORDER SIMULATOR
+    let sequenceIndices = [1, 2, 3];
+    function shiftDraggableItem(currId) {
+      const parentNode = document.querySelector('.demo-builder-list');
+      if (!parentNode) return;
+      const clickedItem = document.getElementById(`drag-item-${currId}`);
+      if (!clickedItem) return;
+      
+      // Rotates order gracefully
+      parentNode.appendChild(clickedItem);
+
+      // Re-assign step badges based on new rendered order
+      setTimeout(() => {
+        const reOrderedItems = Array.from(parentNode.querySelectorAll('.dragger-item'));
+        reOrderedItems.forEach((item, idx) => {
+          const stepIdx = idx + 1;
+          const tagSpan = item.querySelector('.dragger-tag');
+          if (!tagSpan) return;
+          const isCurrentlyActive = item.classList.contains('active-drag');
+          
+          if (isCurrentlyActive) {
+            tagSpan.textContent = `Step ${stepIdx} (Active)`;
+          } else {
+            tagSpan.textContent = `Step ${stepIdx}`;
+          }
+        });
+      }, 50);
+    }
+
+    // 4b. MULTI-ENERGY LEVEL STATE BUILDER (gives real feeling of moments)
+    function setBuilderMomentEnergy(level) {
+      // Toggle button active classes
+      const btnMed = document.getElementById('btn-moment-med');
+      const btnLow = document.getElementById('btn-moment-low');
+      const btnHigh = document.getElementById('btn-moment-high');
+      
+      if (btnMed) btnMed.classList.remove('active');
+      if (btnLow) btnLow.classList.remove('active');
+      if (btnHigh) btnHigh.classList.remove('active');
+      
+      const currentBtn = document.getElementById(`btn-moment-${level}`);
+      if (currentBtn) currentBtn.classList.add('active');
+      
+      // Update the builder items inside `#builder-demo-list-id`
+      const builderList = document.getElementById('builder-demo-list-id');
+      if (!builderList) return;
+      
+      let html = '';
+      if (level === 'low') {
+        html = `
+          <div class="dragger-item" id="drag-item-1" onclick="shiftDraggableItem(1)">
+            <div class="drag-handle"><span></span><span></span><span></span></div>
+            <span class="dragger-title">💧 Drink water & critical meds</span>
+            <span class="dragger-tag">Step 1</span>
+          </div>
+          <div class="dragger-item active-drag" id="drag-item-2" onclick="shiftDraggableItem(2)">
+            <div class="drag-handle"><span></span><span></span><span></span></div>
+            <span class="dragger-title">🛋️ Gentle warm couch stretch</span>
+            <span class="dragger-tag">Step 2 (Active)</span>
+          </div>
+          <div class="dragger-item" id="drag-item-3" onclick="shiftDraggableItem(3)">
+            <div class="drag-handle"><span></span><span></span><span></span></div>
+            <span class="dragger-title">🍎 Eat quick energy bar</span>
+            <span class="dragger-tag">Step 3</span>
+          </div>
+        `;
+      } else if (level === 'high') {
+        html = `
+          <div class="dragger-item" id="drag-item-1" onclick="shiftDraggableItem(1)">
+            <div class="drag-handle"><span></span><span></span><span></span></div>
+            <span class="dragger-title">💧 Big water glass & full vitamins</span>
+            <span class="dragger-tag">Step 1</span>
+          </div>
+          <div class="dragger-item active-drag" id="drag-item-2" onclick="shiftDraggableItem(2)">
+            <div class="drag-handle"><span></span><span></span><span></span></div>
+            <span class="dragger-title">🚶 10m warm outdoor walk</span>
+            <span class="dragger-tag">Step 2 (Active)</span>
+          </div>
+          <div class="dragger-item" id="drag-item-3" onclick="shiftDraggableItem(3)">
+            <div class="drag-handle"><span></span><span></span><span></span></div>
+            <span class="dragger-title">🍳 Cook nutrient-rich protein meal</span>
+            <span class="dragger-tag">Step 3</span>
+          </div>
+        `;
+      } else {
+        // level === 'med'
+        html = `
+          <div class="dragger-item" id="drag-item-1" onclick="shiftDraggableItem(1)">
+            <div class="drag-handle"><span></span><span></span><span></span></div>
+            <span class="dragger-title">💧 Hydrate & take morning meds</span>
+            <span class="dragger-tag">Step 1</span>
+          </div>
+          <div class="dragger-item active-drag" id="drag-item-2" onclick="shiftDraggableItem(2)">
+            <div class="drag-handle"><span></span><span></span><span></span></div>
+            <span class="dragger-title">🧘 Do 5 deep breaths & center</span>
+            <span class="dragger-tag">Step 2 (Active)</span>
+          </div>
+          <div class="dragger-item" id="drag-item-3" onclick="shiftDraggableItem(3)">
+            <div class="drag-handle"><span></span><span></span><span></span></div>
+            <span class="dragger-title">🍳 Easy protein-heavy breakfast</span>
+            <span class="dragger-tag">Step 3</span>
+          </div>
+        `;
+      }
+      
+      builderList.innerHTML = html;
+      
+      builderList.style.transform = 'scale(0.97)';
+      builderList.style.opacity = '0.8';
+      builderList.style.transition = 'all 0.15s cubic-bezier(0.16, 1, 0.3, 1)';
+      setTimeout(() => {
+        builderList.style.transform = 'scale(1)';
+        builderList.style.opacity = '1';
+      }, 150);
+    }
+
+    // 4c. FEATURE 2 WEEK DAY SMILE PROGRESS LOGIC & PERCENTAGE RECALCULATOR (No More Streak Punishment)
+    const dayOptionCycles = [
+      { smile: '😊', value: 1.0, css: 'done', title: 'Completed' },
+      { smile: '😌', value: 1.0, css: 'rest', title: 'Rest Protected' },
+      { smile: '🙂', value: 0.7, css: 'done', title: 'Quiet scale check' },
+      { smile: '💤', value: 0.0, css: 'missed', title: 'Missed without penalty' }
+    ];
+    
+    const dayStates = [0, 0, 1, 0, 0, 0, 0]; // Monday to Sunday initial levels. Wed is index 2 = Rest Protected (😌)
+
+    function toggleCalendarDemoDay(dayIdx) {
+      dayStates[dayIdx] = (dayStates[dayIdx] + 1) % dayOptionCycles.length;
+      
+      const calendarContainer = document.getElementById('demo-streak-calendar-id');
+      if (!calendarContainer) return;
+      
+      const dayElements = calendarContainer.querySelectorAll('.day-box');
+      const targetDay = dayElements[dayIdx];
+      if (!targetDay) return;
+      
+      const activeState = dayOptionCycles[dayStates[dayIdx]];
+      
+      // Update element
+      targetDay.className = `day-box ${activeState.css}`;
+      targetDay.title = `${targetDay.querySelector('span').textContent}: ${activeState.title} (Click to toggle!)`;
+      const smileSpan = targetDay.querySelector('.day-smile');
+      if (smileSpan) smileSpan.textContent = activeState.smile;
+      
+      // Recalculate
+      let totalValue = 0;
+      dayStates.forEach(status => {
+        totalValue += dayOptionCycles[status].value;
+      });
+      const finalPercentage = Math.round((totalValue / 7) * 100);
+      
+      // Apply to UI Node Elements
+      const percentLabel = document.getElementById('percent-text-display');
+      const circleNode = document.getElementById('percent-circle-node');
+      const descPercentText = document.getElementById('demo-calendar-percent');
+      
+      if (percentLabel) {
+        percentLabel.textContent = `${finalPercentage}%`;
+        percentLabel.style.transform = 'scale(1.25)';
+        percentLabel.style.transition = 'transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+        setTimeout(() => percentLabel.style.transform = 'scale(1)', 180);
+      }
+      
+      if (descPercentText) {
+        descPercentText.textContent = `${finalPercentage}%`;
+      }
+      
+      if (circleNode) {
+        // Circumference of r=50 circle is 314
+        const circumference = 314;
+        const offset = circumference - (finalPercentage / 100) * circumference;
+        circleNode.style.strokeDashoffset = offset;
+      }
+    }
+
+    // 5. INTERSECTION OBSERVER FOR FADE-IN ANIMATIONS
+    const fadeSections = document.querySelectorAll('.fade-in-section');
+    
+    if ('IntersectionObserver' in window) {
+      const options = {
+        threshold: 0.15,
+        rootMargin: '0px 0px -50px 0px'
+      };
+
+      const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, options);
+
+      fadeSections.forEach(section => {
+        observer.observe(section);
+      });
+    } else {
+      // Fallback for older browsers
+      fadeSections.forEach(section => section.classList.add('is-visible'));
+    }
+
+    // 6. WAITLIST FORM HANDLING
+    function handleWaitlistSubmit(event) {
+      event.preventDefault();
+      
+      const emailInput = document.getElementById('waitlist-email');
+      const waitlistForm = document.getElementById('waitlist-form-el');
+      const successBox = document.getElementById('waitlist-success');
+
+      // Simple mock loading effect
+      const submitBtn = waitlistForm.querySelector('button');
+      submitBtn.textContent = 'Joining...';
+      submitBtn.disabled = true;
+
+      // Add a fun dopamine animation glow
+      submitBtn.style.transform = 'scale(0.95)';
+
+      setTimeout(() => {
+        // Hide form and open dopamine animation success box
+        waitlistForm.style.display = 'none';
+        successBox.style.display = 'block';
+        
+        // Console reporting standard waitlist subscription
+        console.log(`Subscriber registered: ${emailInput.value}`);
+      }, 800);
+    }
+
+    // 7. SETUP DYNAMIC LIVE CALENDAR IN MOCKUP
+    const daysArr = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const monthsArr = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    
+    const currDateObj = new Date();
+    const dayName = daysArr[currDateObj.getDay()];
+    const monthName = monthsArr[currDateObj.getMonth()];
+    const dayNum = currDateObj.getDate();
+
+    const liveDisplayNode = document.getElementById('live-date');
+    if (liveDisplayNode) {
+      liveDisplayNode.textContent = `${dayName}, ${monthName} ${dayNum}`;
+    }
+
+    // 8. HERO WAITLIST SUBMISSION
+    function handleHeroWaitlist(event) {
+      event.preventDefault();
+      const emailInput = document.getElementById('hero-waitlist-email');
+      const heroBtn = document.getElementById('hero-waitlist-btn-id');
+
+      if (!emailInput || !heroBtn) return;
+
+      const userEmail = emailInput.value;
+      heroBtn.textContent = 'Joining...';
+      heroBtn.disabled = true;
+
+      setTimeout(() => {
+        // Register simulation
+        console.log(`Hero waitlist subscriber: ${userEmail}`);
+        
+        // Visual completion feedback
+        heroBtn.textContent = 'Awesome! 🎉';
+        heroBtn.style.backgroundColor = 'var(--secondary-accent)';
+        emailInput.value = '';
+
+        // Also trigger the primary waitlist form success block gracefully
+        const bottomInput = document.getElementById('waitlist-email');
+        if (bottomInput) bottomInput.value = userEmail;
+        const bottomForm = document.getElementById('waitlist-form-el');
+        const successBox = document.getElementById('waitlist-success');
+        if (bottomForm && successBox) {
+          bottomForm.style.display = 'none';
+          successBox.style.display = 'block';
+
+          // Smooth scroll to waitlist section to confirm success details
+          const waitlistSection = document.getElementById('waitlist');
+          if (waitlistSection) {
+            waitlistSection.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+
+        setTimeout(() => {
+          heroBtn.textContent = 'Join Waitlist';
+          heroBtn.disabled = false;
+          heroBtn.style.backgroundColor = 'var(--primary-accent)';
+        }, 4000);
+      }, 750);
+    }
+
+    // 9. INTERACTIVE WALKTHROUGH CONTROLLER
+    let activeWalkthroughIdx = 0;
+    const timelineSteps = document.querySelectorAll('.timeline-step');
+    const screenshotSlides = document.querySelectorAll('.screenshot-slide');
+
+    function setActiveWalkthrough(index) {
+      activeWalkthroughIdx = index;
+      
+      // Update step active indicators
+      timelineSteps.forEach((step, idx) => {
+        if (idx === index) {
+          step.classList.add('active');
+        } else {
+          step.classList.remove('active');
+        }
+      });
+
+      // Update slide active classes
+      screenshotSlides.forEach((slide, idx) => {
+        if (idx === index) {
+          slide.classList.add('active');
+        } else {
+          slide.classList.remove('active');
+        }
+      });
+    }
+
+    // Bind click handlers to walkthrough selector buttons
+    timelineSteps.forEach((step, idx) => {
+      step.addEventListener('click', () => {
+        setActiveWalkthrough(idx);
+      });
+    });
+
+    // 10. WALKTHROUGH MOCK ACTIVE CHECKLIST TRACKER (SCREEN 3)
+    const walkthroughChecked = [true, false, false, false];
+    function toggleWalkthroughTask(element, index) {
+      walkthroughChecked[index] = !walkthroughChecked[index];
+      
+      if (walkthroughChecked[index]) {
+        element.classList.add('completed');
+      } else {
+        element.classList.remove('completed');
+      }
+
+      // Re-calculate the progress percentage
+      const completedCount = walkthroughChecked.filter(Boolean).length;
+      const totalCount = walkthroughChecked.length;
+      const percentageScore = Math.round((completedCount / totalCount) * 100);
+
+      // Update the UI
+      const percentLabel = document.getElementById('walkthrough-percent');
+      const progressFill = document.getElementById('walkthrough-progress-fill');
+      const encouragementLabel = document.getElementById('walkthrough-encouragement');
+
+      if (percentLabel) {
+        percentLabel.textContent = percentageScore + '%';
+        // Minor scale pop effect
+        percentLabel.style.transform = 'scale(1.15)';
+        percentLabel.style.transition = 'transform 0.15s ease';
+        setTimeout(() => percentLabel.style.transform = 'scale(1)', 150);
+      }
+      
+      if (progressFill) {
+        progressFill.style.width = percentageScore + '%';
+      }
+
+      if (encouragementLabel) {
+        if (percentageScore === 100) {
+          encouragementLabel.textContent = "All done! What a gorgeous start! 🍀";
+        } else if (percentageScore >= 75) {
+          encouragementLabel.textContent = `${completedCount} of ${totalCount} completed! Almost there! ✨`;
+        } else if (percentageScore > 0) {
+          encouragementLabel.textContent = `${completedCount} of ${totalCount} completed — doing great!`;
+        } else {
+          encouragementLabel.textContent = "Take a custom task, one breathing step is enough.";
+        }
+      }
+    }
+
+    // Set lockscreen dynamic calendar date to match user local date on Screen 2
+    const lockscreenDateNode = document.getElementById('walkthrough-lockscreen-date');
+    if (lockscreenDateNode) {
+      lockscreenDateNode.textContent = `${dayName}, ${monthName} ${dayNum}`;
+    }
+
+    // 11. TRUCE PACT MODAL TRIGGERS
+    const truceModalEl = document.getElementById('truce-policy-modal');
+    function openTruceModal() {
+      if (truceModalEl) {
+        truceModalEl.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closeTruceModal() {
+      if (truceModalEl) {
+        truceModalEl.style.display = 'none';
+        document.body.style.overflow = 'auto';
+      }
+    }
+
+    // 12. ADMIN DIALOG MANAGEMENT
+    function openAdminPortal() {
+      const adminOverlayNode = document.getElementById('admin-settings-portal');
+      if (adminOverlayNode) {
+        adminOverlayNode.style.display = 'flex';
+        // Force reflow
+        setTimeout(() => adminOverlayNode.classList.add('active'), 10);
+        document.body.style.overflow = 'hidden';
+      }
+    }
+    
+    function closeAdminPortal() {
+      const adminOverlayNode = document.getElementById('admin-settings-portal');
+      if (adminOverlayNode) {
+        adminOverlayNode.classList.remove('active');
+        setTimeout(() => {
+          adminOverlayNode.style.display = 'none';
+        }, 200);
+        document.body.style.overflow = 'auto';
+      }
+    }
+
+    // Reveal the admin portal button silently if "?admin=true" is passed in URL
+    if (window.location.search.includes('admin=true')) {
+      const adminBtn = document.getElementById('btn-admin-portal-open');
+      if (adminBtn) {
+        adminBtn.style.display = 'flex';
+      }
+    }
+  </script>
+
+  <!-- ADMIN CONTROL OVERLAYS -->
+  <div class="admin-floating-toggle" id="btn-admin-portal-open" onclick="openAdminPortal()" title="Admin Waitlist Sync Settings">
+    ⚙️
+  </div>
+
+  <div class="admin-panel-overlay" id="admin-settings-portal" onclick="if (event.target === this) closeAdminPortal()">
+    <div class="admin-panel-card">
+      <button class="admin-panel-close" onclick="closeAdminPortal()">×</button>
+      <h3 style="font-family: var(--font-display); font-weight: 800; font-size: 20px; color: var(--title-text); margin-bottom: 6px; display: flex; align-items: center; gap: 8px;">
+        ⚙️ Truce Admin Dashboard
+      </h3>
+      <p style="font-size: 13px; color: var(--muted-text); margin-bottom: 20px; line-height: 1.5;">
+        Complete control panel for the "Truce" morning app landing waitlist. Authenticate and write straight to your live Google Sheet.
+      </p>
+
+      <div id="admin-status-container">
+        <!-- Will be dynamically populated by /src/waitlist.ts -->
+        <div style="padding: 40px; text-align: center; color: var(--muted-text); font-style: italic; font-size: 13px;">
+          Initializing Firebase & Sheets connection module...
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/waitlist.ts"></script>
+</body>
+</html>
