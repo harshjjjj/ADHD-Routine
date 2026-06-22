@@ -663,4 +663,12 @@ function hookLandingPageForms() {
 window.addEventListener('DOMContentLoaded', () => {
   hookLandingPageForms();
   renderStatus();
+  
+  // Double-verify admin button visibility in the workspace package
+  if (window.location.href.toLowerCase().includes('admin=true')) {
+    const adminBtn = document.getElementById('btn-admin-portal-open');
+    if (adminBtn) {
+      adminBtn.style.display = 'flex';
+    }
+  }
 });

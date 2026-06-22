@@ -3977,13 +3977,18 @@
       }
     }
 
-    // Reveal the admin portal button silently if "?admin=true" is passed in URL
-    if (window.location.search.includes('admin=true')) {
-      const adminBtn = document.getElementById('btn-admin-portal-open');
-      if (adminBtn) {
-        adminBtn.style.display = 'flex';
+    // Reveal the admin portal button silently if "admin=true" is passed in URL (search/query or hash)
+    function checkAdminQuery() {
+      if (window.location.href.toLowerCase().includes('admin=true')) {
+        const adminBtn = document.getElementById('btn-admin-portal-open');
+        if (adminBtn) {
+          adminBtn.style.display = 'flex';
+        }
       }
     }
+    // Try both instantly and on DOMContentLoaded
+    checkAdminQuery();
+    window.addEventListener('DOMContentLoaded', checkAdminQuery);
   </script>
 
   <!-- ADMIN CONTROL OVERLAYS -->
