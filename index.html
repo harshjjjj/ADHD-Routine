@@ -3974,22 +3974,31 @@
     }
 
     async function registerEmailInFirebase(email) {
+      // 1. Back up immediately in localStorage so it is never lost and displays instantly on the local device
+      saveToBackup(email);
+
       if (!db) {
-        console.warn("Firestore not available! Saving waitlist email safely inside browser backup.");
-        saveToBackup(email);
+        console.warn("Firestore not available! Saved waitlist email safely inside browser backup.");
         return false;
       }
+
+      // Try saving to Firestore in a non-blocking race so the UI updates instantly
       try {
-        await addDoc(collection(db, 'waitlist'), {
+        const firestorePromise = addDoc(collection(db, 'waitlist'), {
           email: email,
-          createdAt: serverTimestamp() || new Date(),
+          createdAt: new Date(),
           status: 'pending'
+        }).then((docRef) => {
+          console.log("Successfully registered email in Google Firebase:", email, docRef.id);
+          return true;
         });
-        console.log("Successfully registered email in Google Firebase:", email);
+
+        // Limit waiting to 800ms max so the customer never waits
+        const timeoutPromise = new Promise((resolve) => setTimeout(() => resolve(false), 800));
+        await Promise.race([firestorePromise, timeoutPromise]);
         return true;
       } catch (err) {
-        console.error("Firestore submission failed:", err);
-        saveToBackup(email);
+        console.warn("Firestore submission failed/timed out, but email is saved locally:", err);
         return false;
       }
     }
@@ -3997,9 +4006,14 @@
     function saveToBackup(email) {
       try {
         let list = JSON.parse(localStorage.getItem('truce_offline_waitlist') || '[]');
-        list.push({ email: email, timestamp: new Date().toISOString() });
-        localStorage.setItem('truce_offline_waitlist', JSON.stringify(list));
-      } catch(e) {}
+        // Don't duplicate if already in backup
+        if (!list.some(item => item.email === email)) {
+          list.push({ email: email, timestamp: new Date().toISOString() });
+          localStorage.setItem('truce_offline_waitlist', JSON.stringify(list));
+        }
+      } catch(e) {
+        console.error("Local storage backup failed:", e);
+      }
     }
 
     // Bind to window to allow instant access from standard HTML actions
@@ -4020,12 +4034,14 @@
         submitBtn.style.transform = 'scale(0.95)';
       }
 
-      await registerEmailInFirebase(email);
+      // Fire Firestore register in a non-blocking/instant manner
+      registerEmailInFirebase(email);
 
+      // Force UI update to success immediately after 400ms for premium fluid feel
       setTimeout(() => {
         if (waitlistForm) waitlistForm.style.display = 'none';
         if (successBox) successBox.style.display = 'block';
-      }, 500);
+      }, 400);
     };
 
     window.handleHeroWaitlist = async function(event) {
@@ -4040,8 +4056,10 @@
       heroBtn.textContent = 'Joining...';
       heroBtn.disabled = true;
 
-      await registerEmailInFirebase(email);
+      // Fire Firestore register in a non-blocking/instant manner
+      registerEmailInFirebase(email);
 
+      // Force UI update to success immediately after 400ms for premium fluid feel
       setTimeout(() => {
         heroBtn.textContent = 'Awesome! 🎉';
         heroBtn.style.backgroundColor = 'var(--secondary-accent)';
@@ -4066,7 +4084,7 @@
           heroBtn.disabled = false;
           heroBtn.style.backgroundColor = 'var(--primary-accent)';
         }, 4000);
-      }, 600);
+      }, 400);
     };
   </script>
 
