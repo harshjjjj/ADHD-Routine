@@ -3967,8 +3967,8 @@
     let db;
     try {
       const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
-      db = getFirestore(app);
-      console.log("Firebase CDN module initialized successfully for truceapp.site waitlist submissions.");
+      db = getFirestore(app, "ai-studio-0e0b7264-581b-4bb7-bd6d-f7225649e700");
+      console.log("Firebase CDN module initialized successfully for truceapp.site waitlist submissions with database ID ai-studio-0e0b7264-581b-4bb7-bd6d-f7225649e700.");
     } catch(err) {
       console.error("Failed to initialize Firebase CDN module:", err);
     }
