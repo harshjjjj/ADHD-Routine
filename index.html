@@ -2635,6 +2635,525 @@
         transform: translateY(0);
       }
     }
+
+    /* APP VIDEO SHOWCASE SECTION */
+    .video-showcase-section {
+      background-color: var(--surface-color);
+      border-top: 1px solid var(--primary-border);
+      border-bottom: 1px solid var(--primary-border);
+    }
+    .video-player-container {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 30px;
+      margin-top: 40px;
+    }
+    @media (min-width: 992px) {
+      .video-player-container {
+        grid-template-columns: 2.2fr 1fr;
+      }
+    }
+    .video-main-deck {
+      background: #150608;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(255, 65, 93, 0.12);
+      border: 1px solid rgba(255, 65, 93, 0.15);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+    .video-canvas {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: #0f0305;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    /* Simulated screen styling inside video */
+    #video-simulated-screen {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      background: #110507;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .simulation-inner {
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+    .sim-stage {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease-in-out;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .sim-stage.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    
+    .sim-phone-frame {
+      width: 180px;
+      height: 330px;
+      background: #2a0b0e;
+      border: 6px solid #421116;
+      border-radius: 28px;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .sim-phone-notch {
+      width: 70px;
+      height: 14px;
+      background: #421116;
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+    }
+    .sim-phone-screen {
+      flex: 1;
+      background: var(--surface-color);
+      display: flex;
+      flex-direction: column;
+      padding: 18px 12px 12px 12px;
+      position: relative;
+      overflow: hidden;
+    }
+    .lockscreen-bg-sim {
+      background: linear-gradient(135deg, #110507 0%, #3d0c11 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .sim-lock-clock {
+      font-size: 32px;
+      font-weight: 800;
+      color: #fff;
+      font-family: var(--font-display);
+      margin-top: -12px;
+    }
+    .sim-lock-date {
+      font-size: 10px;
+      color: rgba(255,255,255,0.6);
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+    .sim-notification-toast {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      padding: 10px;
+      width: 100%;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+      text-align: left;
+      border-left: 3px solid var(--primary-accent);
+      transform: translateY(20px);
+      opacity: 0;
+      animation: simNotiSlide 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      animation-delay: 1.2s;
+    }
+    @keyframes simNotiSlide {
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+    .sim-noti-hdr {
+      display: flex;
+      justify-content: space-between;
+      font-size: 9px;
+      font-weight: 800;
+      color: var(--primary-accent);
+      margin-bottom: 4px;
+    }
+    .sim-noti-body {
+      font-size: 10px;
+      color: #333;
+      margin: 0;
+      line-height: 1.3;
+    }
+    .sim-app-header {
+      border-bottom: 1px solid var(--primary-border);
+      padding-bottom: 6px;
+      margin-bottom: 8px;
+    }
+    .sim-app-header span {
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted-text);
+      font-weight: 700;
+    }
+    .sim-app-header h3 {
+      font-size: 12px;
+      color: var(--title-text);
+      margin: 2px 0 0 0;
+    }
+    .sim-app-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      overflow: hidden;
+    }
+    .sim-draggable-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--surface-color);
+      border: 1.5px solid var(--primary-border);
+      padding: 8px;
+      border-radius: 8px;
+      font-size: 9.5px;
+      font-weight: 600;
+      color: var(--body-text);
+    }
+    .sim-draggable-item.drag-ani {
+      animation: simDragMove 3s infinite ease-in-out;
+    }
+    @keyframes simDragMove {
+      0%, 100% {
+        transform: translateY(0);
+        border-color: var(--primary-border);
+      }
+      50% {
+        transform: translateY(15px);
+        border-color: var(--primary-accent);
+        box-shadow: 0 4px 10px var(--primary-glow-subtle);
+      }
+    }
+    .sim-dur {
+      background: var(--badge-bg);
+      color: var(--primary-accent);
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 8px;
+      font-weight: 700;
+    }
+    .sim-radial-progress {
+      position: relative;
+      width: 60px;
+      height: 60px;
+      margin: 10px auto;
+    }
+    .circular-chart {
+      display: block;
+      margin: 10px auto;
+      max-width: 100%;
+      max-height: 100%;
+    }
+    .circle-bg {
+      fill: none;
+      stroke: var(--primary-border);
+      stroke-width: 2.8;
+    }
+    .circle-fill {
+      fill: none;
+      stroke: var(--primary-accent);
+      stroke-width: 2.8;
+      stroke-linecap: round;
+      transition: stroke-dasharray 0.3s ease;
+    }
+    .sim-pct-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--title-text);
+    }
+    .sim-checklist {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .sim-chk-item {
+      font-size: 10px;
+      color: var(--body-text);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px;
+      border-radius: 4px;
+    }
+    .sim-chk-item.completed {
+      background: #f0fff4;
+      color: #276749;
+      font-weight: 600;
+    }
+    .sim-grid-calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+      margin-top: 10px;
+    }
+    .sim-cal-day {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      border-radius: 6px;
+      background: var(--badge-bg);
+    }
+    .sim-cal-day.done {
+      background: rgba(5, 202, 151, 0.15);
+    }
+    .sim-cal-day.rest {
+      background: rgba(255, 65, 93, 0.1);
+    }
+    .sim-cal-day.current {
+      background: var(--primary-accent);
+      animation: simPulseCurrent 1.5s infinite;
+    }
+    @keyframes simPulseCurrent {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+    @keyframes pulseStartBtn {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.06); }
+    }
+    @keyframes popScale {
+      from { transform: scale(0.7); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    @keyframes bounceEmoji {
+      from { transform: translateY(0); }
+      to { transform: translateY(-5px); }
+    }
+    .confetti-p {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      animation: confettiFall 1.5s infinite linear;
+    }
+    .confetti-p.p1 { left: 10%; animation-delay: 0s; }
+    .confetti-p.p2 { left: 30%; animation-delay: 0.2s; }
+    .confetti-p.p3 { left: 50%; animation-delay: 0.4s; }
+    .confetti-p.p4 { left: 70%; animation-delay: 0.1s; }
+    .confetti-p.p5 { left: 90%; animation-delay: 0.3s; }
+    @keyframes confettiFall {
+      0% { top: -10px; transform: rotate(0deg) translateX(0); opacity: 1; }
+      100% { top: 100%; transform: rotate(360deg) translateX(15px); opacity: 0; }
+    }
+    .sim-card-msg {
+      background: #fef1f3;
+      border-radius: 8px;
+      padding: 8px;
+      font-size: 9px;
+      color: #5c111c;
+      line-height: 1.3;
+      margin-top: 12px;
+    }
+    
+    /* Interactive cursor indicator */
+    .sim-cursor {
+      position: absolute;
+      font-size: 20px;
+      z-index: 100;
+      pointer-events: none;
+      transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    /* Subtitles banner */
+    .sim-subtitle-bar {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.85);
+      color: white;
+      padding: 8px 18px;
+      border-radius: 24px;
+      font-size: 12px;
+      font-weight: 500;
+      text-align: center;
+      white-space: normal;
+      max-width: 80%;
+      backdrop-filter: blur(4px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      z-index: 90;
+    }
+    
+    /* Main Play button overlay */
+    .video-center-play-btn {
+      position: absolute;
+      width: 72px;
+      height: 72px;
+      background: var(--primary-accent);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(255, 65, 93, 0.4);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 105;
+    }
+    .video-center-play-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 12px 30px rgba(255, 65, 93, 0.5);
+    }
+    .video-center-play-btn svg {
+      width: 28px;
+      height: 28px;
+      margin-left: 4px;
+    }
+    .video-player-playing .video-center-play-btn {
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(0.8);
+    }
+    
+    /* Video Controls Bar styling */
+    .video-controls-bar {
+      height: 48px;
+      background: rgba(21, 6, 8, 0.95);
+      border-top: 1px solid rgba(255, 65, 93, 0.15);
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      gap: 12px;
+      z-index: 110;
+    }
+    .control-btn {
+      background: transparent;
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      transition: background-color 0.2s;
+    }
+    .control-btn:hover {
+      background: rgba(255,255,255,0.1);
+    }
+    .video-time-text {
+      color: rgba(255,255,255,0.7);
+      font-size: 11.5px;
+      font-family: var(--font-mono);
+      min-width: 70px;
+    }
+    .video-progress-container {
+      flex: 1;
+      height: 14px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+    .video-progress-bar-bg {
+      width: 100%;
+      height: 4px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 2px;
+      position: relative;
+      overflow: hidden;
+    }
+    .video-progress-bar-fill {
+      height: 100%;
+      background: var(--primary-accent);
+      border-radius: 2px;
+      width: 0%;
+      transition: width 0.1s linear;
+    }
+    
+    /* Chapters List Column */
+    .video-chapters-column {
+      background: var(--recessed-section);
+      border-radius: 24px;
+      padding: 24px;
+      border: 1px solid var(--primary-border);
+      display: flex;
+      flex-direction: column;
+    }
+    .chapters-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .chapter-list-item {
+      display: flex;
+      gap: 14px;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      background: var(--surface-color);
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.25s;
+    }
+    .chapter-list-item:hover {
+      border-color: var(--primary-border);
+      box-shadow: 0 4px 12px rgba(255, 65, 93, 0.04);
+    }
+    .chapter-list-item.active {
+      border-color: var(--primary-accent);
+      background: #fff;
+      box-shadow: 0 6px 16px rgba(255, 65, 93, 0.06);
+    }
+    .chapter-num {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--primary-accent);
+      opacity: 0.6;
+    }
+    .chapter-list-item.active .chapter-num {
+      opacity: 1;
+    }
+    .chapter-meta h4 {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--title-text);
+      margin: 0;
+    }
+    .chapter-meta span {
+      font-size: 11px;
+      color: var(--muted-text);
+    }
+    
+    /* Custom External video styling */
+    .video-external-hidden {
+      display: none !important;
+    }
+    .video-external-visible {
+      display: block !important;
+    }
+    .video-player-playing .video-center-play-btn {
+      opacity: 0;
+      pointer-events: none;
+    }
   </style>
 </head>
 <body>
@@ -2644,26 +3163,20 @@
     <div class="container nav-container">
       <a href="/" class="logo" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
         <svg class="truce-logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g filter="url(#truce-logo-shadow)">
+            <circle cx="50" cy="46" r="38" fill="url(#truce-logo-gradient)" />
+            <path d="M41.5 41C41.5 32 43 26.5 47.5 25.5C50 25 52.5 26.5 52.5 29.5C52.5 32 52 35.5 52 38H58.5C60.5 38 62 39.5 62 41.5C62 43.5 60.5 45 58.5 45H51.5C51 53 51 59 52.5 61.5C53.5 63.5 55.5 64 58 61.5C60 59 63 55 65.5 51C67 48.5 70 47.5 72 49.5C74 51.5 73.5 54.5 71.5 57.5C67.5 64 61.5 73 54.5 74.5C47.5 76 43.5 71 43.5 61C43.5 54.5 43 49 43 45H37.5C35.5 45 34 43.5 34 41.5C34 39.5 35.5 38 37.5 38H42.5V41Z" fill="#FDF3F5"/>
+          </g>
           <defs>
             <linearGradient id="truce-logo-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
               <stop offset="0%" stop-color="#FF5A79" />
               <stop offset="25%" stop-color="#FA2C56" />
-              <stop offset="100%" stop-color="#AA062D" />
+              <stop offset="100%" stop-color="#B80D2F" />
             </linearGradient>
-            <linearGradient id="truce-logo-bevel" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.45" />
-              <stop offset="20%" stop-color="#FFFFFF" stop-opacity="0.15" />
-              <stop offset="60%" stop-color="#FFFFFF" stop-opacity="0.0" />
-            </linearGradient>
-            <filter id="truce-logo-shadow" x="-5%" y="-5%" width="110%" height="110%">
-              <feDropShadow dx="0" dy="1.5" stdDeviation="1" flood-color="#730018" flood-opacity="0.25" />
+            <filter id="truce-logo-shadow" x="4" y="2" width="92" height="92" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+              <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#FF415D" flood-opacity="0.12"/>
             </filter>
           </defs>
-          <rect width="100" height="100" rx="26" fill="url(#truce-logo-gradient)" />
-          <rect x="0.5" y="0.5" width="99" height="99" rx="25.5" stroke="url(#truce-logo-bevel)" stroke-width="1.0" />
-          <g filter="url(#truce-logo-shadow)">
-            <path d="M41.5 41C41.5 32 43 26.5 47.5 25.5C50 25 52.5 26.5 52.5 29.5C52.5 32 52 35.5 52 38H58.5C60.5 38 62 39.5 62 41.5C62 43.5 60.5 45 58.5 45H51.5C51 53 51 59 52.5 61.5C53.5 63.5 55.5 64 58 61.5C60 59 63 55 65.5 51C67 48.5 70 47.5 72 49.5C74 51.5 73.5 54.5 71.5 57.5C67.5 64 61.5 73 54.5 74.5C47.5 76 43.5 71 43.5 61C43.5 54.5 43 49 43 45H37.5C35.5 45 34 43.5 34 41.5C34 39.5 35.5 38 37.5 38H42.5V41Z" fill="#FDF3F5"/>
-          </g>
         </svg>
         <div style="display: flex; flex-direction: column; align-items: flex-start; line-height: 1.15;">
           <span style="font-family: var(--font-display); font-weight: 800; font-size: 21px; color: var(--title-text); letter-spacing: -0.02em;">Truce</span>
@@ -3208,8 +3721,8 @@
                     <div class="lockscreen-alert-card">
                       <div class="alert-header">
                         <div style="display:flex; align-items:center; gap:5px;">
-                          <svg class="truce-logo-svg" style="width:14px; height:14px; border-radius:4px;" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect width="100" height="100" rx="28" fill="url(#truce-logo-gradient)" />
+                          <svg class="truce-logo-svg" style="width:14px; height:14px;" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="50" cy="46" r="38" fill="url(#truce-logo-gradient)" />
                             <path d="M41.5 41C41.5 32 43 26.5 47.5 25.5C50 25 52.5 26.5 52.5 29.5C52.5 32 52 35.5 52 38H58.5C60.5 38 62 39.5 62 41.5C62 43.5 60.5 45 58.5 45H51.5C51 53 51 59 52.5 61.5C53.5 63.5 55.5 64 58 61.5C60 59 63 55 65.5 51C67 48.5 70 47.5 72 49.5C74 51.5 73.5 54.5 71.5 57.5C67.5 64 61.5 73 54.5 74.5C47.5 76 43.5 71 43.5 61C43.5 54.5 43 49 43 45H37.5C35.5 45 34 43.5 34 41.5C34 39.5 35.5 38 37.5 38H42.5V41Z" fill="#FDF3F5"/>
                           </svg>
                           <span style="font-weight:800; font-size:10px; color:#c71638; letter-spacing:0.02em; font-family: var(--font-display);">TRUCE</span>
@@ -3370,6 +3883,353 @@
               </div>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 5.5 — EXCLUSIVE APP DEMO / PREVIEW VIDEO -->
+  <section class="section-padding video-showcase-section fade-in-section" id="app-video-preview">
+    <div class="container">
+      <div class="section-title-wrapper" style="text-align: center; margin-bottom: 40px;">
+        <span class="section-subtitle">Cinematic Walkthrough</span>
+        <h2>Watch Truce in Action</h2>
+        <p style="color: var(--muted-text); margin-top:12px; max-width: 650px; margin-left: auto; margin-right: auto;">
+          Experience our gentle, distraction-free pacing. Turn on sound for calming focus audio, or customize your own stream.
+        </p>
+      </div>
+
+      <div class="video-player-container">
+        <!-- Playback stage -->
+        <div class="video-main-deck">
+          <div class="video-canvas" id="demo-video-canvas">
+            
+            <!-- Simulated screen inside video -->
+            <div id="video-simulated-screen">
+              <div class="simulation-inner" id="simulation-frame">
+                
+                <!-- STAGE 1: Welcome/Intro Screen -->
+                <div class="sim-stage active" id="sim-stage-welcome">
+                  <div class="sim-phone-frame">
+                    <div class="sim-phone-notch"></div>
+                    <div class="sim-phone-screen lockscreen-bg-sim" style="background: linear-gradient(135deg, #0f0406 0%, #2e0910 100%); padding: 12px 10px 10px 10px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                      <div style="text-align: center; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; width: 100%;">
+                        <div style="font-size: 24px; margin-bottom: 2px;">🕊️</div>
+                        <h3 style="font-family: var(--font-display); font-size: 15px; margin: 0 0 2px 0; color: #ff415d; font-weight: 800; letter-spacing: 0.5px;">TRUCE</h3>
+                        <p style="font-size: 9px; opacity: 0.9; margin: 0 0 10px 0; line-height: 1.2; font-weight: 600;">Peace with your productivity.</p>
+                        
+                        <div style="display: flex; flex-direction: column; gap: 4px; width: 100%; text-align: left; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 12px; border: 1px solid rgba(255, 65, 93, 0.15);">
+                          <div style="display: flex; gap: 4px; align-items: flex-start;">
+                            <span style="font-size: 8px; line-height: 1;">🧘</span>
+                            <span style="font-size: 7.5px; line-height: 1.2; color: #fecdd3;"><strong>Gentle Blocks:</strong> No stressful timers or loud alarms.</span>
+                          </div>
+                          <div style="display: flex; gap: 4px; align-items: flex-start;">
+                            <span style="font-size: 8px; line-height: 1;">✨</span>
+                            <span style="font-size: 7.5px; line-height: 1.2; color: #fecdd3;"><strong>Dopamine Loops:</strong> Immediate positive feedback.</span>
+                          </div>
+                          <div style="display: flex; gap: 4px; align-items: flex-start;">
+                            <span style="font-size: 8px; line-height: 1;">📅</span>
+                            <span style="font-size: 7.5px; line-height: 1.2; color: #fecdd3;"><strong>Zero-Guilt Streak:</strong> Smiley-filled weekly calendars.</span>
+                          </div>
+                        </div>
+                        
+                        <button id="sim-start-btn" style="margin-top: 12px; background: #ff415d; border: none; color: white; font-size: 8.5px; padding: 5px 12px; border-radius: 20px; font-weight: 700; box-shadow: 0 4px 10px rgba(255, 65, 93, 0.4); cursor: pointer; animation: pulseStartBtn 1.5s infinite;">
+                          Enter App ➜
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- STAGE 2: setup -->
+                <div class="sim-stage" id="sim-stage-0">
+                  <div class="sim-phone-frame">
+                    <div class="sim-phone-notch"></div>
+                    <div class="sim-phone-screen">
+                      <div class="sim-app-header">
+                        <span>Morning Setup</span>
+                        <h3>Focus Tasks</h3>
+                      </div>
+                      <div class="sim-app-body">
+                        <div class="sim-draggable-item drag-ani" id="drag-item-0">
+                          <span>☰</span>
+                          <span>🧘 Deep Breathing</span>
+                          <span class="sim-dur">5m</span>
+                        </div>
+                        <div class="sim-draggable-item" id="drag-item-1">
+                          <span>☰</span>
+                          <span>💧 Drink Water</span>
+                          <span class="sim-dur">5m</span>
+                        </div>
+                        <div class="sim-draggable-item" id="drag-item-2">
+                          <span>☰</span>
+                          <span>🍳 Breakfast Block</span>
+                          <span class="sim-dur">15m</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- STAGE 3: notification -->
+                <div class="sim-stage" id="sim-stage-1">
+                  <div class="sim-phone-frame">
+                    <div class="sim-phone-notch"></div>
+                    <div class="sim-phone-screen lockscreen-bg-sim">
+                      <div class="sim-lock-clock">08:00</div>
+                      <div class="sim-lock-date">Friday Morning</div>
+                      <div class="sim-notification-toast">
+                        <div class="sim-noti-hdr">
+                          <span>🔔 TRUCE</span>
+                          <span>now</span>
+                        </div>
+                        <p class="sim-noti-body">Your morning block is open. Alex, let's take it easy and build calm momentum. ✨</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- STAGE 4: tracking dopamine loop -->
+                <div class="sim-stage" id="sim-stage-2">
+                  <div class="sim-phone-frame">
+                    <div class="sim-phone-notch"></div>
+                    <div class="sim-phone-screen" style="position: relative;">
+                      <!-- Pop-up overlay for the Dopamine Spike/Reward -->
+                      <div id="sim-dopamine-popup" style="position: absolute; inset: 12px; background: rgba(255,255,255,0.98); border-radius: 16px; border: 2px solid var(--primary-accent); display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 12px; z-index: 20; box-shadow: 0 10px 25px rgba(255, 65, 93, 0.25); animation: popScale 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;">
+                        <div style="font-size: 28px; margin-bottom: 4px; animation: bounceEmoji 1s infinite alternate;">🎉</div>
+                        <h4 style="font-size: 11.5px; margin: 0; color: #110507; font-weight: 800;">DOPAMINE SPIKE!</h4>
+                        <p style="font-size: 9px; color: var(--primary-accent); margin: 2px 0 6px 0; font-weight: 700;">+50 XP Focus Boost</p>
+                        <p style="font-size: 8.5px; color: var(--muted-text); margin: 0; line-height: 1.3;">"Outstanding job Alexis! That's 3 tasks done at your own pace."</p>
+                        <div style="display: flex; gap: 4px; margin-top: 8px;">
+                          <span style="font-size: 10px;">✨</span>
+                          <span style="font-size: 10px;">🌟</span>
+                          <span style="font-size: 10px;">🌈</span>
+                        </div>
+                      </div>
+
+                      <div class="sim-app-header">
+                        <span>Active Progress</span>
+                        <h3>Alex's Block</h3>
+                      </div>
+                      <div class="sim-app-body" style="position: relative;">
+                        <!-- Confetti canvas container (simulated with CSS particles) -->
+                        <div id="sim-confetti-container" style="position: absolute; inset: 0; pointer-events: none; overflow: hidden; display: none;">
+                          <div class="confetti-p p1" style="background: #ff415d;"></div>
+                          <div class="confetti-p p2" style="background: #fbbf24;"></div>
+                          <div class="confetti-p p3" style="background: #3b82f6;"></div>
+                          <div class="confetti-p p4" style="background: #10b981;"></div>
+                          <div class="confetti-p p5" style="background: #ec4899;"></div>
+                        </div>
+
+                        <div class="sim-radial-progress" style="margin: 5px auto;">
+                          <svg viewBox="0 0 36 36" class="circular-chart">
+                            <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            <path class="circle-fill" id="sim-circle-pct" stroke-dasharray="33, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                          </svg>
+                          <div class="sim-pct-text" id="sim-pct-text-val">33%</div>
+                        </div>
+                        <div class="sim-checklist" style="gap: 4px;">
+                          <div class="sim-chk-item completed" id="chk-sim-0">✔️ <span>Drink Water</span></div>
+                          <div class="sim-chk-item" id="chk-sim-1">⬜ <span>Deep Breathing</span></div>
+                          <div class="sim-chk-item" id="chk-sim-2">⬜ <span>Breakfast Block</span></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- STAGE 5: weekly/monthly tracking calendar -->
+                <div class="sim-stage" id="sim-stage-3">
+                  <div class="sim-phone-frame">
+                    <div class="sim-phone-notch"></div>
+                    <div class="sim-phone-screen" style="padding: 14px 8px 8px 8px;">
+                      <div class="sim-app-header" style="margin-bottom: 4px; padding-bottom: 4px;">
+                        <span style="font-size: 8px;">Guilt-Free Calendar</span>
+                        <h3 style="font-size: 11px;">June 2026</h3>
+                      </div>
+                      <div class="sim-app-body" style="gap: 4px;">
+                        <!-- Calendar weekday initials -->
+                        <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; text-align: center; font-size: 7.5px; font-weight: 700; color: var(--muted-text);">
+                          <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
+                        </div>
+                        
+                        <!-- Fully-populated monthly calendar with smilies in EVERY single day -->
+                        <div class="sim-grid-calendar" style="grid-template-columns: repeat(7, 1fr); gap: 3px; margin-top: 2px;" id="sim-full-calendar-grid">
+                          <!-- Row 1 -->
+                          <div class="sim-cal-day done" style="font-size: 10px; background: rgba(5, 202, 151, 0.15); height: 18px; border-radius: 4px;" title="Done">😄</div>
+                          <div class="sim-cal-day done" style="font-size: 10px; background: rgba(5, 202, 151, 0.15); height: 18px; border-radius: 4px;" title="Done">🥰</div>
+                          <div class="sim-cal-day done" style="font-size: 10px; background: rgba(5, 202, 151, 0.15); height: 18px; border-radius: 4px;" title="Done">😎</div>
+                          <div class="sim-cal-day rest" style="font-size: 10px; background: rgba(236, 72, 153, 0.12); height: 18px; border-radius: 4px;" title="Rest Day">🧘</div>
+                          <div class="sim-cal-day done" style="font-size: 10px; background: rgba(5, 202, 151, 0.15); height: 18px; border-radius: 4px;" title="Done">😊</div>
+                          <div class="sim-cal-day done" style="font-size: 10px; background: rgba(5, 202, 151, 0.15); height: 18px; border-radius: 4px;" title="Done">😃</div>
+                          <div class="sim-cal-day rest" style="font-size: 10px; background: rgba(236, 72, 153, 0.12); height: 18px; border-radius: 4px;" title="Rest Day">😌</div>
+                          
+                          <!-- Row 2 -->
+                          <div class="sim-cal-day done" style="font-size: 10px; background: rgba(5, 202, 151, 0.15); height: 18px; border-radius: 4px;">🙂</div>
+                          <div class="sim-cal-day done" style="font-size: 10px; background: rgba(5, 202, 151, 0.15); height: 18px; border-radius: 4px;">😄</div>
+                          <div class="sim-cal-day rest" style="font-size: 10px; background: rgba(236, 72, 153, 0.12); height: 18px; border-radius: 4px;" title="Rest Day">😴</div>
+                          <div class="sim-cal-day done" style="font-size: 10px; background: rgba(5, 202, 151, 0.15); height: 18px; border-radius: 4px;">🥰</div>
+                          <div class="sim-cal-day done" style="font-size: 10px; background: rgba(5, 202, 151, 0.15); height: 18px; border-radius: 4px;">😎</div>
+                          <div class="sim-cal-day done" style="font-size: 10px; background: rgba(5, 202, 151, 0.15); height: 18px; border-radius: 4px;">😊</div>
+                          <div class="sim-cal-day rest" style="font-size: 10px; background: rgba(236, 72, 153, 0.12); height: 18px; border-radius: 4px;">🧘</div>
+                          
+                          <!-- Row 3 -->
+                          <div class="sim-cal-day done" style="font-size: 10px; background: rgba(5, 202, 151, 0.15); height: 18px; border-radius: 4px;">😃</div>
+                          <div class="sim-cal-day done" style="font-size: 10px; background: rgba(5, 202, 151, 0.15); height: 18px; border-radius: 4px;">🙂</div>
+                          <div class="sim-cal-day done" style="font-size: 10px; background: rgba(5, 202, 151, 0.15); height: 18px; border-radius: 4px;">🥰</div>
+                          <div class="sim-cal-day done" style="font-size: 10px; background: rgba(5, 202, 151, 0.15); height: 18px; border-radius: 4px;">😄</div>
+                          <div class="sim-cal-day rest" style="font-size: 10px; background: rgba(236, 72, 153, 0.12); height: 18px; border-radius: 4px;">😌</div>
+                          <div class="sim-cal-day done" style="font-size: 10px; background: rgba(5, 202, 151, 0.15); height: 18px; border-radius: 4px;">😎</div>
+                          <div class="sim-cal-day done" style="font-size: 10px; background: rgba(5, 202, 151, 0.15); height: 18px; border-radius: 4px;">😊</div>
+                          
+                          <!-- Row 4 -->
+                          <div class="sim-cal-day done" style="font-size: 10px; background: rgba(5, 202, 151, 0.15); height: 18px; border-radius: 4px;">😃</div>
+                          <div class="sim-cal-day done" style="font-size: 10px; background: rgba(5, 202, 151, 0.15); height: 18px; border-radius: 4px;">🙂</div>
+                          <div class="sim-cal-day rest" style="font-size: 10px; background: rgba(236, 72, 153, 0.12); height: 18px; border-radius: 4px;">🧘</div>
+                          <div class="sim-cal-day done" style="font-size: 10px; background: rgba(5, 202, 151, 0.15); height: 18px; border-radius: 4px;">😄</div>
+                          <div class="sim-cal-day done" style="font-size: 10px; background: rgba(5, 202, 151, 0.15); height: 18px; border-radius: 4px;">🥰</div>
+                          <div class="sim-cal-day done" style="font-size: 10px; background: rgba(5, 202, 151, 0.15); height: 18px; border-radius: 4px;">😎</div>
+                          <div class="sim-cal-day current" style="font-size: 10px; height: 18px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">✨</div>
+                        </div>
+                        
+                        <!-- Legend explaining that all colors are smiley wins -->
+                        <div style="display: flex; gap: 6px; justify-content: center; margin-top: 4px; font-size: 7.5px; border-top: 1px solid var(--primary-border); padding-top: 4px;">
+                          <div style="display: flex; align-items: center; gap: 2px;">
+                            <span style="display: inline-block; width: 6px; height: 6px; border-radius: 2px; background: rgba(5, 202, 151, 0.3);"></span>
+                            <span>Focus</span>
+                          </div>
+                          <div style="display: flex; align-items: center; gap: 2px;">
+                            <span style="display: inline-block; width: 6px; height: 6px; border-radius: 2px; background: rgba(236, 72, 153, 0.2);"></span>
+                            <span>Healing Rest</span>
+                          </div>
+                        </div>
+
+                        <div class="sim-card-msg" style="margin-top: 4px; padding: 4px 6px; font-size: 8px; line-height: 1.2;">
+                          🏆 <strong>Guilt-Free Streak!</strong> No red marks. Every single day of focus or mindful rest brings a smiley.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              
+              <!-- Simulated Cursor Hand -->
+              <div class="sim-cursor" id="sim-cursor-finger" style="top: 150px; left: 160px;">👆</div>
+              
+              <!-- Video Caption overlay -->
+              <div class="sim-subtitle-bar" id="sim-subtitle-text">
+                Welcome to Truce: The ADHD-friendly gentle momentum builder that puts peace back in productivity.
+              </div>
+            </div>
+
+            <!-- Actual Video / Custom URL frame (Starts hidden) -->
+            <div id="video-external-frame" class="video-external-hidden" style="width: 100%; height: 100%;">
+              <!-- Embedded player will mount dynamically -->
+            </div>
+
+            <!-- Big center play overlay (visible when paused) -->
+            <button class="video-center-play-btn" id="video-big-play-btn" aria-label="Play video preview">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M8 5v14l11-7z"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Controls panel -->
+          <div class="video-controls-bar">
+            <button class="control-btn" id="video-play-toggle" aria-label="Play / Pause">
+              <span id="play-icon-svg">▶️</span>
+            </button>
+            <span class="video-time-text" id="video-timestamp">0:00 / 0:50</span>
+            
+            <div class="video-progress-container" id="video-progress-clicker">
+              <div class="video-progress-bar-bg">
+                <div class="video-progress-bar-fill" id="video-progress-fill-bar" style="width: 0%;"></div>
+              </div>
+            </div>
+
+            <button class="control-btn" id="video-audio-toggle" aria-label="Toggle Audio">
+              <span id="audio-icon-svg">🔇</span>
+            </button>
+
+            <button class="control-btn" id="video-settings-toggle" aria-label="Video settings">
+              ⚙️
+            </button>
+          </div>
+        </div>
+
+        <!-- Chapters Column -->
+        <div class="video-chapters-column">
+          <h3 style="margin-top: 0; font-size: 16px; font-weight: 700; color: var(--title-text); margin-bottom: 16px; font-family: var(--font-display);">Chapters</h3>
+          <div class="chapters-list">
+            <button class="chapter-list-item active" id="chapter-item-0" onclick="seekToVideoChapter(0)">
+              <span class="chapter-num">01</span>
+              <div class="chapter-meta">
+                <h4>Meet Truce</h4>
+                <span>0:00 - 0:08</span>
+              </div>
+            </button>
+            <button class="chapter-list-item" id="chapter-item-1" onclick="seekToVideoChapter(1)">
+              <span class="chapter-num">02</span>
+              <div class="chapter-meta">
+                <h4>Routine setup</h4>
+                <span>0:08 - 0:18</span>
+              </div>
+            </button>
+            <button class="chapter-list-item" id="chapter-item-2" onclick="seekToVideoChapter(2)">
+              <span class="chapter-num">03</span>
+              <div class="chapter-meta">
+                <h4>Smart low-pressure prompts</h4>
+                <span>0:18 - 0:28</span>
+              </div>
+            </button>
+            <button class="chapter-list-item" id="chapter-item-3" onclick="seekToVideoChapter(3)">
+              <span class="chapter-num">04</span>
+              <div class="chapter-meta">
+                <h4>Dopamine progress loops</h4>
+                <span>0:28 - 0:40</span>
+              </div>
+            </button>
+            <button class="chapter-list-item" id="chapter-item-4" onclick="seekToVideoChapter(4)">
+              <span class="chapter-num">05</span>
+              <div class="chapter-meta">
+                <h4>Guilt-free calendar weeks</h4>
+                <span>0:40 - 0:50</span>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Custom Video Stream Source Settings Modal -->
+    <div class="truce-modal" id="video-settings-modal" style="display: none;">
+      <div class="truce-modal-overlay" onclick="toggleVideoSettingsModal(false)"></div>
+      <div class="truce-modal-content" style="max-width: 500px; padding: 32px; border-radius: 28px; position: relative;">
+        <button class="close-btn" onclick="toggleVideoSettingsModal(false)" aria-label="Close modal" style="position: absolute; right: 24px; top: 24px; background: transparent; border: none; font-size: 18px; cursor: pointer;">✕</button>
+        <h3 style="font-family: var(--font-display); font-size: 22px; font-weight: 800; color: var(--title-text); margin-bottom: 12px; margin-top: 0;">App Video Settings</h3>
+        <p style="color: var(--muted-text); font-size: 14px; line-height: 1.5; margin-bottom: 24px; margin-top: 0;">
+          Truce operates with a high-fidelity interactive simulation by default. Want to connect your own physical video feed, YouTube promo video, or self-hosted .mp4? Change the source stream here:
+        </p>
+
+        <div class="form-group" style="margin-bottom: 20px;">
+          <label style="font-weight: 700; font-size: 14px; margin-bottom: 8px; display: block; color: var(--title-text);">Video Mode</label>
+          <select id="video-mode-selector" class="form-control" style="width: 100%; padding: 10px; border-radius: 10px; border: 1.5px solid var(--primary-border); outline: none;" onchange="onVideoModeChange()">
+            <option value="simulated">High-Fidelity Interactive Tour (Default)</option>
+            <option value="custom">Custom Video Link or Embed</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 24px; display: none;" id="custom-video-input-group">
+          <label style="font-weight: 700; font-size: 14px; margin-bottom: 8px; display: block; color: var(--title-text);">YouTube Embed, Direct MP4, or Vimeo URL</label>
+          <input type="text" id="custom-video-url-input" class="form-control" style="width: 100%; padding: 10px; border-radius: 10px; border: 1.5px solid var(--primary-border); outline: none;" placeholder="e.g. https://www.youtube.com/embed/dQw4w9WgXcQ or https://example.com/demo.mp4">
+          <small style="color: var(--muted-text); display: block; margin-top: 6px; font-size: 11.5px;">Supports absolute links, YouTube share codes, or self-hosted video locations.</small>
+        </div>
+
+        <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 24px;">
+          <button class="btn btn-secondary" style="padding: 10px 18px; border-radius: 12px; border: 1.5px solid var(--primary-border); background: transparent; cursor: pointer; font-weight: 600;" onclick="toggleVideoSettingsModal(false)">Cancel</button>
+          <button class="btn btn-primary" style="padding: 10px 18px; border-radius: 12px; background: var(--primary-accent); border: none; color: white; cursor: pointer; font-weight: 600;" onclick="saveCustomVideoSettings()">Save & Load Stream</button>
         </div>
       </div>
     </div>
@@ -3560,26 +4420,20 @@
         <div class="footer-brand">
           <div class="logo" style="display: flex; align-items: center; gap: 8px;">
             <svg class="truce-logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g filter="url(#truce-logo-shadow-footer)">
+                <circle cx="50" cy="46" r="38" fill="url(#truce-logo-gradient-footer)" />
+                <path d="M41.5 41C41.5 32 43 26.5 47.5 25.5C50 25 52.5 26.5 52.5 29.5C52.5 32 52 35.5 52 38H58.5C60.5 38 62 39.5 62 41.5C62 43.5 60.5 45 58.5 45H51.5C51 53 51 59 52.5 61.5C53.5 63.5 55.5 64 58 61.5C60 59 63 55 65.5 51C67 48.5 70 47.5 72 49.5C74 51.5 73.5 54.5 71.5 57.5C67.5 64 61.5 73 54.5 74.5C47.5 76 43.5 71 43.5 61C43.5 54.5 43 49 43 45H37.5C35.5 45 34 43.5 34 41.5C34 39.5 35.5 38 37.5 38H42.5V41Z" fill="#FDF3F5"/>
+              </g>
               <defs>
                 <linearGradient id="truce-logo-gradient-footer" x1="0%" y1="0%" x2="0%" y2="100%">
                   <stop offset="0%" stop-color="#FF5A79" />
                   <stop offset="25%" stop-color="#FA2C56" />
-                  <stop offset="100%" stop-color="#AA062D" />
+                  <stop offset="100%" stop-color="#B80D2F" />
                 </linearGradient>
-                <linearGradient id="truce-logo-bevel-footer" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.45" />
-                  <stop offset="20%" stop-color="#FFFFFF" stop-opacity="0.15" />
-                  <stop offset="60%" stop-color="#FFFFFF" stop-opacity="0.0" />
-                </linearGradient>
-                <filter id="truce-logo-shadow-footer" x="-5%" y="-5%" width="110%" height="110%">
-                  <feDropShadow dx="0" dy="1.5" stdDeviation="1" flood-color="#730018" flood-opacity="0.25" />
+                <filter id="truce-logo-shadow-footer" x="4" y="2" width="92" height="92" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                  <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#FF415D" flood-opacity="0.12"/>
                 </filter>
               </defs>
-              <rect width="100" height="100" rx="26" fill="url(#truce-logo-gradient-footer)" />
-              <rect x="0.5" y="0.5" width="99" height="99" rx="25.5" stroke="url(#truce-logo-bevel-footer)" stroke-width="1.0" />
-              <g filter="url(#truce-logo-shadow-footer)">
-                <path d="M41.5 41C41.5 32 43 26.5 47.5 25.5C50 25 52.5 26.5 52.5 29.5C52.5 32 52 35.5 52 38H58.5C60.5 38 62 39.5 62 41.5C62 43.5 60.5 45 58.5 45H51.5C51 53 51 59 52.5 61.5C53.5 63.5 55.5 64 58 61.5C60 59 63 55 65.5 51C67 48.5 70 47.5 72 49.5C74 51.5 73.5 54.5 71.5 57.5C67.5 64 61.5 73 54.5 74.5C47.5 76 43.5 71 43.5 61C43.5 54.5 43 49 43 45H37.5C35.5 45 34 43.5 34 41.5C34 39.5 35.5 38 37.5 38H42.5V41Z" fill="#FDF3F5"/>
-              </g>
             </svg>
             <div style="display: flex; flex-direction: column; align-items: flex-start; line-height: 1.15;">
               <span style="font-family: var(--font-display); font-weight: 800; font-size: 21px; color: var(--title-text); letter-spacing: -0.02em;">Truce</span>
@@ -3930,6 +4784,399 @@
         const offset = circumference - (finalPercentage / 100) * circumference;
         circleNode.style.strokeDashoffset = offset;
       }
+    }
+
+    // 4.5. APP VIDEO PREVIEW SIMULATION PLAYER HANDLER
+    let videoPlaying = false;
+    let videoTime = 0;
+    const videoDuration = 50;
+    let videoMuted = true;
+    let videoTimerId = null;
+    let videoMode = 'simulated';
+    let audioCtx = null;
+    let focusSoundNode = null;
+
+    const playToggleBtn = document.getElementById('video-play-toggle');
+    const bigPlayBtn = document.getElementById('video-big-play-btn');
+    const audioToggleBtn = document.getElementById('video-audio-toggle');
+    const progressFillBar = document.getElementById('video-progress-fill-bar');
+    const progressClicker = document.getElementById('video-progress-clicker');
+    const timestampText = document.getElementById('video-timestamp');
+    const subtitleText = document.getElementById('sim-subtitle-text');
+    const fingerCursor = document.getElementById('sim-cursor-finger');
+    const videoCanvas = document.getElementById('demo-video-canvas');
+    
+    const simStages = [
+      document.getElementById('sim-stage-welcome'),
+      document.getElementById('sim-stage-0'),
+      document.getElementById('sim-stage-1'),
+      document.getElementById('sim-stage-2'),
+      document.getElementById('sim-stage-3')
+    ];
+    
+    const chapterItems = [
+      document.getElementById('chapter-item-0'),
+      document.getElementById('chapter-item-1'),
+      document.getElementById('chapter-item-2'),
+      document.getElementById('chapter-item-3'),
+      document.getElementById('chapter-item-4')
+    ];
+
+    if (playToggleBtn) playToggleBtn.addEventListener('click', toggleVideoPlayback);
+    if (bigPlayBtn) bigPlayBtn.addEventListener('click', toggleVideoPlayback);
+    if (audioToggleBtn) audioToggleBtn.addEventListener('click', toggleVideoAudio);
+    
+    if (progressClicker) {
+      progressClicker.addEventListener('click', (e) => {
+        const rect = progressClicker.getBoundingClientRect();
+        const pct = (e.clientX - rect.left) / rect.width;
+        seekVideoTo(pct * videoDuration);
+      });
+    }
+
+    function toggleVideoPlayback() {
+      if (videoPlaying) {
+        pauseVideo();
+      } else {
+        playVideo();
+      }
+    }
+
+    function playVideo() {
+      if (videoMode === 'custom') {
+        const nativeVideo = document.querySelector('#video-external-frame video');
+        if (nativeVideo) {
+          nativeVideo.play();
+        }
+        videoPlaying = true;
+        const playIcon = document.getElementById('play-icon-svg');
+        if (playIcon) playIcon.innerText = "⏸️";
+        if (videoCanvas) videoCanvas.classList.add('video-player-playing');
+        return;
+      }
+
+      videoPlaying = true;
+      const playIcon = document.getElementById('play-icon-svg');
+      if (playIcon) playIcon.innerText = "⏸️";
+      if (videoCanvas) videoCanvas.classList.add('video-player-playing');
+      
+      if (!videoMuted) {
+        startCalmingSynth();
+      }
+
+      if (!videoTimerId) {
+        videoTimerId = setInterval(() => {
+          videoTime += 0.25;
+          if (videoTime >= videoDuration) {
+            videoTime = 0;
+            pauseVideo();
+          }
+          updateVideoUI();
+        }, 250);
+      }
+    }
+
+    function pauseVideo() {
+      videoPlaying = false;
+      const playIcon = document.getElementById('play-icon-svg');
+      if (playIcon) playIcon.innerText = "▶️";
+      if (videoCanvas) videoCanvas.classList.remove('video-player-playing');
+      stopCalmingSynth();
+      if (videoTimerId) {
+        clearInterval(videoTimerId);
+        videoTimerId = null;
+      }
+      
+      if (videoMode === 'custom') {
+        const nativeVideo = document.querySelector('#video-external-frame video');
+        if (nativeVideo) {
+          nativeVideo.pause();
+        }
+      }
+    }
+
+    function seekVideoTo(time) {
+      videoTime = Math.max(0, Math.min(videoDuration, time));
+      updateVideoUI();
+    }
+
+    window.seekToVideoChapter = function(chapterIndex) {
+      const chapterStarts = [0, 8, 18, 28, 40];
+      seekVideoTo(chapterStarts[chapterIndex]);
+      if (!videoPlaying) {
+        playVideo();
+      }
+    }
+
+    function updateVideoUI() {
+      const pct = (videoTime / videoDuration) * 100;
+      if (progressFillBar) progressFillBar.style.width = `${pct}%`;
+      
+      const minutes = Math.floor(videoTime / 60);
+      const seconds = Math.floor(videoTime % 60).toString().padStart(2, '0');
+      if (timestampText) timestampText.textContent = `${minutes}:${seconds} / 0:50`;
+      
+      let activeChapter = 0;
+      if (videoTime >= 40) activeChapter = 4;
+      else if (videoTime >= 28) activeChapter = 3;
+      else if (videoTime >= 18) activeChapter = 2;
+      else if (videoTime >= 8) activeChapter = 1;
+      
+      chapterItems.forEach((item, idx) => {
+        if (item) {
+          if (idx === activeChapter) item.classList.add('active');
+          else item.classList.remove('active');
+        }
+      });
+
+      simStages.forEach((stage, idx) => {
+        if (stage) {
+          if (idx === activeChapter) stage.classList.add('active');
+          else stage.classList.remove('active');
+        }
+      });
+
+      runSimulatedWalkthroughAnimations(activeChapter);
+    }
+
+    function runSimulatedWalkthroughAnimations(stageIndex) {
+      if (!fingerCursor) return;
+
+      if (stageIndex === 0) {
+        const stageTime = videoTime - 0;
+        if (subtitleText) subtitleText.textContent = "Welcome to Truce! Choose peaceful boundary habits that fit your real brain.";
+        
+        if (stageTime < 4) {
+          fingerCursor.style.transform = 'translate(110px, 190px)';
+        } else {
+          fingerCursor.style.transform = 'translate(90px, 248px) scale(0.9)';
+          const startBtn = document.getElementById('sim-start-btn');
+          if (startBtn && Math.floor(stageTime) % 2 === 0) {
+            startBtn.style.background = '#e11d48';
+          } else if (startBtn) {
+            startBtn.style.background = '#ff415d';
+          }
+        }
+      }
+      else if (stageIndex === 1) {
+        const stageTime = videoTime - 8;
+        if (subtitleText) subtitleText.textContent = "Step 1: Alexis sets up a realistic Morning Routine, choosing only 3 core tasks.";
+        
+        if (stageTime < 3) {
+          fingerCursor.style.transform = 'translate(140px, 180px)';
+        } else if (stageTime < 6) {
+          fingerCursor.style.transform = 'translate(90px, 140px) scale(0.9)';
+        } else {
+          fingerCursor.style.transform = 'translate(100px, 240px) scale(1)';
+        }
+      }
+      else if (stageIndex === 2) {
+        const stageTime = videoTime - 18;
+        if (subtitleText) subtitleText.textContent = "Step 2: A gentle, non-judgmental reminder slides in when your boundary window opens.";
+        
+        if (stageTime < 5) {
+          fingerCursor.style.transform = 'translate(120px, 260px)';
+        } else {
+          fingerCursor.style.transform = 'translate(120px, 160px) scale(0.9)';
+        }
+      }
+      else if (stageIndex === 3) {
+        const stageTime = videoTime - 28;
+        if (subtitleText) subtitleText.textContent = "Step 3: Checking off tasks generates immediate momentum. Watch completion progress grow!";
+        
+        const pctCircle = document.getElementById('sim-circle-pct');
+        const pctText = document.getElementById('sim-pct-text-val');
+        const chk0 = document.getElementById('chk-sim-0');
+        const chk1 = document.getElementById('chk-sim-1');
+        const chk2 = document.getElementById('chk-sim-2');
+        const dPopup = document.getElementById('sim-dopamine-popup');
+        const cContainer = document.getElementById('sim-confetti-container');
+
+        if (stageTime < 4) {
+          fingerCursor.style.transform = 'translate(120px, 200px)';
+          if (pctCircle) pctCircle.setAttribute('stroke-dasharray', '33, 100');
+          if (pctText) pctText.textContent = "33%";
+          if (chk0) chk0.className = "sim-chk-item completed";
+          if (chk1) chk1.className = "sim-chk-item";
+          if (chk2) chk2.className = "sim-chk-item";
+          if (dPopup) dPopup.style.display = 'none';
+          if (cContainer) cContainer.style.display = 'none';
+        } else if (stageTime < 8) {
+          fingerCursor.style.transform = 'translate(50px, 210px) scale(0.9)';
+          if (pctCircle) pctCircle.setAttribute('stroke-dasharray', '66, 100');
+          if (pctText) pctText.textContent = "66%";
+          if (chk0) chk0.className = "sim-chk-item completed";
+          if (chk1) chk1.className = "sim-chk-item completed";
+          if (chk2) chk2.className = "sim-chk-item";
+          if (dPopup) dPopup.style.display = 'none';
+          if (cContainer) cContainer.style.display = 'none';
+        } else {
+          fingerCursor.style.transform = 'translate(50px, 235px) scale(0.9)';
+          if (pctCircle) pctCircle.setAttribute('stroke-dasharray', '100, 100');
+          if (pctText) pctText.textContent = "100%";
+          if (chk0) chk0.className = "sim-chk-item completed";
+          if (chk1) chk1.className = "sim-chk-item completed";
+          if (chk2) chk2.className = "sim-chk-item completed";
+          if (dPopup) dPopup.style.display = 'flex';
+          if (cContainer) cContainer.style.display = 'block';
+        }
+      }
+      else if (stageIndex === 4) {
+        const stageTime = videoTime - 40;
+        const dPopup = document.getElementById('sim-dopamine-popup');
+        const cContainer = document.getElementById('sim-confetti-container');
+        if (dPopup) dPopup.style.display = 'none';
+        if (cContainer) cContainer.style.display = 'none';
+
+        if (stageTime < 3) {
+          if (subtitleText) subtitleText.textContent = "Step 4: Active focus days earn proud smiling checkmarks on your main calendar view.";
+          fingerCursor.style.transform = 'translate(45px, 110px)';
+        } else if (stageTime < 7) {
+          if (subtitleText) subtitleText.textContent = "Mindful rest days are fully protected too! Resting guilt-free earns a happy smiley.";
+          fingerCursor.style.transform = 'translate(80px, 110px) scale(0.9)';
+        } else {
+          if (subtitleText) subtitleText.textContent = "Every single day keeps your positive habit streak healthy, with no stress or guilt.";
+          fingerCursor.style.transform = 'translate(140px, 160px)';
+        }
+      }
+    }
+
+    function toggleVideoAudio() {
+      videoMuted = !videoMuted;
+      const soundIcon = document.getElementById('audio-icon-svg');
+      
+      if (videoMuted) {
+        if (soundIcon) soundIcon.innerText = "🔇";
+        stopCalmingSynth();
+      } else {
+        if (soundIcon) soundIcon.innerText = "🔊";
+        if (videoPlaying) {
+          startCalmingSynth();
+        }
+      }
+    }
+
+    function startCalmingSynth() {
+      try {
+        if (videoMuted) return;
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        
+        if (focusSoundNode) {
+          focusSoundNode.stop();
+          focusSoundNode = null;
+        }
+
+        const bufferSize = 2 * audioCtx.sampleRate;
+        const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+        const output = noiseBuffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          output[i] = Math.random() * 2 - 1;
+        }
+
+        const whiteNoise = audioCtx.createBufferSource();
+        whiteNoise.buffer = noiseBuffer;
+        whiteNoise.loop = true;
+
+        const lowpassFilter = audioCtx.createBiquadFilter();
+        lowpassFilter.type = 'lowpass';
+        lowpassFilter.frequency.setValueAtTime(320, audioCtx.currentTime);
+        lowpassFilter.Q.setValueAtTime(1.0, audioCtx.currentTime);
+
+        const gainNode = audioCtx.createGain();
+        gainNode.gain.setValueAtTime(0.04, audioCtx.currentTime);
+
+        whiteNoise.connect(lowpassFilter);
+        lowpassFilter.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+
+        whiteNoise.start();
+        focusSoundNode = whiteNoise;
+      } catch(e) {
+        console.error("Audio Synthesis error: ", e);
+      }
+    }
+
+    function stopCalmingSynth() {
+      if (focusSoundNode) {
+        try {
+          focusSoundNode.stop();
+        } catch(e) {}
+        focusSoundNode = null;
+      }
+    }
+
+    window.toggleVideoSettingsModal = function(show) {
+      const modal = document.getElementById('video-settings-modal');
+      if (modal) {
+        modal.style.display = show ? 'flex' : 'none';
+      }
+    }
+
+    window.onVideoModeChange = function() {
+      const selector = document.getElementById('video-mode-selector');
+      const inputGroup = document.getElementById('custom-video-input-group');
+      if (selector && inputGroup) {
+        inputGroup.style.display = selector.value === 'custom' ? 'block' : 'none';
+      }
+    }
+
+    window.saveCustomVideoSettings = function() {
+      const modeSelector = document.getElementById('video-mode-selector');
+      const urlInput = document.getElementById('custom-video-url-input');
+      const simScreen = document.getElementById('video-simulated-screen');
+      const extFrame = document.getElementById('video-external-frame');
+      
+      if (!modeSelector) return;
+      
+      videoMode = modeSelector.value;
+      
+      if (videoMode === 'simulated') {
+        if (simScreen) simScreen.className = "";
+        if (extFrame) {
+          extFrame.className = "video-external-hidden";
+          extFrame.innerHTML = "";
+        }
+        pauseVideo();
+        seekVideoTo(0);
+      } else {
+        let url = urlInput ? urlInput.value.trim() : '';
+        if (!url) {
+          url = 'https://www.youtube.com/embed/dQw4w9WgXcQ';
+        }
+        
+        if (simScreen) simScreen.className = "video-external-hidden";
+        if (extFrame) {
+          extFrame.className = "video-external-visible";
+          
+          if (url.includes('youtube.com') || url.includes('youtu.be') || url.includes('vimeo.com') || url.includes('embed')) {
+            let embedUrl = url;
+            if (url.includes('youtube.com/watch?v=')) {
+              embedUrl = url.replace('watch?v=', 'embed/');
+            } else if (url.includes('youtu.be/')) {
+              embedUrl = 'https://www.youtube.com/embed/' + url.split('youtu.be/')[1];
+            }
+            extFrame.innerHTML = `<iframe src="${embedUrl}?autoplay=0&controls=1" style="width: 100%; height: 100%; border: none;" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+          } else {
+            extFrame.innerHTML = `<video src="${url}" controls style="width: 100%; height: 100%; object-fit: cover;" id="custom-native-video"></video>`;
+          }
+        }
+        pauseVideo();
+      }
+      
+      toggleVideoSettingsModal(false);
+      alert("App video source updated successfully!");
+    }
+
+    if (document.getElementById('video-settings-toggle')) {
+      document.getElementById('video-settings-toggle').addEventListener('click', () => {
+        toggleVideoSettingsModal(true);
+      });
     }
 
     // 5. INTERSECTION OBSERVER FOR FADE-IN ANIMATIONS

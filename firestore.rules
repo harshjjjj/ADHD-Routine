@@ -1,8 +1,25 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    // Global Safety Net default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
     // Allow anyone to submit an email to the waitlist
     match /waitlist/{document} {
+      allow create: if true;
+      allow read, update, delete: if request.auth != null;
+    }
+
+    // Allow public creation of deletion requests (compliance portal)
+    match /deletion_requests/{document} {
+      allow create: if true;
+      allow read, update, delete: if request.auth != null;
+    }
+
+    // Allow public creation of support inquiries
+    match /support_requests/{document} {
       allow create: if true;
       allow read, update, delete: if request.auth != null;
     }

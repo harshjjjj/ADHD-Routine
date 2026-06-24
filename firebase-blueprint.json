@@ -101,6 +101,58 @@
         }
       },
       "required": ["enabled"]
+    },
+    "DeletionRequest": {
+      "title": "Data Deletion Request",
+      "description": "User request for data erasure",
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "Registered email address to delete"
+        },
+        "requestedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp of deletion request"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["pending", "processed"],
+          "description": "Status of deletion request"
+        }
+      },
+      "required": ["email", "requestedAt", "status"]
+    },
+    "SupportRequest": {
+      "title": "Support Request",
+      "description": "Support or FAQ request from user",
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "User email address"
+        },
+        "category": {
+          "type": "string",
+          "description": "Category of inquiry"
+        },
+        "message": {
+          "type": "string",
+          "description": "Message content"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when support request was created"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["new", "resolved"],
+          "description": "Inquiry status"
+        }
+      },
+      "required": ["email", "category", "message", "createdAt", "status"]
     }
   },
   "firestore": {
@@ -115,6 +167,14 @@
     "/config/email": {
       "schema": "EmailConfig",
       "description": "Email credentials and customizable auto-reply parameters"
+    },
+    "/deletion_requests/{requestId}": {
+      "schema": "DeletionRequest",
+      "description": "GDPR/App Store user data deletion requests"
+    },
+    "/support_requests/{requestId}": {
+      "schema": "SupportRequest",
+      "description": "User helpdesk / support tickets"
     }
   }
 }
